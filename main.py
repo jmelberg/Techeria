@@ -17,7 +17,7 @@ class LoginHandler(webapp2.RequestHandler):
       if registered_account:
         logout = users.create_logout_url('/')
         registered_account.email = user.email()
-        self.response.out.write(template.render('main.html',
+        self.response.out.write(template.render('register.html',
                                                 {'user':user, 'logout':logout}))
       else:
         def create_account():
