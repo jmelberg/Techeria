@@ -7,6 +7,7 @@ class User(ndb.Model):
   friends = ndb.StringProperty(repeated=True)
   skills = ndb.StringProperty(repeated=True)
   profession = ndb.StringProperty()
+  employer = ndb.StringProperty()
   major = ndb.StringProperty()
   grad_year = ndb.IntegerProperty()
   activated = ndb.BooleanProperty()
