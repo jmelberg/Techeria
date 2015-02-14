@@ -49,11 +49,12 @@ class ProfileHandler(webapp2.RequestHandler):
   """handler to display a profile page"""
   def get(self, profile_id):
     #profile_id = key name of user
+    viewer = users.get_current_user()
     logout = users.create_logout_url('/')
     user = User.get_by_id(profile_id)
     if user:
       self.response.out.write(template.render('profile.html',
-                                        {'user':user, 'logout':logout}))
+                                        {'user':user, 'viewer':viewer, 'logout':logout}))
 
 
 app = webapp2.WSGIApplication([
