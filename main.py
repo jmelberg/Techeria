@@ -4,6 +4,7 @@ from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from models import User
+import logging
 
 """Techeria is a professional social network for techies"""
 
@@ -16,8 +17,9 @@ class LoginHandler(webapp2.RequestHandler):
       logout = users.create_logout_url('/')
       #checks if account for user exists
       if registered_account:
-        self.response.out.write(template.render('profile.html',
-                                                {'user':registered_account, 'logout':logout}))
+        #self.response.out.write(template.render('profile.html',
+        #                                        {'user':registered_account, 'logout':logout}))
+        self.redirect('/profile/{}'.format(user.user_id()))
       else:
         def create_account():
           """creates a user entity"""
@@ -42,8 +44,20 @@ class RegisterHandler(webapp2.RequestHandler):
     user.grad_year = int(self.request.get('grad_year'))
     user.put()
     self.redirect('/')
- 
+
+class ProfileHandler(webapp2.RequestHandler):
+  """handler to display a profile page"""
+  def get(self, profile_id):
+    #profile_id = key name of user
+    logout = users.create_logout_url('/')
+    user = User.get_by_id(profile_id)
+    if user:
+      self.response.out.write(template.render('profile.html',
+                                        {'user':user, 'logout':logout}))
+
+
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
-                               ('/register', RegisterHandler)
+                               ('/register', RegisterHandler),
+                               ('/profile/(.+)', ProfileHandler),
                                ], debug=True)

@@ -4,7 +4,7 @@ class User(ndb.Model):
   first_name = ndb.StringProperty()
   last_name = ndb.StringProperty()
   email = ndb.StringProperty()
-  friends = ndb.StringProperty(repeated=True)
+  friends = ndb.KeyProperty(kind= "User", repeated=True)
   skills = ndb.StringProperty(repeated=True)
   profession = ndb.StringProperty()
   employer = ndb.StringProperty()
