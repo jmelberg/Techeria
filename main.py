@@ -16,7 +16,6 @@ class LoginHandler(webapp2.RequestHandler):
       logout = users.create_logout_url('/')
       #checks if account for user exists
       if registered_account:
-        registered_account.email = user.email()
         self.response.out.write(template.render('profile.html',
                                                 {'user':registered_account, 'logout':logout}))
       else:
@@ -40,9 +39,10 @@ class RegisterHandler(webapp2.RequestHandler):
     user.profession = cgi.escape(self.request.get('profession'))
     user.employer = cgi.escape(self.request.get('employer'))
     user.major = cgi.escape(self.request.get('major'))
+    user.grad_year = int(self.request.get('grad_year'))
     user.put()
-    self.response.out.write(template.render('profile.html', {'user':user}))
-    
+    self.redirect('/')
+ 
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
                                ('/register', RegisterHandler)
