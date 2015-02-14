@@ -54,11 +54,22 @@ class ProfileHandler(webapp2.RequestHandler):
     user = User.get_by_id(profile_id)
     if user:
       self.response.out.write(template.render('profile.html',
-                                        {'user':user, 'viewer':viewer, 'logout':logout}))
+                                        {'user':user,
+                                              'profile_id':profile_id,
+                                              'viewer':viewer,
+                                              'logout':logout}))
 
+class ConnectHandler(webapp2.RequestHandler):
+  def post(self):
+    requestor = User.get_by_id(users.get_current_user().user_id())
+    requestee = User.get_by_id(self.request.get('requestee'))
+    requestor.friends.append(requestee.key)
+    requestor.put()
+    self.redirect('/')
 
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
                                ('/register', RegisterHandler),
                                ('/profile/(.+)', ProfileHandler),
+                               ('/connect', ConnectHandler),
                                ], debug=True)
