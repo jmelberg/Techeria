@@ -36,7 +36,7 @@
             {% if user.email != viewer.email %}
             <form role="form-horizontal" action="/connect" method="post">
               <div class="form-group">
-                <input  type="hidden" name="requestee" class="btn btn-primary" value={{profile_id}}>
+                <input  type="hidden" name="requestee" class="btn btn-primary" value={{user.username}}>
                   </div>
               <button type="submit" class="btn btn-primary">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>          Connect</button>

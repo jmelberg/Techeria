@@ -19,7 +19,7 @@ class LoginHandler(webapp2.RequestHandler):
       if registered_account:
         #self.response.out.write(template.render('profile.html',
         #                                        {'user':registered_account, 'logout':logout}))
-        self.redirect('/profile/{}'.format(user.user_id()))
+        self.redirect('/profile/{}'.format(registered_account.username))
       else:
         def create_account():
           """creates a user entity"""
@@ -38,6 +38,7 @@ class RegisterHandler(webapp2.RequestHandler):
     user = User.get_by_id(users.get_current_user().user_id())
     user.first_name = cgi.escape(self.request.get('first_name'))
     user.last_name = cgi.escape(self.request.get('last_name'))
+    user.username = cgi.escape(self.request.get('username'))
     user.profession = cgi.escape(self.request.get('profession'))
     user.employer = cgi.escape(self.request.get('employer'))
     user.major = cgi.escape(self.request.get('major'))
@@ -51,18 +52,20 @@ class ProfileHandler(webapp2.RequestHandler):
     #profile_id = key name of user
     viewer = users.get_current_user()
     logout = users.create_logout_url('/')
-    user = User.get_by_id(profile_id)
+    q = User.query(User.username == profile_id)
+    user = q.get()
     if user:
       self.response.out.write(template.render('profile.html',
                                         {'user':user,
-                                              'profile_id':profile_id,
                                               'viewer':viewer,
                                               'logout':logout}))
 
 class ConnectHandler(webapp2.RequestHandler):
   def post(self):
     requestor = User.get_by_id(users.get_current_user().user_id())
-    requestee = User.get_by_id(self.request.get('requestee'))
+    # requestee = User.get_by_id(self.request.get('requestee'))
+    q = User.query(User.username == self.request.get('requestee'))
+    requestee = q.get()
     requestor.friends.append(requestee.key)
     requestor.put()
     self.redirect('/')
