@@ -61,6 +61,7 @@ class ProfileHandler(webapp2.RequestHandler):
                                               'logout':logout}))
 
 class ConnectHandler(webapp2.RequestHandler):
+  """handler to connect users"""
   def post(self):
     requestor = User.get_by_id(users.get_current_user().user_id())
     # requestee = User.get_by_id(self.request.get('requestee'))
@@ -70,9 +71,24 @@ class ConnectHandler(webapp2.RequestHandler):
     requestor.put()
     self.redirect('/')
 
+class SearchHandler(webapp2.RequestHandler):
+  """Handler to search for users/jobs"""
+  def get(self):
+    search = cgi.escape(self.request.get('search'))
+    #TODO normalize names in User model to ignore case
+    search_list = search.split(',')
+    email = []
+    for search_string in search_list:
+      search_string = search_string.strip(' ')
+      if "@" in search_string:
+        q = User.query(User.email == search_string)
+        email.append(q.get())
+    self.response.out.write(template.render('search.html', {'email':email}))
+
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
                                ('/register', RegisterHandler),
                                ('/profile/(.+)', ProfileHandler),
                                ('/connect', ConnectHandler),
+                               ('/search', SearchHandler),
                                ], debug=True)
