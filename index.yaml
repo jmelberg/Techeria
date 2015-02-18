@@ -20,3 +20,9 @@ indexes:
   - name: recipient
   - name: time
     direction: desc
+
+- kind: Message
+  properties:
+  - name: recipient
+  - name: time
+    direction: desc

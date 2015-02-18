@@ -21,5 +21,5 @@ class Comment(ndb.Model):
 class Message(ndb.Model):
   sender = ndb.StringProperty()
   recipient = ndb.StringProperty()
-  message = ndb.StringProperty()
+  text = ndb.StringProperty()
   time = ndb.DateTimeProperty(auto_now_add=True)

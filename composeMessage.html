@@ -40,15 +40,26 @@
       </div><!-- /.conaiiner-fluid -->
     </nav>
     <body>
-      <div class = "container">
-        <ul class = "list-group">
-        {% for message in messages %}
-        <a href="/profile/{{message.sender}}" class="list-group-item">
-                <h4 class="list-group-item-heading">{{message.sender}}</h4>
-                <p class="list-group-item-text">{{message.text}}</p>
-        </a>
-        {% endfor %}
-        </ul>
-      </div>
+    <div class = "container">
+      <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Compose Message</h3>
+              </div>
+              <div class="panel-body">
+                <form role="form" action="/compose" method="post">
+                <div class="form-group">
+                  <input  name="recipient" class="form-control" type="text" placeholder="Recipient">
+                  <ol style="visibility:hidden;"></ol>
+
+                  <textarea style="resize:none; font-size: 20px;" name="text" class="form-control" rows="2"></textarea>
+                  <ol style="visibility:hidden;"></ol>
+
+                <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
+                <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>   Send</button>
+                </div>
+                </form>
+              </div>
+        </div>
+    </div>
   </body>
 </html>

@@ -109,11 +109,30 @@ class MessageHandler(webapp2.RequestHandler):
   def get(self):
     user = User.get_by_id(users.get_current_user().user_id())
     messages = Message.query(Message.recipient == user.username).order(-Message.time)
-    self.response.out.write(template.render('messages.html', {'messages': messages}))
+    logout = users.create_logout_url('/')
+    self.response.out.write(template.render('messages.html', {'messages': messages, 'logout':logout}))
 
-# class ComposeMessage(webapp2.RequestHandler):
-#   def post(self):
-    
+class ComposeMessage(webapp2.RequestHandler):
+  def get(self):
+    viewer_email = users.get_current_user()
+    v = User.query(User.email == viewer_email.email())
+    viewer = v.get()
+    logout = users.create_logout_url('/')
+    self.response.out.write(template.render('composeMessage.html', {'logout': logout,
+                                                                    'viewer':viewer}))
+
+  def post(self):
+    text = cgi.escape(self.request.get('text'))
+    sender = cgi.escape(self.request.get('sender'))
+    recipient = cgi.escape(self.request.get('recipient'))
+    message = Message()
+    message.text = text
+    message.sender = sender
+    message.recipient = recipient
+    message.put()
+    self.redirect('/messages')
+
+
 
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
@@ -123,4 +142,5 @@ app = webapp2.WSGIApplication([
                                ('/search', SearchHandler),
                                ('/comment', CommentHandler),
                                ('/messages', MessageHandler),
+                               ('/compose', ComposeMessage),
                                ], debug=True)
