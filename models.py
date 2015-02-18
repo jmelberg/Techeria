@@ -13,7 +13,7 @@ class User(ndb.Model):
   activated = ndb.BooleanProperty()
 
 class Comment(ndb.Model):
-  sender = ndb.KeyProperty()
-  recipient = ndb.KeyProperty()
+  sender = ndb.StringProperty()
+  recipient = ndb.StringProperty()
   text = ndb.StringProperty()
   time = ndb.DateTimeProperty(auto_now_add=True)

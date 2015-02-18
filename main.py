@@ -4,6 +4,7 @@ from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from models import User
+from models import Comment
 import logging
 
 """Techeria is a professional social network for techies"""
@@ -50,13 +51,17 @@ class ProfileHandler(webapp2.RequestHandler):
   """handler to display a profile page"""
   def get(self, profile_id):
     #profile_id = key name of user
-    viewer = users.get_current_user()
+    viewer_email = users.get_current_user()
+    v = User.query(User.email == viewer_email.email())
+    viewer = v.get()
     logout = users.create_logout_url('/')
     q = User.query(User.username == profile_id)
     user = q.get()
+    comments = Comment.query(Comment.recipient == user.username)
     if user:
       self.response.out.write(template.render('profile.html',
                                         {'user':user,
+                                              'comments': comments,
                                               'viewer':viewer,
                                               'logout':logout}))
 
@@ -88,7 +93,16 @@ class SearchHandler(webapp2.RequestHandler):
 class CommentHandler(webapp2.RequestHandler):
   """Handler to process user comments"""
   def post(self):
-    comment = cgi.escape(self.request.get('comment'))
+    text = cgi.escape(self.request.get('text'))
+    sender = cgi.escape(self.request.get('sender'))
+    recipient = cgi.escape(self.request.get('recipient'))
+    comment = Comment()
+    comment.text = text
+    comment.sender = sender
+    comment.recipient = recipient
+    comment.put()
+    self.redirect('/profile/{}'.format(recipient))
+
 
 
 app = webapp2.WSGIApplication([
