@@ -57,7 +57,7 @@ class ProfileHandler(webapp2.RequestHandler):
     logout = users.create_logout_url('/')
     q = User.query(User.username == profile_id)
     user = q.get()
-    comments = Comment.query(Comment.recipient == user.username)
+    comments = Comment.query(Comment.recipient == user.username).order(-Comment.time)
     if user:
       self.response.out.write(template.render('profile.html',
                                         {'user':user,
