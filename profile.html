@@ -64,9 +64,24 @@
           </h2>
         </div>
         <div class="row">
-          <div class="col-md-4">{{user.friends}}</div>
-          <div class="col-md-2"> </div>
-          <div class="col-md-1"> </div>
+          <div class="col-md-2">{{user.friends}}</div>
+          <div class="col-md-4"> </div>
+          <div class="col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Comment</h3>
+              </div>
+              <div class="panel-body">
+                <form role="form-horizontal" action="/comment" method="post">
+                <div class="form-group">
+                  <textarea style="resize:none; font-size: 20px;" class="form-control" rows="2" id="comment"></textarea>
+                  <ol style="visibility:hidden;"></ol>
+                  <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post</button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
           </div>
         </div>
     </div>

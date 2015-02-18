@@ -85,10 +85,17 @@ class SearchHandler(webapp2.RequestHandler):
         email.append(q.get())
     self.response.out.write(template.render('search.html', {'email':email}))
 
+class CommentHandler(webapp2.RequestHandler):
+  """Handler to process user comments"""
+  def post(self):
+    comment = cgi.escape(self.request.get('comment'))
+
+
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
                                ('/register', RegisterHandler),
                                ('/profile/(.+)', ProfileHandler),
                                ('/connect', ConnectHandler),
                                ('/search', SearchHandler),
+                               ('/comment', CommentHandler)
                                ], debug=True)

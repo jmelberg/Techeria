@@ -11,3 +11,9 @@ class User(ndb.Model):
   major = ndb.StringProperty()
   grad_year = ndb.IntegerProperty()
   activated = ndb.BooleanProperty()
+
+class Comment(ndb.Model):
+  sender = ndb.KeyProperty()
+  recipient = ndb.KeyProperty()
+  text = ndb.StringProperty()
+  time = ndb.DateTimeProperty(auto_now_add=True)
