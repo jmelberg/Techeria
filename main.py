@@ -5,6 +5,7 @@ from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from models import User
 from models import Comment
+from models import Message
 import logging
 
 """Techeria is a professional social network for techies"""
@@ -103,7 +104,16 @@ class CommentHandler(webapp2.RequestHandler):
     comment.put()
     self.redirect('/profile/{}'.format(recipient))
 
+class MessageHandler(webapp2.RequestHandler):
+  """ Handler to process user messages"""
+  def get(self):
+    user = User.get_by_id(users.get_current_user().user_id())
+    messages = Message.query(Message.recipient == user.username).order(-Message.time)
+    self.response.out.write(template.render('messages.html', {'messages': messages}))
 
+# class ComposeMessage(webapp2.RequestHandler):
+#   def post(self):
+    
 
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
@@ -111,5 +121,6 @@ app = webapp2.WSGIApplication([
                                ('/profile/(.+)', ProfileHandler),
                                ('/connect', ConnectHandler),
                                ('/search', SearchHandler),
-                               ('/comment', CommentHandler)
+                               ('/comment', CommentHandler),
+                               ('/messages', MessageHandler),
                                ], debug=True)
