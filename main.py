@@ -69,6 +69,11 @@ class ProfileHandler(webapp2.RequestHandler):
 
 class ConnectHandler(webapp2.RequestHandler):
   """handler to connect users"""
+  def get(self):
+    user = User.get_by_id(users.get_current_user().user_id())
+    requests = ConnectionRequest.query(ConnectionRequest.requestee == user.username).order(-ConnectionRequest.time)
+    logout = users.create_logout_url('/')
+    self.response.out.write(template.render('requests.html', {'user': user, 'requests': requests, 'logout':logout}))
   def post(self):
     requestor = User.get_by_id(users.get_current_user().user_id())
     q = User.query(User.username == self.request.get('requestee'))
@@ -80,6 +85,7 @@ class ConnectHandler(webapp2.RequestHandler):
     requestee.request_count += 1
     requestee.put()
     self.redirect('/')
+
 
 class SearchHandler(webapp2.RequestHandler):
   """Handler to search for users/jobs"""

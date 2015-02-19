@@ -21,6 +21,12 @@ indexes:
   - name: time
     direction: desc
 
+- kind: ConnectionRequest
+  properties:
+  - name: requestee
+  - name: time
+    direction: desc
+
 - kind: Message
   properties:
   - name: recipient
