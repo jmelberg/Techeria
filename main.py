@@ -147,6 +147,21 @@ class ComposeMessage(webapp2.RequestHandler):
     user.put()
     self.redirect('/messages')
 
+class FeedHandler(webapp2.RequestHandler):
+  """ Handler for handling user feed """
+  def get(self):
+    user = User.get_by_id(users.get_current_user().user_id())
+    logout = users.create_logout_url('/')
+    comments = Comment.query().order(-Comment.time)
+    if user:
+      self.response.out.write(template.render('feed.html',
+                                              {'user':user,
+                                              'comments': comments,
+                                              'logout':logout}))
+
+
+
+
 
 
 app = webapp2.WSGIApplication([
@@ -158,4 +173,5 @@ app = webapp2.WSGIApplication([
                                ('/comment', CommentHandler),
                                ('/messages', MessageHandler),
                                ('/compose', ComposeMessage),
+                               ('/feed', FeedHandler),
                                ], debug=True)

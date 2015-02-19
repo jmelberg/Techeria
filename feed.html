@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+      </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">Techeria</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav navbar-right">
+            <li><p class="navbar-text" aria-label="Left Align"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{user.email}}</li>
+            <li><a href={{logout}}>Sign Out</a></li>
+          </ul>
+          <ul class="nav nav-pills navbar-left" role="tablist">
+            <li role="presentation"><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><span class="badge"></span>
+              <span class="badge"></span>
+            </a></li>
+            <li role="presentation"><a href="/connect"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+              {% if user.request_count > 0 %}
+              <span class="badge">{{user.request_count}}</span>
+              {% endif %}
+            </a></li>
+            <li role="presentation"><a href="../messages"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+              {% if user.message_count > 0 %}
+              <span class="badge">{{user.message_count}}</span>
+              {% endif %}
+            </a></li>
+          </ul>
+          <form class="navbar-form navbar-right" role="search"
+            action="/search" method="get">
+            <div class="form-group">
+              <input name="search" type="text" class="form-control" placeholder="Search" required>
+                </div>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+          </form>
+          
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.conaiiner-fluid -->
+    </nav>
+    <div class="container">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Comment</h3>
+        </div>
+        <div class="panel-body">
+          <form role="form" action="/comment" method="post">
+            <div class="form-group">
+              <textarea style="resize:none; font-size: 20px;" name="text" class="form-control" rows="2"></textarea>
+              <ol style="visibility:hidden;"></ol>
+              <input  type="hidden" name="recipient" class="form-control" value={{user.username}}>
+                <input  type="hidden" name="sender" class="form-control" value={{user.username}}>
+                  <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post</button>
+                  </div>
+          </form>
+        </div>
+      </div>
+      <div class="list-group">
+        {% for comment in comments %}
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            <h2 class="panel-title">{{comment.sender}}<span><p class="panel-title pull-right">{{comment.time}}</p></span></h2>
+          </div>
+          <div class="panel-body">
+            <h4>{{comment.text}}</h4>
+          </div>
+        </div>
+        
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>
