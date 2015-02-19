@@ -23,10 +23,20 @@
             <li><a href={{logout}}>Sign Out</a></li>
           </ul>
           <ul class="nav nav-pills navbar-left" role="tablist">
-            <li role="presentation"><a href="#"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><span class="badge">1</span><span class="badge"></span></a></li>
+            <li role="presentation"><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><span class="badge"></span>
+              <span class="badge"></span>
+            </a></li>
             <li role="presentation"><a href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span class="badge">3</span></a></li>
-            <li role="presentation"><a href="../messages"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span><span class="badge">3</span></a></li>
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+              {% if user.request_count > 0 %}
+              <span class="badge">{{user.request_count}}</span>
+              {% endif %}
+            </a></li>
+            <li role="presentation"><a href="../messages"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+              {% if user.message_count > 0 %}
+              <span class="badge">{{user.message_count}}</span>
+              {% endif %}
+            </a></li>
           </ul>
           <form class="navbar-form navbar-right" role="search"
             action="/search" method="get">
@@ -38,6 +48,7 @@
 
         </div><!-- /.navbar-collapse -->
       </div><!-- /.conaiiner-fluid -->
+    </nav>
     </nav>
     <body>
     <div class = "container">

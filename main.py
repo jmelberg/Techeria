@@ -77,6 +77,8 @@ class ConnectHandler(webapp2.RequestHandler):
     connection_request.requestor = requestor.username
     connection_request.requestee = requestee.username
     connection_request.put()
+    requestee.request_count += 1
+    requestee.put()
     self.redirect('/')
 
 class SearchHandler(webapp2.RequestHandler):
@@ -112,7 +114,7 @@ class MessageHandler(webapp2.RequestHandler):
     user = User.get_by_id(users.get_current_user().user_id())
     messages = Message.query(Message.recipient == user.username).order(-Message.time)
     logout = users.create_logout_url('/')
-    self.response.out.write(template.render('messages.html', {'messages': messages, 'logout':logout}))
+    self.response.out.write(template.render('messages.html', {'user': user, 'messages': messages, 'logout':logout}))
 
 class ComposeMessage(webapp2.RequestHandler):
   def get(self):
@@ -121,7 +123,7 @@ class ComposeMessage(webapp2.RequestHandler):
     viewer = v.get()
     logout = users.create_logout_url('/')
     self.response.out.write(template.render('composeMessage.html', {'logout': logout,
-                                                                    'viewer':viewer}))
+                                                                    'viewer':viewer, 'user':viewer}))
 
   def post(self):
     text = cgi.escape(self.request.get('text'))
@@ -135,7 +137,7 @@ class ComposeMessage(webapp2.RequestHandler):
     #Increment message count for navbar
     q = User.query(User.username == recipient)
     user = q.get()
-    user.messageCount += 1
+    user.message_count += 1
     user.put()
     self.redirect('/messages')
 

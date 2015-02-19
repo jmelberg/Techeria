@@ -11,8 +11,8 @@ class User(ndb.Model):
   major = ndb.StringProperty()
   grad_year = ndb.IntegerProperty()
   activated = ndb.BooleanProperty()
-  messageCount = ndb.IntegerProperty(default = 0)
-  requestCount = ndb.IntegerProperty(default = 0)
+  message_count = ndb.IntegerProperty(default = 0)
+  request_count = ndb.IntegerProperty(default = 0)
 
 
 class Comment(ndb.Model):
