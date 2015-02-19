@@ -6,6 +6,7 @@ from google.appengine.api import users
 from models import User
 from models import Comment
 from models import Message
+from models import ConnectionRequest
 import logging
 
 """Techeria is a professional social network for techies"""
@@ -37,28 +38,16 @@ class LoginHandler(webapp2.RequestHandler):
 class RegisterHandler(webapp2.RequestHandler):
   def post(self):
     """Registers the user and updates datastore"""
-    attempted_username = cgi.escape(self.request.get('username'))
-    available = User.query(User.username == attempted_username).count()
-    #confirm that username is available from query
-    if available == 0:
-      user = User.get_by_id(users.get_current_user().user_id())
-      user.first_name = cgi.escape(self.request.get('first_name'))
-      user.last_name = cgi.escape(self.request.get('last_name'))
-      user.username = cgi.escape(self.request.get('username'))
-      user.profession = cgi.escape(self.request.get('profession'))
-      user.employer = cgi.escape(self.request.get('employer'))
-      user.major = cgi.escape(self.request.get('major'))
-      user.grad_year = int(self.request.get('grad_year'))
-      user.put()
-      self.redirect('/')
-    else:
-      #TODO notify user of unavailable username
-      user = users.get_current_user()
-      logout = users.create_logout_url('/')
-      self.response.out.write(template.render('register.html',
-                                        {'user':user, 'logout':logout}))
-
-
+    user = User.get_by_id(users.get_current_user().user_id())
+    user.first_name = cgi.escape(self.request.get('first_name'))
+    user.last_name = cgi.escape(self.request.get('last_name'))
+    user.username = cgi.escape(self.request.get('username'))
+    user.profession = cgi.escape(self.request.get('profession'))
+    user.employer = cgi.escape(self.request.get('employer'))
+    user.major = cgi.escape(self.request.get('major'))
+    user.grad_year = int(self.request.get('grad_year'))
+    user.put()
+    self.redirect('/')
 
 class ProfileHandler(webapp2.RequestHandler):
   """handler to display a profile page"""
@@ -82,11 +71,12 @@ class ConnectHandler(webapp2.RequestHandler):
   """handler to connect users"""
   def post(self):
     requestor = User.get_by_id(users.get_current_user().user_id())
-    # requestee = User.get_by_id(self.request.get('requestee'))
     q = User.query(User.username == self.request.get('requestee'))
     requestee = q.get()
-    requestor.friends.append(requestee.key)
-    requestor.put()
+    connection_request = ConnectionRequest()
+    connection_request.requestor = requestor.username
+    connection_request.requestee = requestee.username
+    connection_request.put()
     self.redirect('/')
 
 class SearchHandler(webapp2.RequestHandler):
@@ -142,6 +132,11 @@ class ComposeMessage(webapp2.RequestHandler):
     message.sender = sender
     message.recipient = recipient
     message.put()
+    #Increment message count for navbar
+    q = User.query(User.username == recipient)
+    user = q.get()
+    user.messageCount += 1
+    user.put()
     self.redirect('/messages')
 
 

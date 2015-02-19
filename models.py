@@ -11,6 +11,9 @@ class User(ndb.Model):
   major = ndb.StringProperty()
   grad_year = ndb.IntegerProperty()
   activated = ndb.BooleanProperty()
+  messageCount = ndb.IntegerProperty(default = 0)
+  requestCount = ndb.IntegerProperty(default = 0)
+
 
 class Comment(ndb.Model):
   sender = ndb.StringProperty()
@@ -23,3 +26,9 @@ class Message(ndb.Model):
   recipient = ndb.StringProperty()
   text = ndb.StringProperty()
   time = ndb.DateTimeProperty(auto_now_add=True)
+
+class ConnectionRequest(ndb.Model):
+  requestor = ndb.StringProperty()
+  requestee = ndb.StringProperty()
+  time = ndb.DateTimeProperty(auto_now_add=True)
+  text = ndb.StringProperty()
