@@ -51,12 +51,27 @@
     </nav>
     <body>
       <div class = "container">
+        <div class="page-header">
+          <h1>Connection Requests<small></small>
+          </h1>
+        </div>
         <ul class = "list-group">
         {% for request in  requests %}
-        <a href="/profile/{{message.sender}}" class="list-group-item">
-                <h4 class="list-group-item-heading">{{request.requestor}}</h4>
-                <p class="list-group-item-text">{{request.text}}</p>
-        </a>
+        <div class="list-group-item">
+          <a href="/profile/{{request.requestor}}">
+            <h3 class="list-group-item-text">{{request.requestor}}</h3>
+          </a>
+          {% if request.text != None %}
+          <p class="list-group-item-text">{{request.text}}</p>
+          {% endif %}
+          <form role="form" action="/confirmconnect" method="post">
+            <input  type="hidden" name="requestor" class="form-control" value={{request.requestor}}>
+              <input type="hidden" name="requestee" class="form-control" value={{request.requestee}}>
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Connect</button>
+              </span>
+              </form>
+        </div>
         {% endfor %}
         </ul>
       </div>

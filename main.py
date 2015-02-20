@@ -86,6 +86,21 @@ class ConnectHandler(webapp2.RequestHandler):
     requestee.put()
     self.redirect('/')
 
+class ConfirmConnection(webapp2.RequestHandler):
+  """updates the datastore for user connections"""
+  def post(self):
+    requestor = User.query(User.username == cgi.escape(self.request.get('requestor'))).get()
+    requestee = User.query(User.username == cgi.escape(self.request.get('requestee'))).get()
+    connection_request = ConnectionRequest.query(ConnectionRequest.requestee == requestee.username).get()
+    requestor.friends.append(requestee.key)
+    requestee.friends.append(requestor.key)
+    requestee.request_count -= 1
+    requestor.put()
+    requestee.put()
+    connection_request.key.delete()
+    self.redirect('/')
+    
+
 
 class SearchHandler(webapp2.RequestHandler):
   """Handler to search for users/jobs"""
@@ -118,6 +133,8 @@ class MessageHandler(webapp2.RequestHandler):
   """ Handler to process user messages"""
   def get(self):
     user = User.get_by_id(users.get_current_user().user_id())
+    user.message_count = 0
+    user.put()
     messages = Message.query(Message.recipient == user.username).order(-Message.time)
     logout = users.create_logout_url('/')
     self.response.out.write(template.render('messages.html', {'user': user, 'messages': messages, 'logout':logout}))
@@ -169,6 +186,7 @@ app = webapp2.WSGIApplication([
                                ('/register', RegisterHandler),
                                ('/profile/(.+)', ProfileHandler),
                                ('/connect', ConnectHandler),
+                               ('/confirmconnect', ConfirmConnection),
                                ('/search', SearchHandler),
                                ('/comment', CommentHandler),
                                ('/messages', MessageHandler),

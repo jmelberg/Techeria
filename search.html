@@ -19,20 +19,36 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
-            <form class="navbar-form navbar-left" role="search"
-              action="/search" method="get">
-              <div class="form-group">
-                <input name="search" type="text" class="form-control" placeholder="Search" required>
-                  </div>
-              <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-            </form>
             <li><p class="navbar-text" aria-label="Left Align"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{user.email}}</li>
             <li><a href={{logout}}>Sign Out</a></li>
           </ul>
+          <ul class="nav nav-pills navbar-left" role="tablist">
+            <li role="presentation"><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><span class="badge"></span>
+              <span class="badge"></span>
+            </a></li>
+            <li role="presentation"><a href="/connect"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+              {% if user.request_count > 0 %}
+              <span class="badge">{{user.request_count}}</span>
+              {% endif %}
+            </a></li>
+            <li role="presentation"><a href="../messages"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+              {% if user.message_count > 0 %}
+              <span class="badge">{{user.message_count}}</span>
+              {% endif %}
+            </a></li>
+          </ul>
+          <form class="navbar-form navbar-right" role="search"
+            action="/search" method="get">
+            <div class="form-group">
+              <input name="search" type="text" class="form-control" placeholder="Search" required>
+                </div>
+            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+          </form>
+          
         </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
-    <div class="container">
+      </div><!-- /.conaiiner-fluid -->
+    </nav>    <div class="container">
       {% for user in email %}
       <div class="list-group">
         <a href="/profile/{{user.username}}" class="list-group-item ">

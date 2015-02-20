@@ -26,7 +26,7 @@
             <li role="presentation"><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><span class="badge"></span>
               <span class="badge"></span>
             </a></li>
-            <li role="presentation"><a href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+            <li role="presentation"><a href="/connect"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
               <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
               {% if user.request_count > 0 %}
               <span class="badge">{{user.request_count}}</span>
@@ -51,6 +51,10 @@
     </nav>
     <body>
       <div class = "container">
+        <div class="page-header">
+          <h1>Messages<small> </small>
+          </h1>
+        </div>
         <ul class = "list-group">
         {% for message in messages %}
         <a href="/profile/{{message.sender}}" class="list-group-item">
