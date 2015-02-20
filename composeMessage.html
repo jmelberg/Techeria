@@ -23,10 +23,10 @@
             <li><a href={{logout}}>Sign Out</a></li>
           </ul>
           <ul class="nav nav-pills navbar-left" role="tablist">
-            <li role="presentation"><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><span class="badge"></span>
+            <li role="presentation"><a href="/feed"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><span class="badge"></span>
               <span class="badge"></span>
             </a></li>
-            <li role="presentation"><a href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+            <li role="presentation"><a href="/connect"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
               <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
               {% if user.request_count > 0 %}
               <span class="badge">{{user.request_count}}</span>
