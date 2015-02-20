@@ -100,6 +100,30 @@ class ConfirmConnection(webapp2.RequestHandler):
     connection_request.key.delete()
     self.redirect('/')
     
+class DisplayConnections(webapp2.RequestHandler):
+  """ Will display all friends/connections of a user"""
+  def get(self):
+    username = cgi.escape(self.request.get('username'))
+    user = User.query(User.username == username).get()
+    viewer = User.get_by_id(users.get_current_user().user_id())
+    class Friend():
+      def __init__(self):
+        self.first_name = ""
+        self.last_name = ""
+        self.username = ""
+        self.profession = ""
+        #self.location = ""
+        #self.picture = ""
+    connection_list = []
+    for connection_key in user.friends:
+      connection = User.get_by_id(connection_key.id())
+      friend = Friend()
+      friend.first_name = connection.first_name
+      friend.last_name = connection.last_name
+      friend.username = connection.username
+      friend.profession = connection.profession + " at " + connection.employer
+      connection_list.append(friend)
+    self.response.out.write(template.render('connections.html', {'connections':connection_list, 'user':user, 'viewer':viewer}))
 
 
 class SearchHandler(webapp2.RequestHandler):
@@ -188,10 +212,6 @@ class FeedHandler(webapp2.RequestHandler):
                                               'logout':logout}))
 
 
-
-
-
-
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
                                ('/register', RegisterHandler),
@@ -203,4 +223,5 @@ app = webapp2.WSGIApplication([
                                ('/messages', MessageHandler),
                                ('/compose', ComposeMessage),
                                ('/feed', FeedHandler),
+                               ('/connections', DisplayConnections),
                                ], debug=True)

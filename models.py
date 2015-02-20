@@ -14,7 +14,6 @@ class User(ndb.Model):
   message_count = ndb.IntegerProperty(default = 0)
   request_count = ndb.IntegerProperty(default = 0)
 
-
 class Comment(ndb.Model):
   sender = ndb.StringProperty()
   recipient = ndb.StringProperty()
@@ -32,3 +31,4 @@ class ConnectionRequest(ndb.Model):
   requestee = ndb.StringProperty()
   time = ndb.DateTimeProperty(auto_now_add=True)
   text = ndb.StringProperty()
+
