@@ -60,9 +60,12 @@
         <ul class = "list-group">
         {% for message in messages %}
         <a href="/profile/{{message.sender}}" class="list-group-item">
+          <!-- TODO Delete message link -->
                 <h4 class="list-group-item-heading">{{message.sender}}
+                  <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
                 </h4>
-                <p class="list-group-item-text">{{message.text}}</p>
+                <p class="list-group-item-text">{{message.text}} </p>
+
         </a>
         {% endfor %}
         </ul>
