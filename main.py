@@ -147,12 +147,13 @@ class MessageHandler(webapp2.RequestHandler):
 
 class ComposeMessage(webapp2.RequestHandler):
   def get(self):
+    recipient = cgi.escape(self.request.get('recipient'))
     viewer_email = users.get_current_user()
     v = User.query(User.email == viewer_email.email())
     viewer = v.get()
     logout = users.create_logout_url('/')
     self.response.out.write(template.render('composeMessage.html', {'logout': logout,
-                                                                    'viewer':viewer, 'user':viewer}))
+                                                                    'viewer':viewer, 'user':viewer, 'recipient':recipient}))
   def post(self):
     text = cgi.escape(self.request.get('text'))
     sender = cgi.escape(self.request.get('sender'))

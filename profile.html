@@ -19,7 +19,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
-            <li><p class="navbar-text" aria-label="Left Align"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{user.email}}</li>
+            <li><p class="navbar-text" aria-label="Left Align"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{viewer.email}}</li>
             <li><a href={{logout}}>Sign Out</a></li>
           </ul>
           <ul class="nav nav-pills navbar-left" role="tablist">
@@ -28,13 +28,13 @@
             </a></li>
             <li role="presentation"><a href="/connect"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
               <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-              {% if user.request_count > 0 %}
-              <span class="badge">{{user.request_count}}</span>
+              {% if viewer.request_count > 0 %}
+              <span class="badge">{{viewer.request_count}}</span>
               {% endif %}
             </a></li>
             <li role="presentation"><a href="../messages"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-              {% if user.message_count > 0 %}
-              <span class="badge">{{user.message_count}}</span>
+              {% if viewer.message_count > 0 %}
+              <span class="badge">{{viewer.message_count}}</span>
               {% endif %}
             </a></li>
           </ul>
@@ -64,8 +64,8 @@
                   </div>
               <button type="submit" class="btn btn-primary">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>          Connect</button>
-              <button type="button" class="btn btn-primary">
-                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>          Message</button>
+              <a href="/compose?recipient={{user.username}}" type="button" class="btn btn-primary">
+                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>          Message</a>
             </form>
             {% else %}
             <button type="button" class="btn btn-primary pull-right" align="right">
