@@ -1,6 +1,6 @@
 import cgi
 import webapp2
-from google.appengine.ext import db
+from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from models import User
@@ -108,13 +108,19 @@ class SearchHandler(webapp2.RequestHandler):
     search = cgi.escape(self.request.get('search'))
     #TODO normalize names in User model to ignore case
     search_list = search.split(',')
-    email = []
+    results = []
+    names = []
     for search_string in search_list:
       search_string = search_string.strip(' ')
       if "@" in search_string:
         q = User.query(User.email == search_string)
-        email.append(q.get())
-    self.response.out.write(template.render('search.html', {'email':email}))
+        if q:
+          results.append(q.get())
+      else:
+        first_name = User.query(User.first_name == search_string)
+        if first_name:
+          results.append(first_name.get())
+    self.response.out.write(template.render('search.html', {'results':results}))
 
 class CommentHandler(webapp2.RequestHandler):
   """Handler to process user comments"""
@@ -147,22 +153,26 @@ class ComposeMessage(webapp2.RequestHandler):
     logout = users.create_logout_url('/')
     self.response.out.write(template.render('composeMessage.html', {'logout': logout,
                                                                     'viewer':viewer, 'user':viewer}))
-
   def post(self):
     text = cgi.escape(self.request.get('text'))
     sender = cgi.escape(self.request.get('sender'))
     recipient = cgi.escape(self.request.get('recipient'))
-    message = Message()
-    message.text = text
-    message.sender = sender
-    message.recipient = recipient
-    message.put()
-    #Increment message count for navbar
     q = User.query(User.username == recipient)
     user = q.get()
-    user.message_count += 1
-    user.put()
-    self.redirect('/messages')
+    if(user):
+      message = Message()
+      message.text = text
+      message.sender = sender
+      message.recipient = recipient
+      message.put()
+      #Increment message count for navbar
+      q = User.query(User.username == recipient)
+      user = q.get()
+      user.message_count += 1
+      user.put()
+      self.redirect('/messages')
+    else:
+      self.redirect('/compose')
 
 class FeedHandler(webapp2.RequestHandler):
   """ Handler for handling user feed """

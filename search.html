@@ -48,14 +48,24 @@
           
         </div><!-- /.navbar-collapse -->
       </div><!-- /.conaiiner-fluid -->
-    </nav>    <div class="container">
-      {% for user in email %}
+    </nav>
+    <div class="container">
+      {% for user in results %}
+      {% if user != None %}
       <div class="list-group">
         <a href="/profile/{{user.username}}" class="list-group-item ">
           <h4 class="list-group-item-heading">{{user.first_name}}  {{user.last_name}}</h4>
           <p class="list-group-item-text">{{user.profession}} @ {{user.employer}}</p>
         </a>
       </div>
+      {% else %}
+      <div class="list-group">
+        <a href="/profile/{{user.username}}" class="list-group-item ">
+          <h4 class="list-group-item-heading">No search results found</h4>
+          <p class="list-group-item-text">Please Try again</p>
+        </a>
+      </div>
+      {% endif %}
       {% endfor %}
     </div>
   </body>

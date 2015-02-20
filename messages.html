@@ -52,13 +52,16 @@
     <body>
       <div class = "container">
         <div class="page-header">
-          <h1>Messages<small> </small>
-          </h1>
+          <h2>Messages
+            <a href="/compose" type="button" class="btn btn-primary pull-right" align="right">
+              <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>   Compose</a>
+          </h2>
         </div>
         <ul class = "list-group">
         {% for message in messages %}
         <a href="/profile/{{message.sender}}" class="list-group-item">
-                <h4 class="list-group-item-heading">{{message.sender}}</h4>
+                <h4 class="list-group-item-heading">{{message.sender}}
+                </h4>
                 <p class="list-group-item-text">{{message.text}}</p>
         </a>
         {% endfor %}
