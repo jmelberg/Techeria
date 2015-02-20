@@ -7,6 +7,8 @@ from models import User
 from models import Comment
 from models import Message
 from models import ConnectionRequest
+from models import ForumPost
+from models import Skill
 import logging
 
 """Techeria is a professional social network for techies"""
@@ -211,6 +213,25 @@ class FeedHandler(webapp2.RequestHandler):
                                               'comments': comments,
                                               'logout':logout}))
 
+class ForumHandler(webapp2.RequestHandler):
+  """ Handles the forum """
+  def get(self, forum_id):
+    user = User.get_by_id(users.get_current_user().user_id())
+    forum_posts = ForumPost.query(ForumPost.forum_name == forum_id)
+    self.response.out.write(template.render('forum.html', {'viewer': user,
+                                      'posts': forum_posts, 'forum_name': forum_id}))
+  def post(self, forum_id):
+    author = cgi.escape(self.request.get('author'))
+    forum = cgi.escape(self.request.get('forum'))
+    title = cgi.escape(self.request.get('text'))
+    post = ForumPost()
+    post.author = author
+    post.forum_name = forum
+    post.title = title
+    post.put()
+    self.redirect('/tech/{}'.format(forum))
+
+
 
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
@@ -224,4 +245,5 @@ app = webapp2.WSGIApplication([
                                ('/compose', ComposeMessage),
                                ('/feed', FeedHandler),
                                ('/connections', DisplayConnections),
+                               ('/tech/(.+)', ForumHandler)
                                ], debug=True)

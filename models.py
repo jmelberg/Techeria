@@ -13,12 +13,14 @@ class User(ndb.Model):
   activated = ndb.BooleanProperty()
   message_count = ndb.IntegerProperty(default = 0)
   request_count = ndb.IntegerProperty(default = 0)
+  skills = ndb.KeyProperty(kind = "Skill", repeated=True)
 
 class Comment(ndb.Model):
   sender = ndb.StringProperty()
   recipient = ndb.StringProperty()
   text = ndb.StringProperty()
   time = ndb.DateTimeProperty(auto_now_add=True)
+  karma = ndb.IntegerProperty(default = 0)
 
 class Message(ndb.Model):
   sender = ndb.StringProperty()
@@ -31,4 +33,21 @@ class ConnectionRequest(ndb.Model):
   requestee = ndb.StringProperty()
   time = ndb.DateTimeProperty(auto_now_add=True)
   text = ndb.StringProperty()
+
+class ForumPost(ndb.Model):
+  forum_name = ndb.StringProperty()
+  url = ndb.StringProperty()
+  title = ndb.StringProperty()
+  author = ndb.StringProperty()
+  karma = ndb.IntegerProperty(default = 0)
+  comment_count = ndb.IntegerProperty(default = 0)
+  time = ndb.DateTimeProperty(auto_now_add=True)
+  text = ndb.StringProperty()
+  categories = ndb.KeyProperty(kind= "Skill", repeated=True)
+
+class Skill(ndb.Model):
+  name = ndb.StringProperty()
+
+
+
 
