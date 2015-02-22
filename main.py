@@ -216,6 +216,7 @@ class FeedHandler(webapp2.RequestHandler):
 class ForumHandler(webapp2.RequestHandler):
   """ Handles the forum """
   def get(self, forum_id):
+    forum_id = forum_id.lower()
     user = User.get_by_id(users.get_current_user().user_id())
     forum_posts = ForumPost.query(ForumPost.forum_name == forum_id)
     self.response.out.write(template.render('forum.html', {'viewer': user,
