@@ -23,7 +23,7 @@
             <li><a href={{logout}}>Sign Out</a></li>
           </ul>
           <ul class="nav nav-pills navbar-left" role="tablist">
-            <li role="presentation"><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><span class="badge"></span>
+            <li role="presentation"><a href="/feed"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><span class="badge"></span>
               <span class="badge"></span>
             </a></li>
             <li role="presentation"><a href="/connect"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
@@ -50,41 +50,45 @@
       </div><!-- /.conaiiner-fluid -->
     </nav>
     <div class="container">
-      <div class="page-header">
-          <h2>{{forum_name}}
-            <a href="/submit?forum_name={{forum_name}}" type="button" class="btn btn-primary pull-right" align="right">
-              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Submit Post</a>
-          </h2>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Make Post</h3>
-        </div>
-        <div class="panel-body">
-          <form role="form" action="/tech/{{forum_name}}" method="post">
-            <div class="form-group">
-              <textarea style="resize:none; font-size: 20px;" name="text" class="form-control" rows="2"></textarea>
-              <ol style="visibility:hidden;"></ol>
-              <input  type="hidden" name="author" class="form-control" value={{viewer.username}}>
-              <input  type="hidden" name="forum" class="form-control" value={{forum_name}}>
-                  <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post</button>
-                  </div>
-          </form>
-        </div>
-      </div>
-      <div class="list-group">
-        {% for post in posts %}
-        <div class="panel panel-info">
-          <div class="panel-heading">
-            <h2 class="panel-title">{{post.title}}<span><p class="panel-title pull-right">{{post.author}}</p></span></h2>
+      <form class="form-horizontal">
+        <fieldset>
+          <legend>New Post</legend>
+          <div class="form-group">
+            <label for="forum_name" class="col-lg-2 control-label">/tech/</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control" id="forum_name" placeholder="Forum Title" value={{forum_name}}>
+                </div>
           </div>
-          <div class="panel-body">
-            <h4>{{post.time}}</h4>
+          <div class="form-group">
+            <label for="url" class="col-lg-2 control-label">Title</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control" id="url" placeholder="Post Title">
+                </div>
           </div>
-        </div>
-        
-        {% endfor %}
-      </div>
+          <div class="form-group">
+            <label for="url" class="col-lg-2 control-label">URL</label>
+            <div class="col-lg-10">
+              <input type="text" class="form-control" id="url" placeholder="URL">
+                </div>
+          </div>
+          <div class="form-group">
+            <label for="textArea" class="col-lg-2 control-label">Text</label>
+            <div class="col-lg-10">
+              <textarea class="form-control" rows="4" id="textArea"></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-lg-10">
+          </div>
+          </div>
+          <div class="form-group">
+            <div class="col-lg-10 col-lg-offset-2">
+              <button type="reset" class="btn btn-default">Cancel</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
     </div>
   </body>
 </html>

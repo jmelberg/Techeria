@@ -232,6 +232,13 @@ class ForumHandler(webapp2.RequestHandler):
     post.put()
     self.redirect('/tech/{}'.format(forum))
 
+class SubmissionHandler(webapp2.RequestHandler):
+  """Handles user submissions to forums"""
+  def get(self):
+    user = User.get_by_id(users.get_current_user().user_id())
+    forum_name = cgi.escape(self.request.get('forum_name'))
+    self.response.out.write(template.render('submitPost.html', {'viewer': user, 'forum_name':forum_name}))
+
 
 
 app = webapp2.WSGIApplication([
@@ -246,5 +253,6 @@ app = webapp2.WSGIApplication([
                                ('/compose', ComposeMessage),
                                ('/feed', FeedHandler),
                                ('/connections', DisplayConnections),
-                               ('/tech/(.+)', ForumHandler)
+                               ('/tech/(.+)', ForumHandler),
+                               ('/submit', SubmissionHandler),
                                ], debug=True)
