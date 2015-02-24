@@ -151,6 +151,7 @@ class SearchHandler(webapp2.RequestHandler):
 class CommentHandler(webapp2.RequestHandler):
   """Handler to process user comments"""
   def post(self):
+    origin = cgi.escape(self.request.get('origin'))
     text = cgi.escape(self.request.get('text'))
     sender = cgi.escape(self.request.get('sender'))
     recipient = cgi.escape(self.request.get('recipient'))
@@ -159,7 +160,10 @@ class CommentHandler(webapp2.RequestHandler):
     comment.sender = sender
     comment.recipient = recipient
     comment.put()
-    self.redirect('/profile/{}'.format(recipient))
+    if origin == "feed":
+      self.redirect('/feed')
+    else:
+      self.redirect('/profile/{}'.format(recipient))
 
 class MessageHandler(webapp2.RequestHandler):
   """ Handler to process user messages"""
@@ -213,6 +217,14 @@ class FeedHandler(webapp2.RequestHandler):
                                               'comments': comments,
                                               'logout':logout}))
 
+class FeedListHandler(webapp2.RequestHandler):
+  def get(self):
+        comments = Comment.query().order(-Comment.time)
+        self.response.out.write(template.render('feedlist.html', {
+                                              'comments': comments,
+                                              }))
+
+
 class ForumHandler(webapp2.RequestHandler):
   """ Handles the forum """
   def get(self, forum_id):
@@ -255,4 +267,5 @@ app = webapp2.WSGIApplication([
                                ('/connections', DisplayConnections),
                                ('/tech/(.+)', ForumHandler),
                                ('/submit', SubmissionHandler),
+                               ('/feedlist', FeedListHandler),
                                ], debug=True)
