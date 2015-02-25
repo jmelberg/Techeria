@@ -51,36 +51,19 @@
     </nav>
     <div class="container">
       <div class="page-header">
-          <h2>{{forum_name}}
+          <h1>{{forum_name}}
             <a href="/submit?forum_name={{forum_name}}" type="button" class="btn btn-primary pull-right" align="right">
               <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Submit Post</a>
-          </h2>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <h3 class="panel-title">Make Post</h3>
-        </div>
-        <div class="panel-body">
-          <form role="form" action="/tech/{{forum_name}}" method="post">
-            <div class="form-group">
-              <textarea style="resize:none; font-size: 20px;" name="text" class="form-control" rows="2"></textarea>
-              <ol style="visibility:hidden;"></ol>
-              <input  type="hidden" name="author" class="form-control" value={{viewer.username}}>
-              <input  type="hidden" name="forum" class="form-control" value={{forum_name}}>
-                  <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post</button>
-                  </div>
-          </form>
-        </div>
+          </h1>
       </div>
       <div class="list-group">
         {% for post in posts %}
-        <div class="panel panel-info">
-          <div class="panel-heading">
-            <h2 class="panel-title">{{post.title}}<span><p class="panel-title pull-right">{{post.author}}</p></span></h2>
-          </div>
-          <div class="panel-body">
-            <h4>{{post.time}}</h4>
-          </div>
+        <div class="list-group-item">
+          <!-- TODO Delete message link -->
+          <a href="{{post.url}}">
+          <h3 class="list-group-item-heading">{{post.title}} </h3>
+          </a>
+          <p class="list-group-tem-text"> submitted {{post.time}} by {{post.author}} <span class="label-lg label-default pull-right"> Comments</span></p>
         </div>
         
         {% endfor %}

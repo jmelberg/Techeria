@@ -236,11 +236,13 @@ class ForumHandler(webapp2.RequestHandler):
   def post(self, forum_id):
     author = cgi.escape(self.request.get('author'))
     forum = cgi.escape(self.request.get('forum'))
-    title = cgi.escape(self.request.get('text'))
+    title = cgi.escape(self.request.get('title'))
+    url = cgi.escape(self.request.get('url'))
     post = ForumPost()
     post.author = author
     post.forum_name = forum
     post.title = title
+    post.url = url
     post.put()
     self.redirect('/tech/{}'.format(forum))
 

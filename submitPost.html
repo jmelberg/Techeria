@@ -50,31 +50,32 @@
       </div><!-- /.conaiiner-fluid -->
     </nav>
     <div class="container">
-      <form class="form-horizontal">
+      <form class="form-horizontal" action="/tech/{{forum_name}}" method="post">
         <fieldset>
           <legend>New Post</legend>
           <div class="form-group">
-            <label for="forum_name" class="col-lg-2 control-label">/tech/</label>
+            <label for="forum" class="col-lg-2 control-label">/tech/</label>
             <div class="col-lg-10">
-              <input type="text" class="form-control" id="forum_name" placeholder="Forum Title" value={{forum_name}}>
+              <input type="text" class="form-control" name="forum" placeholder="Forum Title" value={{forum_name}}>
                 </div>
           </div>
           <div class="form-group">
-            <label for="url" class="col-lg-2 control-label">Title</label>
+            <label for="title" class="col-lg-2 control-label">Title</label>
             <div class="col-lg-10">
-              <input type="text" class="form-control" id="url" placeholder="Post Title">
+              <input type="text" class="form-control" name="title" placeholder="Post Title">
+                <input type="hidden" class="form-control" name="author" placeholder="Post Title" value={{viewer.username}}>
                 </div>
           </div>
           <div class="form-group">
             <label for="url" class="col-lg-2 control-label">URL</label>
             <div class="col-lg-10">
-              <input type="text" class="form-control" id="url" placeholder="URL">
+              <input type="text" class="form-control" name="url" placeholder="URL">
                 </div>
           </div>
           <div class="form-group">
-            <label for="textArea" class="col-lg-2 control-label">Text</label>
+            <label for="text" class="col-lg-2 control-label">Text</label>
             <div class="col-lg-10">
-              <textarea class="form-control" rows="4" id="textArea"></textarea>
+              <textarea class="form-control" rows="4" name="text"></textarea>
             </div>
           </div>
           <div class="form-group">
