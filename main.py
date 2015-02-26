@@ -75,7 +75,7 @@ class ConnectHandler(webapp2.RequestHandler):
     user = User.get_by_id(users.get_current_user().user_id())
     requests = ConnectionRequest.query(ConnectionRequest.requestee == user.username).order(-ConnectionRequest.time)
     logout = users.create_logout_url('/')
-    self.response.out.write(template.render('requests.html', {'user': user, 'requests': requests, 'logout':logout}))
+    self.response.out.write(template.render('requests.html', {'viewer': user, 'requests': requests, 'logout':logout}))
   def post(self):
     requestor = User.get_by_id(users.get_current_user().user_id())
     q = User.query(User.username == self.request.get('requestee'))
@@ -183,7 +183,7 @@ class MessageHandler(webapp2.RequestHandler):
     user.put()
     messages = Message.query(Message.recipient == user.username).order(-Message.time)
     logout = users.create_logout_url('/')
-    self.response.out.write(template.render('messages.html', {'user': user, 'messages': messages, 'logout':logout}))
+    self.response.out.write(template.render('messages.html', {'viewer': user, 'messages': messages, 'logout':logout}))
 
 class ComposeMessage(webapp2.RequestHandler):
   def get(self):
@@ -223,7 +223,7 @@ class FeedHandler(webapp2.RequestHandler):
     comments = Comment.query().order(-Comment.time)
     if user:
       self.response.out.write(template.render('feed.html',
-                                              {'user':user,
+                                              {'viewer':user,
                                               'comments': comments,
                                               'logout':logout}))
 
