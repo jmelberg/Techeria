@@ -10,6 +10,8 @@ from models import ConnectionRequest
 from models import ForumPost
 from models import Skill
 import logging
+import random
+import string
 
 """Techeria is a professional social network for techies"""
 
@@ -22,8 +24,6 @@ class LoginHandler(webapp2.RequestHandler):
       logout = users.create_logout_url('/')
       #checks if account for user exists
       if registered_account:
-        #self.response.out.write(template.render('profile.html',
-        #                                        {'user':registered_account, 'logout':logout}))
         self.redirect('/profile/{}'.format(registered_account.username))
       else:
         def create_account():
@@ -142,9 +142,19 @@ class SearchHandler(webapp2.RequestHandler):
         q = User.query(User.email == search_string)
         if q:
           results.append(q.get())
+      elif " " in search_string:
+        person = search_string.split(' ')
+        first_name = person[0]
+        last_name = person[1]
+        full_name = User.query(User.first_name == first_name, User.last_name == last_name)
+        if full_name:
+          results.append(full_name.get())
       else:
         first_name = User.query(User.first_name == search_string)
-        if first_name:
+        username = User.query(User.username == search_string)
+        if username.get() is not None:
+          results.append(username.get())
+        if first_name.get() is not None:
           results.append(first_name.get())
     self.response.out.write(template.render('search.html', {'results':results}))
 
@@ -243,6 +253,7 @@ class ForumHandler(webapp2.RequestHandler):
     post.forum_name = forum
     post.title = title
     post.url = url
+    post.reference = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
     post.put()
     self.redirect('/tech/{}'.format(forum))
 
@@ -252,8 +263,6 @@ class SubmissionHandler(webapp2.RequestHandler):
     user = User.get_by_id(users.get_current_user().user_id())
     forum_name = cgi.escape(self.request.get('forum_name'))
     self.response.out.write(template.render('submitPost.html', {'viewer': user, 'forum_name':forum_name}))
-
-
 
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),

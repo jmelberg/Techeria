@@ -20,7 +20,7 @@ class Comment(ndb.Model):
   recipient = ndb.StringProperty()
   text = ndb.StringProperty()
   time = ndb.DateTimeProperty(auto_now_add=True)
-  karma = ndb.IntegerProperty(default = 0)
+  vote_count = ndb.IntegerProperty(default = 0)
 
 class Message(ndb.Model):
   sender = ndb.StringProperty()
@@ -39,7 +39,8 @@ class ForumPost(ndb.Model):
   url = ndb.StringProperty()
   title = ndb.StringProperty()
   author = ndb.StringProperty()
-  karma = ndb.IntegerProperty(default = 0)
+  reference = ndb.StringProperty()
+  vote_count = ndb.IntegerProperty(default = 0)
   comment_count = ndb.IntegerProperty(default = 0)
   time = ndb.DateTimeProperty(auto_now_add=True)
   text = ndb.StringProperty()
