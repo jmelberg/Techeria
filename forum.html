@@ -8,17 +8,22 @@
       <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Submit Post</a>
   </h1>
 </div>
-<div class="list-group">
   {% for post in posts %}
   <div class="list-group-item">
-    <!-- TODO Delete message link -->
-    <a href="{{post.url}}">
-      <h3 class="list-group-item-heading">{{post.title}} </h3>
-    </a>
-    <p class="list-group-tem-text"> submitted {{post.time}} by {{post.author}} <span class="label-lg label-default pull-right"> Comments</span></p>
+  <div class="row">
+    <div class="col-md-1 text-center">
+        <a class="btn btn-default"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>
+        <h4>{{post.vote_count}}</h4>
+        <a class="btn btn-default"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></a>
+    </div>
+    <div class="col-md-11">
+          <h3><a href="{{post.url}}">{{post.title}}</a></h3>
+        <p> submitted {{post.time}} by {{post.author}}</p>
+        <a class="badge badge-default pull-right">Comments</a>
+    </div>
+  </div>
   </div>
   
   {% endfor %}
-</div>
 
 {% endblock %}
