@@ -248,7 +248,9 @@ class ForumHandler(webapp2.RequestHandler):
     forum = cgi.escape(self.request.get('forum'))
     title = cgi.escape(self.request.get('title'))
     url = cgi.escape(self.request.get('url'))
+    text = cgi.escape(self.request.get('text'))
     post = ForumPost()
+    post.text = text
     post.author = author
     post.forum_name = forum
     post.title = title
@@ -264,10 +266,31 @@ class SubmissionHandler(webapp2.RequestHandler):
     forum_name = cgi.escape(self.request.get('forum_name'))
     self.response.out.write(template.render('submitPost.html', {'viewer': user, 'forum_name':forum_name}))
 
+class ForumCommentHandler(webapp2.RequestHandler):
+  """retrieves the correct forum post"""
+  def get(self, forum_id, post_reference):
+    user = User.get_by_id(users.get_current_user().user_id())
+    post = ForumPost.query(ForumPost.forum_name == forum_id, ForumPost.reference == post_reference).get()
+    comments = Comment.query(ancestor=post.key).fetch()
+    self.response.out.write(template.render('forumComments.html', {'viewer': user, 'post':post, 'forum_name':forum_id, 'comments':comments}))
+  def post(self, forum_id, post_reference):
+    user = User.get_by_id(users.get_current_user().user_id())
+    post = ForumPost.query(ForumPost.forum_name == forum_id, ForumPost.reference == post_reference).get()
+    text = cgi.escape(self.request.get('text'))
+    sender = cgi.escape(self.request.get('sender'))
+    recipient = cgi.escape(self.request.get('recipient'))
+    comment = Comment(parent=post.key)
+    comment.text = text
+    comment.sender = sender
+    comment.recipient = recipient
+    comment.put()
+    self.redirect('/tech/{}/{}'.format(forum_id, post_reference))
+
+
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
                                ('/register', RegisterHandler),
-                               ('/profile/(.+)', ProfileHandler),
+                               ('/profile/(\w+)', ProfileHandler),
                                ('/connect', ConnectHandler),
                                ('/confirmconnect', ConfirmConnection),
                                ('/search', SearchHandler),
@@ -276,7 +299,8 @@ app = webapp2.WSGIApplication([
                                ('/compose', ComposeMessage),
                                ('/feed', FeedHandler),
                                ('/connections', DisplayConnections),
-                               ('/tech/(.+)', ForumHandler),
+                               ('/tech/(\w+)', ForumHandler),
                                ('/submit', SubmissionHandler),
                                ('/feedlist', FeedListHandler),
+                               ('/tech/(\w+)/(\w+)', ForumCommentHandler)
                                ], debug=True)
