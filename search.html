@@ -1,72 +1,21 @@
-<html>
-  <head>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/yeti/bootstrap.min.css">
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-      </head>
-  <body>
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/">Techeria</a>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav navbar-right">
-            <li><p class="navbar-text" aria-label="Left Align"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{user.email}}</li>
-            <li><a href={{logout}}>Sign Out</a></li>
-          </ul>
-          <ul class="nav nav-pills navbar-left" role="tablist">
-            <li role="presentation"><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><span class="badge"></span>
-              <span class="badge"></span>
-            </a></li>
-            <li role="presentation"><a href="/connect"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-              {% if user.request_count > 0 %}
-              <span class="badge">{{user.request_count}}</span>
-              {% endif %}
-            </a></li>
-            <li role="presentation"><a href="../messages"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-              {% if user.message_count > 0 %}
-              <span class="badge">{{user.message_count}}</span>
-              {% endif %}
-            </a></li>
-          </ul>
-          <form class="navbar-form navbar-right" role="search"
-            action="/search" method="get">
-            <div class="form-group">
-              <input name="search" type="text" class="form-control" placeholder="Search" required>
-                </div>
-            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-          </form>
-          
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.conaiiner-fluid -->
-    </nav>
-    <div class="container">
-      {% for user in results %}
-      {% if user != None %}
-      <div class="list-group">
-        <a href="/profile/{{user.username}}" class="list-group-item ">
-          <h4 class="list-group-item-heading">{{user.first_name}}  {{user.last_name}}</h4>
-          <p class="list-group-item-text">{{user.profession}} @ {{user.employer}}</p>
-        </a>
-      </div>
-      {% else %}
-      <div class="list-group">
-        <a href="/profile/{{user.username}}" class="list-group-item ">
-          <h4 class="list-group-item-heading">No search results found</h4>
-          <p class="list-group-item-text">Please Try again</p>
-        </a>
-      </div>
-      {% endif %}
-      {% endfor %}
+{% extends "base.html" %}
+
+{% block content %}
+  {% for user in results %}
+    {% if user != None %}
+    <div class="list-group">
+      <a href="/profile/{{user.username}}" class="list-group-item ">
+        <h4 class="list-group-item-heading">{{user.first_name}}  {{user.last_name}}</h4>
+        <p class="list-group-item-text">{{user.profession}} @ {{user.employer}}</p>
+      </a>
     </div>
-  </body>
-</html>
+    {% else %}
+    <div class="list-group">
+      <a href="/profile/{{user.username}}" class="list-group-item ">
+        <h4 class="list-group-item-heading">No search results found</h4>
+        <p class="list-group-item-text">Please Try again</p>
+      </a>
+    </div>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
