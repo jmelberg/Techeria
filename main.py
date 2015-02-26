@@ -12,6 +12,7 @@ from models import Skill
 import logging
 import random
 import string
+import datetime
 
 """Techeria is a professional social network for techies"""
 
@@ -83,6 +84,7 @@ class ConnectHandler(webapp2.RequestHandler):
     connection_request = ConnectionRequest()
     connection_request.requestor = requestor.username
     connection_request.requestee = requestee.username
+    connection_request.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
     connection_request.put()
     requestee.request_count += 1
     requestee.put()
@@ -169,6 +171,7 @@ class CommentHandler(webapp2.RequestHandler):
     comment.text = text
     comment.sender = sender
     comment.recipient = recipient
+    comment.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
     comment.put()
     if origin == "feed":
       self.redirect('/feed')
@@ -205,6 +208,7 @@ class ComposeMessage(webapp2.RequestHandler):
       message.text = text
       message.sender = sender
       message.recipient = recipient
+      message.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
       message.put()
       #Increment message count for navbar
       q = User.query(User.username == recipient)
@@ -254,6 +258,7 @@ class ForumHandler(webapp2.RequestHandler):
     post.author = author
     post.forum_name = forum
     post.title = title
+    post.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
     post.url = url
     post.reference = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
     post.put()
@@ -283,6 +288,7 @@ class ForumCommentHandler(webapp2.RequestHandler):
     comment.text = text
     comment.sender = sender
     comment.recipient = recipient
+    comment.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
     comment.put()
     self.redirect('/tech/{}/{}'.format(forum_id, post_reference))
 
