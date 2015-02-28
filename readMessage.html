@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-header"><h2>Read Message</h2></div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">From: {{message.sender}}</h3>
+  </div>
+  <div class="panel-body">
+    <h4>Subject: {{message.subject}} </h4>
+    <div class="well well-lg">
+      {{message.text}}
+    </div>
+    <form role="form" action="/compose" method="post">
+      <div class="form-group">
+        <ol style="visibility:hidden;"></ol>
+        <textarea id= "reply" style="display: none;" name="text" class="form-control" rows="10"></textarea>
+        <ol style="visibility:hidden;"></ol>
+        <input type="hidden" name = "parent" class="form-control" value={{message.key.urlsafe}}>
+        <input type="hidden" name = "sender" class="form-control" value={{message.recipient}}>
+        <input type="hidden" name = "recipient" class="form-control" value={{message.sender}}>
+        <input type="hidden" name = "subject" class="form-control" value={{message.subject}}>
+      </div>
+    <button id= "sendButton" class="btn btn-primary pull-right" style = "display: none;" type="submit"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>   Send</button>
+    </form>
+    <button id= "replyButton" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>   Reply</button>
+  </div>
+</div>
+<script>
+
+$(document).ready(function() {
+  $( "#replyButton" ).click(function() {
+    $( "#reply" ).show( "slow", function() {
+             // Animation complete.
+           });
+    $("#sendButton").show("slow", function(){
+    //Animation done.
+    });
+    $("#replyButton").hide("slow", function(){
+      //Animation done.
+    });
+  });
+
+}); 
+</script>
+
+
+{% endblock %}

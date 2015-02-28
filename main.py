@@ -201,10 +201,17 @@ class ComposeMessage(webapp2.RequestHandler):
     text = cgi.escape(self.request.get('text'))
     sender = cgi.escape(self.request.get('sender'))
     recipient = cgi.escape(self.request.get('recipient'))
+    subject = cgi.escape(self.request.get('subject'))
+    parent_message = cgi.escape(self.request.get('parent'))
     q = User.query(User.username == recipient)
     user = q.get()
     if(user):
-      message = Message()
+      if parent_message is not None:
+        message_key = ndb.Key(urlsafe=parent_message)
+        message = Message(parent = message_key)
+      else:
+        message = Message()
+      message.subject = subject
       message.text = text
       message.sender = sender
       message.recipient = recipient
@@ -218,6 +225,17 @@ class ComposeMessage(webapp2.RequestHandler):
       self.redirect('/messages')
     else:
       self.redirect('/compose')
+
+class ReadMessage(webapp2.RequestHandler):
+  def get(self, message_id):
+    viewer_email = users.get_current_user()
+    v = User.query(User.email == viewer_email.email())
+    viewer = v.get()
+    message_key = ndb.Key(urlsafe=message_id)
+    message = message_key.get()
+    logout = users.create_logout_url('/')
+    self.response.out.write(template.render('readMessage.html', {'logout': logout,
+                                                                    'viewer':viewer, 'message': message}))
 
 class FeedHandler(webapp2.RequestHandler):
   """ Handler for handling user feed """
@@ -308,5 +326,6 @@ app = webapp2.WSGIApplication([
                                ('/tech/(\w+)', ForumHandler),
                                ('/submit', SubmissionHandler),
                                ('/feedlist', FeedListHandler),
-                               ('/tech/(\w+)/(\w+)', ForumCommentHandler)
+                               ('/tech/(\w+)/(\w+)', ForumCommentHandler),
+                               ('/messages/(.+)', ReadMessage),
                                ], debug=True)
