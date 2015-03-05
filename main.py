@@ -206,7 +206,7 @@ class ComposeMessage(webapp2.RequestHandler):
     q = User.query(User.username == recipient)
     user = q.get()
     if(user):
-      if parent_message is not None:
+      if len(parent_message) > 0:
         message_key = ndb.Key(urlsafe=parent_message)
         message = Message(parent = message_key)
       else:
