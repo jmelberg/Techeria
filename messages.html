@@ -1,26 +1,27 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="page-header">
-  <h2>Messages <p></p>
-    <a href="/compose" type="button" class="btn btn-primary ">
+  <h2>Messages
+    <a href="/compose" type="button" class="btn btn-primary pull-right">
       <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>   Compose
     </a>
-    <button id = "deleteButton" type="submit" style: "display=none;" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-trash"  aria-hidden="true">   Remove</span>
-    </button>
   </h2>
 </div>
 <ul class = "nav nav-tabs nav-justified">
-<li role="presentation" class = "active"><a href="/messages">Inbox</a></li>
-<li role="presentation"><a href ="/trash">Trash</a></li>
+  <li role="presentation" class = "active"><a href="/messages">Inbox</a></li>
+  <li role="presentation"><a href ="/trash">Trash</a></li>
 </ul>
-
 <ul class = "list-group">
   {% for message in messages %}
     <div class = "row">
+      <div class="list-item">
       <div class = "col-md-1" style= "padding-right: 0;">
-        <button class = "btn btn-default" style = "display: inline-block; vertical-align: middle;">
-          <span class = "glyphicon glyphicon-ok" ></span>
+        <h4></h4>
+        <div class="well well-sm">
+          <button id="checkbox{{forloop.counter}}" class = "btn btn-default center-block">
+          <div id="check{{forloop.counter}}" class = "glyphicon glyphicon-ok" style="display:none;" ></div>
         </button>
+        </div>
       </div>
       <div class = "col-md-11" style= "padding-left: 0;">
         <a href="/messages/{{message.key.urlsafe}}" class="list-group-item">
@@ -28,7 +29,27 @@
         <h7 class="list-group-item-text">Subject: {{message.subject}}  -  {{message.text}} </h7>
         </a>
       </div>
+      </div>
     </div>
   {% endfor %}
 </ul>
+
+<script>
+  $(document).ready(function() {
+    $( "[id^='checkbox']" ).click(function() {
+        if($(this).children(':visible').length == 0){
+        $( this).children().show( "fast", function() {
+          // Animation complete.
+        });
+        }
+        else {
+        $(this).children().hide( "fast", function() {
+          // Animation complete.
+          });
+        }
+    });
+    
+                    
+  });
+</script>
 {% endblock %}
