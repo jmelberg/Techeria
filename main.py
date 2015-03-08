@@ -226,6 +226,17 @@ class ComposeMessage(webapp2.RequestHandler):
     else:
       self.redirect('/compose')
 
+class DeleteMessage(webapp2.RequestHandler):
+  def post(self):
+    key_array = cgi.escape(self.request.get('array'))
+    logging.error(key_array)
+    for key in key_array.split(","):
+      message_key = ndb.Key(urlsafe=key)
+      message_key.delete()
+    self.redirect('/messages')
+
+
+
 class ReadMessage(webapp2.RequestHandler):
   def get(self, message_id):
     viewer_email = users.get_current_user()
@@ -328,4 +339,5 @@ app = webapp2.WSGIApplication([
                                ('/feedlist', FeedListHandler),
                                ('/tech/(\w+)/(\w+)', ForumCommentHandler),
                                ('/messages/(.+)', ReadMessage),
+                               ('/trash', DeleteMessage),
                                ], debug=True)

@@ -11,6 +11,7 @@
   <li role="presentation" class = "active"><a href="/messages">Inbox</a></li>
   <li role="presentation"><a href ="/trash">Trash</a></li>
 </ul>
+<button id = "delete" class = "btn btn-warning" style= "display: none;">Delete</button> 
 <ul class = "list-group">
   {% for message in messages %}
     <div class = "row">
@@ -18,9 +19,8 @@
       <div class = "col-md-1" style= "padding-right: 0;">
         <h4></h4>
         <div class="well well-sm">
-          <button id="checkbox{{forloop.counter}}" class = "btn btn-default center-block">
+          <button id="checkbox{{forloop.counter}}" class = "btn btn-default center-block" value ="{{message.key.urlsafe}}">
           <div id="check{{forloop.counter}}" class = "glyphicon glyphicon-ok" style="display:none;" ></div>
-          <input type="hidden" value="{{message.key.urlsafe}}">
           </button>
         </div>
       </div>
@@ -37,20 +37,44 @@
 
 <script>
   $(document).ready(function() {
+    var key;
+    var count = 0;
     $( "[id^='checkbox']" ).click(function() {
         if($(this).children(':visible').length == 0){
         $( this).children().show( "fast", function() {
           // Animation complete.
+          key = $(this).val();
+          $("#delete").show();
+          count++;
         });
         }
         else {
-        $(this).children().hide( "fast", function() {
+        $(this).children().hide("fast", function() {
           // Animation complete.
+          count--;
+          if(count==0){
+            $("#delete").hide("fast", function(){
+            });
+          }
           });
         }
-    });
-    
-                    
+    });  
+    $("#delete").click(function(){
+      // Delete function
+      var array = []
+      $("[id^='checkbox']").each(function(index, key){
+        if($(this).children(':visible').length > 0){
+          array.push(key.value);
+        }
+      });
+      var json_array = array.toString();
+      $.ajax({
+        type: "POST",
+        url: "/trash",
+        data: {'array' : json_array},
+      });
+      top.location.href = '/messages';
+    });                
   });
 </script>
 {% endblock %}
