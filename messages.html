@@ -20,7 +20,8 @@
         <div class="well well-sm">
           <button id="checkbox{{forloop.counter}}" class = "btn btn-default center-block">
           <div id="check{{forloop.counter}}" class = "glyphicon glyphicon-ok" style="display:none;" ></div>
-        </button>
+          <input type="hidden" value="{{message.key.urlsafe}}">
+          </button>
         </div>
       </div>
       <div class = "col-md-11" style= "padding-left: 0;">
