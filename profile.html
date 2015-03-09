@@ -36,11 +36,11 @@
         <div class="panel-body">
           <form role="form" action="/comment" method="post">
             <div class="form-group">
-              <textarea style="resize:none; font-size: 20px;" name="text" class="form-control" rows="2"></textarea>
+              <textarea style="resize:none; font-size: 16px;" name="text" class="form-control" rows="1" id="commentBox"></textarea>
               <ol style="visibility:hidden;"></ol>
               <input  type="hidden" name="recipient" class="form-control" value={{user.username}}>
                 <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
-                  <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post</button>
+                  <button type="submit" style="display:none;" class="btn btn-primary pull-right" id="postButton"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post</button>
                   </div>
           </form>
         </div>
@@ -65,4 +65,28 @@
     </div>
   </div>
   </div>
+  
+  <script>
+    
+    
+    $(function () {
+      
+      $('#commentBox').data('holder', $('#commentBox').attr('placeholder'));
+      
+      $('#commentBox').focusin(function () {
+                               $(this).attr('placeholder', '');
+                               $(this).attr('rows', 2);
+                               $("#postButton").show("fast");
+                               });
+      $('#commentBox').focusout(function () {
+                                if($(this).val().length == 0){
+                                $(this).attr('placeholder', "Leave {{user.first_name}} a comment.");
+                                $(this).attr('rows', 1);
+                                $("#postButton").hide("fast");
+                                }
+                                });
+      
+      
+      });
+    </script>
 {% endblock %}

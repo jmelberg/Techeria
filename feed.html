@@ -8,12 +8,12 @@
   <div class="panel-body">
     <form role="form" action="/comment" method="post">
       <div class="form-group">
-        <textarea style="resize:none; font-size: 20px;" name="text" class="form-control" rows="2"></textarea>
+        <textarea style="resize:none; font-size: 18px;" name="text" class="form-control" rows="1" id="commentBox" placeholder="What's new?"></textarea>
         <ol style="visibility:hidden;"></ol>
-        <input  type="hidden" name="recipient" class="form-control" value={{user.username}}>
-          <input  type="hidden" name="sender" class="form-control" value={{user.username}}>
+        <input  type="hidden" name="recipient" class="form-control" value={{viewer.username}}>
+          <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
             <input  type="hidden" name="origin" class="form-control" value='feed'>
-              <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post</button>
+              <button type="submit" class="btn btn-primary pull-right" style="display:none;" id="postButton"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post</button>
               </div>
     </form>
   </div>
@@ -22,6 +22,28 @@
   Loading...
 </div>
 <script>
+ 
+ 
+ $(function () {
+   
+   $('#commentBox').data('holder', $('#commentBox').attr('placeholder'));
+   
+   $('#commentBox').focusin(function () {
+                      $(this).attr('placeholder', '');
+                      $(this).attr('rows', 2);
+                      $("#postButton").show("fast");
+                      });
+   $('#commentBox').focusout(function () {
+                    if($(this).val().length == 0){
+                       $(this).attr('placeholder', "What's New?");
+                       $(this).attr('rows', 1);
+                       $("#postButton").hide("fast");
+                    }
+                       });
+   
+   
+   });
+   
   function updateFeed() {
     $.ajax({
            url: "/feedlist",
