@@ -24,7 +24,7 @@ class LoginHandler(webapp2.RequestHandler):
       registered_account = User.get_by_id(user.user_id())
       logout = users.create_logout_url('/')
       #checks if account for user exists
-      if registered_account:
+      if registered_account and registered_account.username is not None:
         self.redirect('/profile/{}'.format(registered_account.username))
       else:
         def create_account():
@@ -47,8 +47,6 @@ class RegisterHandler(webapp2.RequestHandler):
     user.username = cgi.escape(self.request.get('username'))
     user.profession = cgi.escape(self.request.get('profession'))
     user.employer = cgi.escape(self.request.get('employer'))
-    user.major = cgi.escape(self.request.get('major'))
-    user.grad_year = int(self.request.get('grad_year'))
     user.put()
     self.redirect('/')
 

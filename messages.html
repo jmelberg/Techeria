@@ -11,7 +11,7 @@
   <li role="presentation" class = "active"><a href="/messages">Inbox</a></li>
   <li role="presentation"><a href ="/trash">Trash</a></li>
 </ul>
-<button id = "delete" class = "btn btn-warning" style= "display: none;">Delete</button> 
+<button id = "delete" class = "btn btn-warning btn-lg" style= "display: none; width: 100%;">Delete</button>
 <ul class = "list-group">
   {% for message in messages %}
     <div class = "row">
@@ -44,7 +44,7 @@
         $( this).children().show( "fast", function() {
           // Animation complete.
           key = $(this).val();
-          $("#delete").show();
+          $("#delete").show("fast");
           count++;
         });
         }

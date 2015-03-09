@@ -44,7 +44,7 @@
           <form class="navbar-form navbar-right" role="search"
             action="/search" method="get">
             <div class="form-group">
-              <input name="search" type="text" class="form-control" placeholder="Search" required>
+              <input id="searchBox" name="search" type="text" class="form-control" placeholder="Search" required>
                 </div>
             <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
           </form>
@@ -56,4 +56,23 @@
       {% block content %}{% endblock %}
     </div>
   </body>
+  
+  <script>
+    $(function () {
+      
+      $('#seachBox').data('holder', $('#searchBox').attr('placeholder'));
+      
+      $('#searchBox').focusin(function () {
+                               $(this).attr('placeholder', '');
+                               });
+      $('#searchBox').focusout(function () {
+                                if($(this).val().length == 0){
+                                $(this).attr('placeholder', "Search");
+                                }
+                                });
+      
+      
+      });
+
+  </script>
 </html>

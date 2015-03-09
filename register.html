@@ -1,6 +1,6 @@
 <html>
 <head>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/yeti/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/lumen/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
@@ -27,40 +27,67 @@
   </nav>
   <div class="container">
     <div class="page-header">
-      <h1>Welcome to Techeria! <small>Setup your account</small>
+      <h1>Welcome to Techeria!
       </h1>
     </div>
-      <div class="row">
-      <div class="col-md-4">
-     <form class="form-horizontal" role="form" action="/register" method="post">
-      <div class="form-group">
-        <label>Username:</label>
-        <input name = "username" type="text" class="form-control" required>
-          <label>First Name:</label>
-          <input name="first_name" type="text" class="form-control" required>
-            <label>Last Name:</label>
-            <input name="last_name" type="text" class="form-control" required>
-              <label>Job Title:</label>
-              <input name="profession" type="text" class="form-control" required>
-                <label> Employer:</label>
-              <input name="employer" type="text" class="form-control" required>
-                <label>Major:</label>
-                <input name="major" type="text" class="form-control" required>
-                  <label>Grad Year:</label>
-                  <input name="grad_year" type="number" class="form-control" required min="1900" max="2020" value="2015">
-                  <br></br>
-                  <form action="up" method="post" enctype="multipart/form-data">Profile Picture: <input type="file" name="img" />
-                    <br /></form>
-                    <br></br>
-                      <button type="submit" class="btn btn-default" aria-label"Center Align">
-                      <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-                      Sign up</button>
+    <div class="row">
+        <div class="col-md-3"></div>
+        
+        <div class="col-md-6">
+          <div class="well">
+          <form class="form-horizontal" action="/register" method="POST">
+            <fieldset>
+              <div id="legend">
+                <legend class="">Sign Up</legend>
+              </div>
+              <div class="control-group">
+                <h4>Username</h4>
+                <div class="controls">
+                  <input type="text" id="username" name="username" placeholder="" class="form-control input-lg" required>
+                    <p class="help-block">Username can contain any letters or numbers, without spaces</p>
+                    </div>
+              </div>
+              
+              <div class="control-group">
+                <h4>First Name</h4>
+                <div class="controls">
+                  <input type="text" id="first_name" name="first_name" placeholder="" class="form-control input-lg" required>
+                    </div>
+              </div>
+              
+              <div class="control-group">
+                <h4>Last Name</h4>
+                <div class="controls">
+                  <input type="text" id="password" name="last_name" placeholder="" class="form-control input-lg" required>
+                    </div>
+              </div>
+              
+              <div class="control-group">
+                <h4>Job Title</h4>
+                <div class="controls">
+                  <input type="text" id="profession" name="profession" placeholder="" class="form-control input-lg" required>
+                    </div>
+              </div>
+              
+              <div class="control-group">
+                <h4>Employer</h4>
+                <div class="controls">
+                  <input type="text" id="employer" name="employer" placeholder="" class="form-control input-lg" required>
+                    </div>
+              </div>
+              <br></br>
+              <div class="control-group">
+                <!-- Button -->
+                <div class="controls">
+                  <button class="btn btn-success btn-lg" style="display: block; width: 100%;">Sign Up</button>
+                </div>
+              </div>
+            </fieldset>
+          </form>
           </div>
         </div>
-      </div>
-    </form>
-
-
+      
+    </div>
   </div>
 </body>
 </html>
