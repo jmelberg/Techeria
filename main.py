@@ -60,6 +60,14 @@ class ProfileHandler(webapp2.RequestHandler):
     logout = users.create_logout_url('/')
     q = User.query(User.username == profile_id)
     user = q.get()
+    connection_list = []
+    """Get friend count """
+    counter = 0
+    for connection in user.friends:
+      connection = User.get_by_id(connection.id())
+      counter+=1
+    user.friend_count = counter
+
     comments = Comment.query(Comment.recipient == user.username).order(-Comment.time)
     if user:
       self.response.out.write(template.render('profile.html',
@@ -125,7 +133,8 @@ class DisplayConnections(webapp2.RequestHandler):
       friend.username = connection.username
       friend.profession = connection.profession + " at " + connection.employer
       connection_list.append(friend)
-    self.response.out.write(template.render('connections.html', {'connections':connection_list, 'user':user, 'viewer':viewer}))
+      logout = users.create_logout_url('/')
+    self.response.out.write(template.render('connections.html', {'connections':connection_list, 'user':user, 'viewer':viewer, 'logout':logout}))
 
 
 class SearchHandler(webapp2.RequestHandler):
@@ -227,13 +236,10 @@ class ComposeMessage(webapp2.RequestHandler):
 class DeleteMessage(webapp2.RequestHandler):
   def post(self):
     key_array = cgi.escape(self.request.get('array'))
-    logging.error(key_array)
     for key in key_array.split(","):
       message_key = ndb.Key(urlsafe=key)
       message_key.delete()
     self.redirect('/messages')
-
-
 
 class ReadMessage(webapp2.RequestHandler):
   def get(self, message_id):
@@ -264,7 +270,6 @@ class FeedListHandler(webapp2.RequestHandler):
         self.response.out.write(template.render('feedlist.html', {
                                               'comments': comments,
                                               }))
-
 
 class ForumHandler(webapp2.RequestHandler):
   """ Handles the forum """

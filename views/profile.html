@@ -31,14 +31,16 @@
       <ul class="list-group">
         <a class="list-group-item" href="/connections?username={{user.username}}">
           Connections
-          <span class="badge">14</span>
+          {% if user.friend_count > 0 %}
+          <span class="badge">{{user.friend_count}}</span>
+          {% endif %}
         </a>
         <a class="list-group-item" href="/connections?username={{user.username}}">
-          Placeholder
+          Projects
           <span class="badge">1690</span>
         </a>
         <a class="list-group-item" href="/connections?username={{user.username}}">
-          Second Placeholder
+          Hacks
           <span class="badge">15</span>
         </a>
         <a class="list-group-item" href="/connections?username={{user.username}}">

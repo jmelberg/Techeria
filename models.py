@@ -11,6 +11,7 @@ class User(ndb.Model):
   major = ndb.StringProperty()
   grad_year = ndb.IntegerProperty()
   activated = ndb.BooleanProperty()
+  friend_count = ndb.IntegerProperty(default=0)
   message_count = ndb.IntegerProperty(default = 0)
   request_count = ndb.IntegerProperty(default = 0)
   skills = ndb.KeyProperty(kind = "Skill", repeated=True)

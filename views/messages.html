@@ -11,34 +11,39 @@
   <li role="presentation" class = "active"><a href="/messages">Inbox</a></li>
   <li role="presentation"><a href ="/trash">Trash</a></li>
 </ul>
-<button id = "delete" class = "btn btn-warning btn-lg" style= "display: none; width: 100%;">Delete</button>
-<ul class = "list-group">
-  {% for message in messages %}
-    <div class = "row">
-      <div class="list-item">
-      <div class = "col-md-1" style= "padding-right: 0;">
-        <h4></h4>
-        <div class="well well-sm">
-          <button id="checkbox{{forloop.counter}}" class = "btn btn-default center-block" value ="{{message.key.urlsafe}}">
-          <div id="check{{forloop.counter}}" class = "glyphicon glyphicon-ok" style="display:none;" ></div>
-          </button>
+<div id="my-tabs" class="tab-content">
+  <div id="messages">
+    <button id = "delete" class = "btn btn-warning btn-lg" style= "display: none; width: 100%;">Delete</button>
+    <ul class = "list-group">
+      {% for message in messages %}
+        <div class = "row">
+          <div class="list-item">
+          <div class = "col-md-1" style= "padding-right: 0;">
+            <h4></h4>
+            <div class="well well-sm">
+              <button id="checkbox{{forloop.counter}}" class = "btn btn-default center-block" value ="{{message.key.urlsafe}}">
+              <div id="check{{forloop.counter}}" class = "glyphicon glyphicon-ok" style="display:none;" ></div>
+              </button>
+            </div>
+          </div>
+          <div class = "col-md-11" style= "padding-left: 0;">
+            <a href="/messages/{{message.key.urlsafe}}" class="list-group-item">
+            <h4 class="list-group-item-heading">{{message.sender}} </h4>
+            <h7 class="list-group-item-text">Subject: {{message.subject}}  -  {{message.text}} </h7>
+            </a>
+          </div>
+          </div>
         </div>
-      </div>
-      <div class = "col-md-11" style= "padding-left: 0;">
-        <a href="/messages/{{message.key.urlsafe}}" class="list-group-item">
-        <h4 class="list-group-item-heading">{{message.sender}} </h4>
-        <h7 class="list-group-item-text">Subject: {{message.subject}}  -  {{message.text}} </h7>
-        </a>
-      </div>
-      </div>
-    </div>
-  {% endfor %}
-</ul>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
 
 <script>
   $(document).ready(function() {
     var key;
     var count = 0;
+    activeTab('Inbox');
     $( "[id^='checkbox']" ).click(function() {
         if($(this).children(':visible').length == 0){
         $( this).children().show( "fast", function() {
@@ -76,5 +81,9 @@
       top.location.href = '/messages';
     });                
   });
+
+function activeTab(tab){
+  $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+};
 </script>
 {% endblock %}
