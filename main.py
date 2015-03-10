@@ -33,7 +33,7 @@ class LoginHandler(webapp2.RequestHandler):
           account.email = user.email()
           account.put()
         create_account()
-        self.response.out.write(template.render('register.html',
+        self.response.out.write(template.render('views/register.html',
                                                 {'user':user, 'logout':logout}))
     else:
       self.redirect(users.create_login_url(self.request.uri))
@@ -70,7 +70,7 @@ class ProfileHandler(webapp2.RequestHandler):
 
     comments = Comment.query(Comment.recipient == user.username).order(-Comment.time)
     if user:
-      self.response.out.write(template.render('profile.html',
+      self.response.out.write(template.render('views/profile.html',
                                         {'user':user,
                                               'comments': comments,
                                               'viewer':viewer,
@@ -82,7 +82,7 @@ class ConnectHandler(webapp2.RequestHandler):
     user = User.get_by_id(users.get_current_user().user_id())
     requests = ConnectionRequest.query(ConnectionRequest.requestee == user.username).order(-ConnectionRequest.time)
     logout = users.create_logout_url('/')
-    self.response.out.write(template.render('requests.html', {'viewer': user, 'requests': requests, 'logout':logout}))
+    self.response.out.write(template.render('views/requests.html', {'viewer': user, 'requests': requests, 'logout':logout}))
   def post(self):
     requestor = User.get_by_id(users.get_current_user().user_id())
     q = User.query(User.username == self.request.get('requestee'))
@@ -134,7 +134,7 @@ class DisplayConnections(webapp2.RequestHandler):
       friend.profession = connection.profession + " at " + connection.employer
       connection_list.append(friend)
       logout = users.create_logout_url('/')
-    self.response.out.write(template.render('connections.html', {'connections':connection_list, 'user':user, 'viewer':viewer, 'logout':logout}))
+    self.response.out.write(template.render('views/connections.html', {'connections':connection_list, 'user':user, 'viewer':viewer, 'logout':logout}))
 
 
 class SearchHandler(webapp2.RequestHandler):
@@ -165,7 +165,7 @@ class SearchHandler(webapp2.RequestHandler):
           results.append(username.get())
         if first_name.get() is not None:
           results.append(first_name.get())
-    self.response.out.write(template.render('search.html', {'results':results}))
+    self.response.out.write(template.render('views/search.html', {'results':results}))
 
 class CommentHandler(webapp2.RequestHandler):
   """Handler to process user comments"""
@@ -193,7 +193,7 @@ class MessageHandler(webapp2.RequestHandler):
     user.put()
     messages = Message.query(Message.recipient == user.username).order(-Message.time)
     logout = users.create_logout_url('/')
-    self.response.out.write(template.render('messages.html', {'viewer': user, 'messages': messages, 'logout':logout}))
+    self.response.out.write(template.render('views/messages.html', {'viewer': user, 'messages': messages, 'logout':logout}))
 
 class ComposeMessage(webapp2.RequestHandler):
   def get(self):
@@ -202,7 +202,7 @@ class ComposeMessage(webapp2.RequestHandler):
     v = User.query(User.email == viewer_email.email())
     viewer = v.get()
     logout = users.create_logout_url('/')
-    self.response.out.write(template.render('composeMessage.html', {'logout': logout,
+    self.response.out.write(template.render('views/composeMessage.html', {'logout': logout,
                                                                     'viewer':viewer, 'user':viewer, 'recipient':recipient}))
   def post(self):
     text = cgi.escape(self.request.get('text'))
@@ -249,7 +249,7 @@ class ReadMessage(webapp2.RequestHandler):
     message_key = ndb.Key(urlsafe=message_id)
     message = message_key.get()
     logout = users.create_logout_url('/')
-    self.response.out.write(template.render('readMessage.html', {'logout': logout,
+    self.response.out.write(template.render('views/readMessage.html', {'logout': logout,
                                                                     'viewer':viewer, 'message': message}))
 
 class FeedHandler(webapp2.RequestHandler):
@@ -259,7 +259,7 @@ class FeedHandler(webapp2.RequestHandler):
     logout = users.create_logout_url('/')
     comments = Comment.query().order(-Comment.time)
     if user:
-      self.response.out.write(template.render('feed.html',
+      self.response.out.write(template.render('views/feed.html',
                                               {'viewer':user,
                                               'comments': comments,
                                               'logout':logout}))
@@ -267,7 +267,7 @@ class FeedHandler(webapp2.RequestHandler):
 class FeedListHandler(webapp2.RequestHandler):
   def get(self):
         comments = Comment.query().order(-Comment.time)
-        self.response.out.write(template.render('feedlist.html', {
+        self.response.out.write(template.render('views/feedlist.html', {
                                               'comments': comments,
                                               }))
 
@@ -277,7 +277,7 @@ class ForumHandler(webapp2.RequestHandler):
     forum_id = forum_id.lower()
     user = User.get_by_id(users.get_current_user().user_id())
     forum_posts = ForumPost.query(ForumPost.forum_name == forum_id)
-    self.response.out.write(template.render('forum.html', {'viewer': user,
+    self.response.out.write(template.render('views/forum.html', {'viewer': user,
                                       'posts': forum_posts, 'forum_name': forum_id}))
   def post(self, forum_id):
     author = cgi.escape(self.request.get('author'))
@@ -301,7 +301,7 @@ class SubmissionHandler(webapp2.RequestHandler):
   def get(self):
     user = User.get_by_id(users.get_current_user().user_id())
     forum_name = cgi.escape(self.request.get('forum_name'))
-    self.response.out.write(template.render('submitPost.html', {'viewer': user, 'forum_name':forum_name}))
+    self.response.out.write(template.render('views/submitPost.html', {'viewer': user, 'forum_name':forum_name}))
 
 class ForumCommentHandler(webapp2.RequestHandler):
   """retrieves the correct forum post"""
@@ -309,7 +309,7 @@ class ForumCommentHandler(webapp2.RequestHandler):
     user = User.get_by_id(users.get_current_user().user_id())
     post = ForumPost.query(ForumPost.forum_name == forum_id, ForumPost.reference == post_reference).get()
     comments = Comment.query(ancestor=post.key).fetch()
-    self.response.out.write(template.render('forumComments.html', {'viewer': user, 'post':post, 'forum_name':forum_id, 'comments':comments}))
+    self.response.out.write(template.render('views/forumComments.html', {'viewer': user, 'post':post, 'forum_name':forum_id, 'comments':comments}))
   def post(self, forum_id, post_reference):
     user = User.get_by_id(users.get_current_user().user_id())
     post = ForumPost.query(ForumPost.forum_name == forum_id, ForumPost.reference == post_reference).get()

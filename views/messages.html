@@ -43,7 +43,6 @@
   $(document).ready(function() {
     var key;
     var count = 0;
-    activeTab('Inbox');
     $( "[id^='checkbox']" ).click(function() {
         if($(this).children(':visible').length == 0){
         $( this).children().show( "fast", function() {
@@ -81,9 +80,5 @@
       top.location.href = '/messages';
     });                
   });
-
-function activeTab(tab){
-  $('.nav-tabs a[href="#' + tab + '"]').tab('show');
-};
 </script>
 {% endblock %}
