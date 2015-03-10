@@ -35,7 +35,7 @@
         
         <div class="col-md-6">
           <div class="well">
-          <form class="form-horizontal" action="/register" method="POST">
+          <form class="form-horizontal" enctype="multipart/form-data"  action="/register" method="POST">
             <fieldset>
               <div id="legend">
                 <legend class="">Sign Up</legend>
@@ -75,6 +75,13 @@
                   <input type="text" id="employer" name="employer" placeholder="" class="form-control input-lg" required>
                     </div>
               </div>
+              <div class="control-group">
+                <h4>Profile Picture</h4>
+                <div class="controls">
+                  <input type="file" id="avatar" name="img"  class="form-control input-lg" required>
+                    </div>
+              </div>
+
               <br></br>
               <div class="control-group">
                 <!-- Button -->

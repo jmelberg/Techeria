@@ -15,6 +15,7 @@ class User(ndb.Model):
   message_count = ndb.IntegerProperty(default = 0)
   request_count = ndb.IntegerProperty(default = 0)
   skills = ndb.KeyProperty(kind = "Skill", repeated=True)
+  avatar =  ndb.BlobProperty()
 
 class Comment(ndb.Model):
   sender = ndb.StringProperty()

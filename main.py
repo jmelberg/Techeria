@@ -3,6 +3,7 @@ import webapp2
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
+from google.appengine.api import images
 from models import User
 from models import Comment
 from models import Message
@@ -47,6 +48,9 @@ class RegisterHandler(webapp2.RequestHandler):
     user.username = cgi.escape(self.request.get('username'))
     user.profession = cgi.escape(self.request.get('profession'))
     user.employer = cgi.escape(self.request.get('employer'))
+    avatar = self.request.get('img')
+    #avatar = images.resize(avatar, 32, 32)
+    user.avatar = avatar 
     user.put()
     self.redirect('/')
 
@@ -324,6 +328,15 @@ class ForumCommentHandler(webapp2.RequestHandler):
     comment.put()
     self.redirect('/tech/{}/{}'.format(forum_id, post_reference))
 
+class Image(webapp2.RequestHandler):
+  """Serves the image associated with an avatar"""
+  def get(self):
+    """receives user by urlsafe key"""
+    user_key = ndb.Key(urlsafe=self.request.get('user_id'))
+    user = user_key.get()
+    self.response.headers['content-type'] = 'image/png'
+    self.response.out.write(user.avatar)
+
 
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
@@ -343,4 +356,5 @@ app = webapp2.WSGIApplication([
                                ('/tech/(\w+)/(\w+)', ForumCommentHandler),
                                ('/messages/(.+)', ReadMessage),
                                ('/trash', DeleteMessage),
+                               ('/img', Image),
                                ], debug=True)
