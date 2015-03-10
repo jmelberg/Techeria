@@ -48,8 +48,8 @@ class RegisterHandler(webapp2.RequestHandler):
     user.username = cgi.escape(self.request.get('username'))
     user.profession = cgi.escape(self.request.get('profession'))
     user.employer = cgi.escape(self.request.get('employer'))
-    avatar = self.request.get('img')
-    #avatar = images.resize(avatar, 32, 32)
+    #avatar = self.request.get('img')
+    avatar = images.resize(avatar, 32, 32)
     user.avatar = avatar 
     user.put()
     self.redirect('/')
