@@ -10,6 +10,7 @@
 <ul class = "list-group">
   {% for connection in connections %}
   <a href="/profile/{{connection.username}}" class="list-group-item">
+    <img src="/img?user_id={{connection.key.urlsafe}}&height=50&width=50" class="img-rounded"></img>
     <h4 class="list-group-item-heading">{{connection.first_name}} {{connection.last_name}}
       <!-- <button type="submit" class="btn-xs btn-primary pull-right"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
        <p></p> -->

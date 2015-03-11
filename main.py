@@ -168,7 +168,8 @@ class SearchHandler(webapp2.RequestHandler):
         if username.get() is not None:
           results.append(username.get())
         if first_name.get() is not None:
-          results.append(first_name.get())
+          for result in first_name.fetch(10):
+            results.append(result)
     self.response.out.write(template.render('views/search.html', {'results':results}))
 
 class CommentHandler(webapp2.RequestHandler):
@@ -333,10 +334,16 @@ class Image(webapp2.RequestHandler):
   def get(self):
     """receives user by urlsafe key"""
     user_key = ndb.Key(urlsafe=self.request.get('user_id'))
+    height = cgi.escape(self.request.get('height'))
+    width = cgi.escape(self.request.get('width'))
     user = user_key.get()
     self.response.headers['content-type'] = 'image/png'
-    self.response.out.write(user.avatar)
-
+    if len(height) > 0 and len(width) > 0:
+      height = int(height)
+      width = int(width)
+      self.response.out.write(images.resize(user.avatar,height,width))
+    else:
+      self.response.out.write(user.avatar)
 
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
