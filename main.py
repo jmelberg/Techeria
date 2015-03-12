@@ -43,11 +43,11 @@ class RegisterHandler(webapp2.RequestHandler):
   def post(self):
     """Registers the user and updates datastore"""
     user = User.get_by_id(users.get_current_user().user_id())
-    user.first_name = cgi.escape(self.request.get('first_name'))
-    user.last_name = cgi.escape(self.request.get('last_name'))
-    user.username = cgi.escape(self.request.get('username'))
-    user.profession = cgi.escape(self.request.get('profession'))
-    user.employer = cgi.escape(self.request.get('employer'))
+    user.first_name = cgi.escape(self.request.get('first_name')).strip()
+    user.last_name = cgi.escape(self.request.get('last_name')).strip()
+    user.username = cgi.escape(self.request.get('username')).strip()
+    user.profession = cgi.escape(self.request.get('profession')).strip()
+    user.employer = cgi.escape(self.request.get('employer')).strip()
     avatar = self.request.get('img')
     avatar = images.resize(avatar,400,400)
     user.avatar = avatar 
