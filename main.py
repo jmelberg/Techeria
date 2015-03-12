@@ -124,6 +124,7 @@ class DisplayConnections(webapp2.RequestHandler):
         self.last_name = ""
         self.username = ""
         self.profession = ""
+        self.key_urlsafe = ""
         #self.location = ""
         #self.picture = ""
     connection_list = []
@@ -134,10 +135,11 @@ class DisplayConnections(webapp2.RequestHandler):
       friend.last_name = connection.last_name
       friend.username = connection.username
       friend.profession = connection.profession + " at " + connection.employer
+      friend.key_urlsafe = connection.key.urlsafe
       connection_list.append(friend)
       logout = users.create_logout_url('/')
     self.response.out.write(template.render('views/connections.html',
-      {'connections':connection_list, 'user':user, 'viewer':viewer, 'logout':logout}))
+      {'connections': connection_list, 'user':user, 'viewer':viewer, 'logout':logout}))
 
 
 class SearchHandler(webapp2.RequestHandler):
