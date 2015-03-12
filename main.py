@@ -75,10 +75,8 @@ class ProfileHandler(webapp2.RequestHandler):
     comments = Comment.query(Comment.recipient == user.username).order(-Comment.time)
     if user:
       self.response.out.write(template.render('views/profile.html',
-                                        {'user':user,
-                                              'comments': comments,
-                                              'viewer':viewer,
-                                              'logout':logout}))
+                                        {'user':user, 'comments': comments,
+                                        'viewer':viewer, 'logout':logout}))
 
 class ConnectHandler(webapp2.RequestHandler):
   """handler to connect users"""
@@ -138,7 +136,8 @@ class DisplayConnections(webapp2.RequestHandler):
       friend.profession = connection.profession + " at " + connection.employer
       connection_list.append(friend)
       logout = users.create_logout_url('/')
-    self.response.out.write(template.render('views/connections.html', {'connections':connection_list, 'user':user, 'viewer':viewer, 'logout':logout}))
+    self.response.out.write(template.render('views/connections.html',
+      {'connections':connection_list, 'user':user, 'viewer':viewer, 'logout':logout}))
 
 
 class SearchHandler(webapp2.RequestHandler):
@@ -271,10 +270,20 @@ class FeedHandler(webapp2.RequestHandler):
 
 class FeedListHandler(webapp2.RequestHandler):
   def get(self):
-        comments = Comment.query().order(-Comment.time)
-        self.response.out.write(template.render('views/feedlist.html', {
+    comments = Comment.query().order(-Comment.time)
+    self.response.out.write(template.render('views/feedlist.html', {
                                               'comments': comments,
                                               }))
+
+class VoteHandler(webapp2.RequestHandler):
+  def post(self):
+    post = cgi.escape(self.request.get('key'))
+    change = int(cgi.escape(self.request.get('change')))
+    post_key = ndb.Key(urlsafe=post)
+    new_post = post_key.get()
+    new_post.vote_count+=change
+    new_post.put()
+
 
 class ForumHandler(webapp2.RequestHandler):
   """ Handles the forum """
@@ -364,4 +373,5 @@ app = webapp2.WSGIApplication([
                                ('/messages/(.+)', ReadMessage),
                                ('/trash', DeleteMessage),
                                ('/img', Image),
+                               ('/vote', VoteHandler),
                                ], debug=True)

@@ -49,6 +49,7 @@ class ForumPost(ndb.Model):
   text = ndb.StringProperty()
   categories = ndb.KeyProperty(kind= "Skill", repeated=True)
 
+
 class Skill(ndb.Model):
   name = ndb.StringProperty()
 

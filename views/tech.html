@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Forums
+  </h2>
+</div>
+<ul class = "list-group">
+  {% for forum in forum_list %}
+  <a href="/profile/{{connection.username}}" class="list-group-item">
+    <img src="/img?user_id={{connection.key.urlsafe}}&height=50&width=50" class="img-rounded"></img>
+    <h4 class="list-group-item-heading">{{forum.forum_name}}
+    </h4>
+    <p class="list-group-item-text">{{forum.title}} </p>
+  </a>
+  {% endfor %}
+</ul>
+{% endblock %}
