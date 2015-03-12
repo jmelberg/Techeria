@@ -13,8 +13,10 @@
         <div class="form-group">
           <input  type="hidden" name="requestee" class="btn btn-primary" value={{user.username}}>
             </div>
+        {% if viewer.key not in user.friends %}
         <button type="submit" class="btn btn-primary">
           <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>          Connect</button>
+        {% endif %}
         <a href="/compose?recipient={{user.username}}" type="button" class="btn btn-primary">
           <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>          Message</a>
       </form>

@@ -89,13 +89,20 @@ class ConnectHandler(webapp2.RequestHandler):
     requestor = User.get_by_id(users.get_current_user().user_id())
     q = User.query(User.username == self.request.get('requestee'))
     requestee = q.get()
-    connection_request = ConnectionRequest()
-    connection_request.requestor = requestor.username
-    connection_request.requestee = requestee.username
-    connection_request.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
-    connection_request.put()
-    requestee.request_count += 1
-    requestee.put()
+    #Querying datastore to check for open connection request
+    incoming_query = ConnectionRequest.query(ConnectionRequest.requestor == requestee.username, ConnectionRequest.requestee == requestor.username)
+    outgoing_query = ConnectionRequest.query(ConnectionRequest.requestor == requestor.username, ConnectionRequest.requestee == requestee.username)
+    incoming_request = incoming_query.get()
+    outgoing_request = outgoing_query.get()
+    #don't create 2 connection requests between users
+    if incoming_request == None and outgoing_request == None:
+      connection_request = ConnectionRequest()
+      connection_request.requestor = requestor.username
+      connection_request.requestee = requestee.username
+      connection_request.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
+      connection_request.put()
+      requestee.request_count += 1
+      requestee.put()
     self.redirect('/')
 
 class ConfirmConnection(webapp2.RequestHandler):
@@ -110,7 +117,7 @@ class ConfirmConnection(webapp2.RequestHandler):
     requestor.put()
     requestee.put()
     connection_request.key.delete()
-    self.redirect('/')
+    self.redirect('/confirmconnect')
     
 class DisplayConnections(webapp2.RequestHandler):
   """ Will display all friends/connections of a user"""
