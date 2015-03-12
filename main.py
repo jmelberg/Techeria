@@ -57,7 +57,6 @@ class RegisterHandler(webapp2.RequestHandler):
 class ProfileHandler(webapp2.RequestHandler):
   """handler to display a profile page"""
   def get(self, profile_id):
-    #profile_id = key name of user
     viewer_email = users.get_current_user()
     v = User.query(User.email == viewer_email.email())
     viewer = v.get()
@@ -77,6 +76,7 @@ class ProfileHandler(webapp2.RequestHandler):
       self.response.out.write(template.render('views/profile.html',
                                         {'user':user, 'comments': comments,
                                         'viewer':viewer, 'logout':logout}))
+
 
 class ConnectHandler(webapp2.RequestHandler):
   """handler to connect users"""
