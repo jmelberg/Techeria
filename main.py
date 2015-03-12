@@ -45,7 +45,7 @@ class RegisterHandler(webapp2.RequestHandler):
     user = User.get_by_id(users.get_current_user().user_id())
     user.first_name = cgi.escape(self.request.get('first_name')).strip()
     user.last_name = cgi.escape(self.request.get('last_name')).strip()
-    user.username = cgi.escape(self.request.get('username')).strip()
+    user.username = cgi.escape(self.request.get('username')).strip().lower()
     user.profession = cgi.escape(self.request.get('profession')).strip()
     user.employer = cgi.escape(self.request.get('employer')).strip()
     avatar = self.request.get('img')
@@ -363,6 +363,16 @@ class Image(webapp2.RequestHandler):
     else:
       self.response.out.write(user.avatar)
 
+class CheckUsername(webapp2.RequestHandler):
+  def get(self):
+    username = cgi.escape(self.request.get('username'))
+    user_query = User.query(User.username == username)
+    taken = user_query.get()
+    if taken == None:
+      self.response.out.write('Username is available')
+    else:
+      self.response.out.write('Username is taken')
+
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
                                ('/register', RegisterHandler),
@@ -383,4 +393,5 @@ app = webapp2.WSGIApplication([
                                ('/trash', DeleteMessage),
                                ('/img', Image),
                                ('/vote', VoteHandler),
+                               ('/checkusername', CheckUsername)
                                ], debug=True)

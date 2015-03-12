@@ -1,7 +1,10 @@
 <html>
 <head>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/lumen/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 </head>
 <body>
   <nav class="navbar navbar-default">
@@ -41,12 +44,51 @@
                 <legend class="">Sign Up</legend>
               </div>
               <div class="control-group">
-                <h4>Username</h4>
+                <h4>Username <small id="available" class="label label-success pull-right" style="display:none;"></small></h4>
                 <div class="controls">
                   <input type="text" id="username" name="username" placeholder="" class="form-control input-lg" required>
                     <p class="help-block">Username can contain any letters or numbers, without spaces</p>
                     </div>
               </div>
+              
+              <script>
+                $(function () {
+                  
+                  $('#username').focusin(function () {
+                                           });
+                  $('#username').focusout(function () {
+                                            if($(this).val().length != 0){
+                                                checkUsername($(this).val().toLowerCase());
+                                            }
+                                          else{
+                                            $("#available").hide();
+                                          }
+                                            });
+                  
+                  });
+                  
+                  function checkUsername(username) {
+                    $.ajax({
+                           url: "/checkusername",
+                           cache: false,
+                           data:{'username' : username},
+                           success: function(result){
+                           $("#available").text(result);
+                           if(result == 'Username is available'){
+                             $("#available").attr('class', 'label label-success pull-right');
+                             $("#available").show();
+                             $("#signup").prop('disabled', false);
+                           }
+                           else {
+                             $("#available").attr('class', 'label label-danger pull-right');
+                             $("#available").show();
+                             $("#signup").prop('disabled', true);
+                           }
+                           }});
+                  }
+
+
+              </script>
               
               <div class="control-group">
                 <h4>First Name</h4>
@@ -86,7 +128,7 @@
               <div class="control-group">
                 <!-- Button -->
                 <div class="controls">
-                  <button class="btn btn-success btn-lg" style="display: block; width: 100%;">Sign Up</button>
+                  <button class="btn btn-success btn-lg" id="signup" style="display: block; width: 100%;">Sign Up</button>
                 </div>
               </div>
             </fieldset>
