@@ -375,10 +375,10 @@ class CheckUsername(webapp2.RequestHandler):
 
 class UpdateProfile(webapp2.RequestHandler):
   def post(self):
-    first_name = cgi.escape(self.request.get('first'))
-    last_name = cgi.escape(self.request.get('last'))
-    profession = cgi.escape(self.request.get('profession'))
-    employer = cgi.escape(self.request.get('employer'))
+    first_name = cgi.escape(self.request.get('first')).strip()
+    last_name = cgi.escape(self.request.get('last')).strip()
+    profession = cgi.escape(self.request.get('profession')).strip()
+    employer = cgi.escape(self.request.get('employer')).strip()
     user_key = ndb.Key(urlsafe=self.request.get('user_key'))
     user = user_key.get()
     user.first_name = first_name
