@@ -19,6 +19,7 @@ class="img-rounded"/>
         <div class = "col-xs-1 text-center"><h4>at</h4></div>
         <div class = "col-md-3">
           <input name = "employer" type = "text" class="form-control input-default" style="width: 100%;" value ="{{user.employer}}">
+          <input name="user_key" type="hidden" value="{{user.key.urlsafe}}">
         </div>
         <div class = "col-md-1"><button class = "btn btn-warning" id="cancel" type="reset">Cancel</button></div>
         <div class = "col-md-1"><button class = "btn btn-primary" id = "save" type="submit">Save</button></div>

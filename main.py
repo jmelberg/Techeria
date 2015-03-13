@@ -373,6 +373,22 @@ class CheckUsername(webapp2.RequestHandler):
     else:
       self.response.out.write('Username is taken')
 
+class UpdateProfile(webapp2.RequestHandler):
+  def post(self):
+    first_name = cgi.escape(self.request.get('first'))
+    last_name = cgi.escape(self.request.get('last'))
+    profession = cgi.escape(self.request.get('profession'))
+    employer = cgi.escape(self.request.get('employer'))
+    user_key = ndb.Key(urlsafe=self.request.get('user_key'))
+    user = user_key.get()
+    user.first_name = first_name
+    user.last_name = last_name
+    user.profession = profession
+    user.employer = employer
+    user.put()
+    self.redirect('/profile/{}'.format(user.username))
+
+
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
                                ('/register', RegisterHandler),
@@ -393,5 +409,6 @@ app = webapp2.WSGIApplication([
                                ('/trash', DeleteMessage),
                                ('/img', Image),
                                ('/vote', VoteHandler),
-                               ('/checkusername', CheckUsername)
+                               ('/checkusername', CheckUsername),
+                               ('/updateprofile', UpdateProfile),
                                ], debug=True)
