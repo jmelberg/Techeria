@@ -281,9 +281,13 @@ class FeedListHandler(webapp2.RequestHandler):
   def get(self):
     page = int(cgi.escape(self.request.get('page')))
     offset_count = 10*page
+    more = 0
     comments = Comment.query().order(-Comment.time).fetch(10, offset=offset_count)
+    for comment in comments:
+      if comment != None:
+        more += 1
     self.response.out.write(template.render('views/feedlist.html', {
-                                              'comments': comments,
+                                              'comments': comments, 'more':more, 'page':page
                                               }))
 
 class VoteHandler(webapp2.RequestHandler):

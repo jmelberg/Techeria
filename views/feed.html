@@ -21,15 +21,18 @@
 <div id = "feedlist">
 </div>
 <script>
+  var done = 0;
   jQuery(document).ready(function() {
     var count = 1;
     var multiplier = 0.5;
-    var bodyheight = 0.5*$('body').height();
+    var bodyheight = $('body').height();
     $(window).scroll(function(){
-      if($(window).scrollTop() + bodyheight >= 0.9*$('#feedlist').height()) {
+      if($(window).scrollTop() + bodyheight >= $('body').height() - 20) {
+      if(done == 0){
        updateFeed(count);
        $('#loading').show();
        count++;
+     }
      }
     });
   });
@@ -65,9 +68,12 @@
            success: function(frag){
            $("#feedlist").append(frag);
            $('#loading').hide();
+           var id = "#more-" + page;
+           if(parseInt($(id).text()) < 10){
+            done = 1;
+           }
            }
            });
-           setTimeout('updateFeed(0)', 100000);
   }
   updateFeed(0);
   </script>
