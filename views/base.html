@@ -5,7 +5,48 @@
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
       <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-      </head>
+  </head>
+
+  <style>
+  .scroll-top-wrapper {
+    position: fixed;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    text-align: center;
+    z-index: 99999999;
+    background-color: #A8A8A8 ;
+    color: #eeeeee;
+    width: 50px;
+    height: 48px;
+    line-height: 48px;
+    right: 30px;
+    bottom: 30px;
+    padding-top: 2px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    -webkit-transition: all 0.25s ease-in-out;
+    -moz-transition: all 0.25s ease-in-out;
+    -ms-transition: all 0.25s ease-in-out;
+    -o-transition: all 0.25s ease-in-out;
+    transition: all 0.25s ease-in-out;
+  }
+  .scroll-top-wrapper:hover {
+    background-color: #FF4500;
+    opacity: 1;
+  }
+  .scroll-top-wrapper.show {
+    visibility:visible;
+    cursor:pointer;
+    opacity: .8;
+  }
+  .scroll-top-wrapper div {
+    line-height: inherit;
+  }
+
+  </style>
   <body>
     <nav class="navbar navbar-default">
       <div class="container-fluid">
@@ -55,6 +96,11 @@
     <div class="container">
       {% block content %}{% endblock %}
     </div>
+  <div class="scroll-top-wrapper ">
+    <span class="scroll-top-inner">
+      <div class="glyphicon glyphicon-chevron-up" style="width:100%;"></div>
+    </span>
+  </div>
   </body>
   
   <script>
@@ -69,10 +115,31 @@
                                 if($(this).val().length == 0){
                                 $(this).attr('placeholder', "Search");
                                 }
-                                });
-      
+                                });    
       
       });
+
+    $(function(){
+
+      $(document).on( 'scroll', function(){
+
+        if ($(window).scrollTop() > 100) {
+          $('.scroll-top-wrapper').addClass('show');
+        } else {
+          $('.scroll-top-wrapper').removeClass('show');
+        }
+      });
+
+      $('.scroll-top-wrapper').on('click', scrollToTop);
+    });
+
+    function scrollToTop() {
+      verticalOffset = typeof(verticalOffset) != 'undefined' ? verticalOffset : 0;
+      element = $('body');
+      offset = element.offset();
+      offsetTop = offset.top;
+      $('html, body').animate({scrollTop: offsetTop}, 500, 'linear');
+    }
 
   </script>
 </html>
