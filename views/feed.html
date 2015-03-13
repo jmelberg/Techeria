@@ -19,12 +19,22 @@
   </div>
 </div>
 <div id = "feedlist">
-  Loading...
 </div>
 <script>
- 
- 
- $(function () {
+  jQuery(document).ready(function() {
+    var count = 1;
+    var multiplier = 0.5;
+    var bodyheight = 0.5*$('body').height();
+    $(window).scroll(function(){
+      if($(window).scrollTop() + bodyheight >= 0.9*$('#feedlist').height()) {
+       updateFeed(count);
+       $('#loading').show();
+       count++;
+     }
+    });
+  });
+
+
    
    $('#commentBox').data('holder', $('#commentBox').attr('placeholder'));
    
@@ -42,20 +52,23 @@
                        });
    
    $('#postButton').click(function() {
-           updateFeed();
-          }); 
-   });
+           updateFeed(0);
+    }); 
    
-  function updateFeed() {
+   
+  function updateFeed(page) {
     $.ajax({
            url: "/feedlist",
            cache: false,
+           data: {'page': page},
+
            success: function(frag){
-           $("#feedlist").html(frag);
+           $("#feedlist").append(frag);
+           $('#loading').hide();
            }
            });
-           setTimeout('updateFeed()', 100000);
+           setTimeout('updateFeed(0)', 100000);
   }
-updateFeed();
+  updateFeed(0);
   </script>
 {% endblock %}
