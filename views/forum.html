@@ -31,9 +31,11 @@
     var count = 0;
     var counter = 0;
     $("[id^='upVote-']").click(function(){
+      this.style.backgroundColor = 'orange';
       key = $(this).val();
       change = 1;
       var counter = $(this).attr('id').split('-')[1];
+      $('#downVote-' + counter).removeAttr("style");
       var number = document.getElementById('voteCount'+counter);
       var voteCount = number.innerHTML;
       voteCount++;
@@ -46,9 +48,11 @@
     });
 
     $("[id^='downVote-']").click(function(){
+      this.style.backgroundColor = '4682B4  ';
       key = $(this).val();
       change = -1;
       var counter = $(this).attr('id').split('-')[1];
+      $('#upVote-' + counter).removeAttr("style");
       var number = document.getElementById('voteCount'+counter);
       var voteCount = number.innerHTML;
       voteCount--;
