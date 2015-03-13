@@ -178,7 +178,7 @@ class SearchHandler(webapp2.RequestHandler):
         if first_name.get() is not None:
           for result in first_name.fetch(10):
             results.append(result)
-    self.response.out.write(template.render('views/search.html', {'results':results}))
+    self.response.out.write(template.render('views/search.html', {'results':results, 'search_string':search_string}))
 
 class CommentHandler(webapp2.RequestHandler):
   """Handler to process user comments"""
