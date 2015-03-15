@@ -4,6 +4,7 @@ from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.api import images
+from webapp2_extras import sessions, auth
 from models import User
 from models import Comment
 from models import Message
@@ -14,47 +15,50 @@ import logging
 import random
 import string
 import datetime
+from BaseHandler import SessionHandler
+from BaseHandler import login_required
 
 """Techeria is a professional social network for techies"""
 
-class LoginHandler(webapp2.RequestHandler):
+class LoginHandler(SessionHandler):
   def get(self):
-    """checks for user account from users api"""
-    user = users.get_current_user()
-    if user:
-      registered_account = User.get_by_id(user.user_id())
-      logout = users.create_logout_url('/')
-      #checks if account for user exists
-      if registered_account and registered_account.username is not None:
-        self.redirect('/profile/{}'.format(registered_account.username))
-      else:
-        def create_account():
-          """creates a user entity"""
-          account = User(id=user.user_id())
-          account.email = user.email()
-          account.put()
-        create_account()
-        self.response.out.write(template.render('views/register.html',
-                                                {'user':user, 'logout':logout}))
-    else:
-      self.redirect(users.create_login_url(self.request.uri))
+    self.response.out.write(template.render('views/login.html', {'user' : self.user_model}))
+  def post(self):
+    username = cgi.escape(self.request.get('username'))
+    password = cgi.escape(self.request.get('password'))
+    #TODO Check for non characters in username.
+    try:
+      u = self.auth.get_user_by_password(username, password, remember=True,
+      save_session=True)
+      self.redirect('/profile/{}'.format(self.user_model.username))
+    except( auth.InvalidAuthIDError, auth.InvalidPasswordError):
+      error = "Invalid Email/Password"
 
-class RegisterHandler(webapp2.RequestHandler):
+class RegisterHandler(SessionHandler):
   def post(self):
     """Registers the user and updates datastore"""
-    user = User.get_by_id(users.get_current_user().user_id())
-    user.first_name = cgi.escape(self.request.get('first_name')).strip()
-    user.last_name = cgi.escape(self.request.get('last_name')).strip()
-    user.username = cgi.escape(self.request.get('username')).strip().lower()
-    user.profession = cgi.escape(self.request.get('profession')).strip()
-    user.employer = cgi.escape(self.request.get('employer')).strip()
+    first_name = cgi.escape(self.request.get('first_name')).strip()
+    last_name = cgi.escape(self.request.get('last_name')).strip()
+    username = cgi.escape(self.request.get('username')).strip().lower()
+    email = cgi.escape(self.request.get('email')).strip().lower()
+    password = cgi.escape(self.request.get('password'))
     avatar = self.request.get('img')
-    avatar = images.resize(avatar,400,400)
-    user.avatar = avatar 
-    user.put()
-    self.redirect('/')
+    avatar = images.resize(avatar,400,400) 
+    
+    unique_properties = ['email_address']
+    user_data = User.create_user(username,
+      unique_properties,
+      email_address=email, first_name=first_name, password_raw=password,
+      last_name=last_name, avatar = avatar, verified=False)
+    self.redirect('/login')
 
-class ProfileHandler(webapp2.RequestHandler):
+class LogoutHandler(SessionHandler):
+    """Destroy the user session and return them to the login screen."""
+    @login_required
+    def get(self):
+        self.auth.unset_session()
+
+class ProfileHandler(SessionHandler):
   """handler to display a profile page"""
   def get(self, profile_id):
     viewer_email = users.get_current_user()
@@ -77,8 +81,7 @@ class ProfileHandler(webapp2.RequestHandler):
                                         {'user':user, 'comments': comments,
                                         'viewer':viewer, 'logout':logout}))
 
-
-class ConnectHandler(webapp2.RequestHandler):
+class ConnectHandler(SessionHandler):
   """handler to connect users"""
   def get(self):
     user = User.get_by_id(users.get_current_user().user_id())
@@ -105,7 +108,7 @@ class ConnectHandler(webapp2.RequestHandler):
       requestee.put()
     self.redirect('/')
 
-class ConfirmConnection(webapp2.RequestHandler):
+class ConfirmConnection(SessionHandler):
   """updates the datastore for user connections"""
   def post(self):
     requestor = User.query(User.username == cgi.escape(self.request.get('requestor'))).get()
@@ -119,7 +122,7 @@ class ConfirmConnection(webapp2.RequestHandler):
     connection_request.key.delete()
     self.redirect('/confirmconnect')
     
-class DisplayConnections(webapp2.RequestHandler):
+class DisplayConnections(SessionHandler):
   """ Will display all friends/connections of a user"""
   def get(self):
     username = cgi.escape(self.request.get('username'))
@@ -149,7 +152,7 @@ class DisplayConnections(webapp2.RequestHandler):
       {'connections': connection_list, 'user':user, 'viewer':viewer, 'logout':logout}))
 
 
-class SearchHandler(webapp2.RequestHandler):
+class SearchHandler(SessionHandler):
   """Handler to search for users/jobs"""
   def get(self):
     search = cgi.escape(self.request.get('search'))
@@ -180,7 +183,7 @@ class SearchHandler(webapp2.RequestHandler):
             results.append(result)
     self.response.out.write(template.render('views/search.html', {'results':results}))
 
-class CommentHandler(webapp2.RequestHandler):
+class CommentHandler(SessionHandler):
   """Handler to process user comments"""
   def post(self):
     origin = cgi.escape(self.request.get('origin'))
@@ -198,7 +201,7 @@ class CommentHandler(webapp2.RequestHandler):
     else:
       self.redirect('/profile/{}'.format(recipient))
 
-class MessageHandler(webapp2.RequestHandler):
+class MessageHandler(SessionHandler):
   """ Handler to process user messages"""
   def get(self):
     user = User.get_by_id(users.get_current_user().user_id())
@@ -208,7 +211,7 @@ class MessageHandler(webapp2.RequestHandler):
     logout = users.create_logout_url('/')
     self.response.out.write(template.render('views/messages.html', {'viewer': user, 'messages': messages, 'logout':logout}))
 
-class ComposeMessage(webapp2.RequestHandler):
+class ComposeMessage(SessionHandler):
   def get(self):
     recipient = cgi.escape(self.request.get('recipient'))
     viewer_email = users.get_current_user()
@@ -246,7 +249,7 @@ class ComposeMessage(webapp2.RequestHandler):
     else:
       self.redirect('/compose')
 
-class DeleteMessage(webapp2.RequestHandler):
+class DeleteMessage(SessionHandler):
   def post(self):
     key_array = cgi.escape(self.request.get('array'))
     for key in key_array.split(","):
@@ -254,7 +257,7 @@ class DeleteMessage(webapp2.RequestHandler):
       message_key.delete()
     self.redirect('/messages')
 
-class ReadMessage(webapp2.RequestHandler):
+class ReadMessage(SessionHandler):
   def get(self, message_id):
     viewer_email = users.get_current_user()
     v = User.query(User.email == viewer_email.email())
@@ -265,7 +268,7 @@ class ReadMessage(webapp2.RequestHandler):
     self.response.out.write(template.render('views/readMessage.html', {'logout': logout,
                                                                     'viewer':viewer, 'message': message}))
 
-class FeedHandler(webapp2.RequestHandler):
+class FeedHandler(SessionHandler):
   """ Handler for handling user feed """
   def get(self):
     user = User.get_by_id(users.get_current_user().user_id())
@@ -277,7 +280,7 @@ class FeedHandler(webapp2.RequestHandler):
                                               'comments': comments,
                                               'logout':logout}))
 
-class FeedListHandler(webapp2.RequestHandler):
+class FeedListHandler(SessionHandler):
   def get(self):
     page = int(cgi.escape(self.request.get('page')))
     offset_count = 10*page
@@ -290,7 +293,7 @@ class FeedListHandler(webapp2.RequestHandler):
                                               'comments': comments, 'more':more, 'page':page
                                               }))
 
-class VoteHandler(webapp2.RequestHandler):
+class VoteHandler(SessionHandler):
   def post(self):
     post = cgi.escape(self.request.get('key'))
     change = int(cgi.escape(self.request.get('change')))
@@ -300,7 +303,7 @@ class VoteHandler(webapp2.RequestHandler):
     new_post.put()
 
 
-class ForumHandler(webapp2.RequestHandler):
+class ForumHandler(SessionHandler):
   """ Handles the forum """
   def get(self, forum_id):
     forum_id = forum_id.lower()
@@ -325,14 +328,14 @@ class ForumHandler(webapp2.RequestHandler):
     post.put()
     self.redirect('/tech/{}'.format(forum))
 
-class SubmissionHandler(webapp2.RequestHandler):
+class SubmissionHandler(SessionHandler):
   """Handles user submissions to forums"""
   def get(self):
     user = User.get_by_id(users.get_current_user().user_id())
     forum_name = cgi.escape(self.request.get('forum_name'))
     self.response.out.write(template.render('views/submitPost.html', {'viewer': user, 'forum_name':forum_name}))
 
-class ForumCommentHandler(webapp2.RequestHandler):
+class ForumCommentHandler(SessionHandler):
   """retrieves the correct forum post"""
   def get(self, forum_id, post_reference):
     user = User.get_by_id(users.get_current_user().user_id())
@@ -353,7 +356,7 @@ class ForumCommentHandler(webapp2.RequestHandler):
     comment.put()
     self.redirect('/tech/{}/{}'.format(forum_id, post_reference))
 
-class Image(webapp2.RequestHandler):
+class Image(SessionHandler):
   """Serves the image associated with an avatar"""
   def get(self):
     """receives user by urlsafe key"""
@@ -369,7 +372,7 @@ class Image(webapp2.RequestHandler):
     else:
       self.response.out.write(user.avatar)
 
-class CheckUsername(webapp2.RequestHandler):
+class CheckUsername(SessionHandler):
   def get(self):
     username = cgi.escape(self.request.get('username'))
     user_query = User.query(User.username == username)
@@ -379,7 +382,7 @@ class CheckUsername(webapp2.RequestHandler):
     else:
       self.response.out.write('Username is taken')
 
-class UpdateProfile(webapp2.RequestHandler):
+class UpdateProfile(SessionHandler):
   def post(self):
     first_name = cgi.escape(self.request.get('first'))
     last_name = cgi.escape(self.request.get('last'))
@@ -393,6 +396,14 @@ class UpdateProfile(webapp2.RequestHandler):
     user.employer = employer
     user.put()
     self.redirect('/profile/{}'.format(user.username))
+
+config = {}
+config['webapp2_extras.sessions'] = {
+    'secret_key': 'zomg-this-key-is-so-secret',
+}
+config['webapp2_extras.auth'] = {
+    'user_model': User,
+}
 
 
 app = webapp2.WSGIApplication([
@@ -417,4 +428,5 @@ app = webapp2.WSGIApplication([
                                ('/vote', VoteHandler),
                                ('/checkusername', CheckUsername),
                                ('/updateprofile', UpdateProfile),
-                               ], debug=True)
+                               ('/logout', LogoutHandler),
+                               ], debug=True, config=config)

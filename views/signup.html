@@ -1,0 +1,143 @@
+<html>
+<head>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.2/lumen/bootstrap.min.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+</head>
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Techeria</a>
+      </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav navbar-right">
+          <li><p class="navbar-text" aria-label="Left Align"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{user.email}}</li>
+          <li><a href={{logout}}>Sign Out</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+  <div class="container">
+    <div class="page-header">
+      <h1>Welcome to Techeria!
+      </h1>
+    </div>
+    <div class="row">
+      <div class="col-md-3"></div>
+
+      <div class="col-md-6">
+        <div class="well">
+          <form class="form-horizontal" enctype="multipart/form-data"  action="/signup" method="POST">
+            <fieldset>
+              <div id="legend">
+                <legend class="">Sign Up</legend>
+              </div>
+              <div class="control-group">
+                <h4>Username <small id="available" class="label label-success pull-right" style="display:none;"></small></h4>
+                <div class="controls">
+                  <input type="text" id="username" name="username" placeholder="" class="form-control input-default" required>
+                  <p class="help-block">Username can contain any letters or numbers, without spaces</p>
+                </div>
+              </div>
+              
+              <script>
+              $(function () {
+
+                $('#username').focusin(function () {
+                });
+                $('#username').focusout(function () {
+                  if($(this).val().length != 0){
+                    checkUsername($(this).val().toLowerCase());
+                  }
+                  else{
+                    $("#available").hide();
+                  }
+                });
+
+              });
+
+              function checkUsername(username) {
+                $.ajax({
+                 url: "/checkusername",
+                 cache: false,
+                 data:{'username' : username},
+                 success: function(result){
+                   $("#available").text(result);
+                   if(result == 'Username is available'){
+                     $("#available").attr('class', 'label label-success pull-right');
+                     $("#available").show();
+                     $("#signup").prop('disabled', false);
+                   }
+                   else {
+                     $("#available").attr('class', 'label label-danger pull-right');
+                     $("#available").show();
+                     $("#signup").prop('disabled', true);
+                   }
+                 }});
+              }
+
+
+              </script>
+              
+              <div class="control-group">
+                <h4>First Name</h4>
+                <div class="controls">
+                  <input type="text" id="first_name" name="first_name" placeholder="" class="form-control input-default" required>
+                </div>
+              </div>
+              
+              <div class="control-group">
+                <h4>Last Name</h4>
+                <div class="controls">
+                  <input type="text" id="password" name="last_name" placeholder="" class="form-control input-default" required>
+                </div>
+              </div>
+              
+              <div class="control-group">
+                <h4>Email</h4>
+                <div class="controls">
+                  <input type="text" id="profession" name="email" placeholder="user@example.com" class="form-control input-default" required>
+                </div>
+              </div>
+              
+              <div class="control-group">
+                <h4>Password</h4>
+                <div class="controls">
+                  <input class="focused required form-control" name="password" id="l_password" type="password" placeholder="Password" required>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <div class="controls">
+                  <input class="focused required form-control" name="password" id="l_password" type="password" placeholder="Confirm Password" required>
+
+                </div>
+              </div>
+
+              <br></br>
+              <div class="control-group">
+                <!-- Button -->
+                <div class="controls">
+                  <button class="btn btn-success btn-lg" id="signup" style="display: block; width: 100%;">Sign Up</button>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</body>
+</html>

@@ -1,9 +1,10 @@
 from google.appengine.ext import ndb
+import webapp2_extras.appengine.auth.models as auth_models
 
-class User(ndb.Model):
+
+class User(auth_models.User):
   first_name = ndb.StringProperty()
   last_name = ndb.StringProperty()
-  email = ndb.StringProperty()
   username = ndb.StringProperty()
   friends = ndb.KeyProperty(kind= "User", repeated=True)
   profession = ndb.StringProperty()
