@@ -31,7 +31,7 @@ class="img-rounded"/>
     <small id = "profession">      {{user.profession}}    </small>
     <small> @ </small>
     <small id = "employer">     {{user.employer}}</small>
-    {% if user.email != viewer.email %}
+    {% if user.email_address != viewer.email_address %}
     <form role="form-horizontal" action="/connect" method="post">
       <div class="form-group">
         <input  type="hidden" name="requestee" class="btn btn-primary" value={{user.username}}>

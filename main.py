@@ -22,7 +22,10 @@ from BaseHandler import login_required
 
 class LoginHandler(SessionHandler):
   def get(self):
-    self.response.out.write(template.render('views/login.html', {'user' : self.user_model}))
+    if self.user_model != None:
+      self.redirect('/profile/{}'.format(self.user_model.username))
+    else:
+      self.response.out.write(template.render('views/login.html', {'user' : self.user_model}))
   def post(self):
     username = cgi.escape(self.request.get('username'))
     password = cgi.escape(self.request.get('password'))
@@ -35,6 +38,8 @@ class LoginHandler(SessionHandler):
       error = "Invalid Email/Password"
 
 class RegisterHandler(SessionHandler):
+  def get(self):
+    self.response.out.write(template.render('views/register.html',{}))
   def post(self):
     """Registers the user and updates datastore"""
     first_name = cgi.escape(self.request.get('first_name')).strip()
@@ -44,27 +49,24 @@ class RegisterHandler(SessionHandler):
     password = cgi.escape(self.request.get('password'))
     avatar = self.request.get('img')
     avatar = images.resize(avatar,400,400) 
-    
     unique_properties = ['email_address']
     user_data = User.create_user(username,
-      unique_properties,
+      unique_properties, username=username,
       email_address=email, first_name=first_name, password_raw=password,
       last_name=last_name, avatar = avatar, verified=False)
-    self.redirect('/login')
+    self.redirect('/profile/{}'.format(self.user_model.username))
 
 class LogoutHandler(SessionHandler):
     """Destroy the user session and return them to the login screen."""
     @login_required
     def get(self):
         self.auth.unset_session()
+        self.redirect('/')
 
 class ProfileHandler(SessionHandler):
   """handler to display a profile page"""
   def get(self, profile_id):
-    viewer_email = users.get_current_user()
-    v = User.query(User.email == viewer_email.email())
-    viewer = v.get()
-    logout = users.create_logout_url('/')
+    viewer = self.user_model
     q = User.query(User.username == profile_id)
     user = q.get()
     connection_list = []
@@ -74,22 +76,21 @@ class ProfileHandler(SessionHandler):
       connection = User.get_by_id(connection.id())
       counter+=1
     user.friend_count = counter
-
     comments = Comment.query(Comment.recipient == user.username).order(-Comment.time)
     if user:
       self.response.out.write(template.render('views/profile.html',
                                         {'user':user, 'comments': comments,
-                                        'viewer':viewer, 'logout':logout}))
+                                        'viewer':viewer}))
 
 class ConnectHandler(SessionHandler):
   """handler to connect users"""
+  @login_required
   def get(self):
-    user = User.get_by_id(users.get_current_user().user_id())
+    user = self.user_model
     requests = ConnectionRequest.query(ConnectionRequest.requestee == user.username).order(-ConnectionRequest.time)
-    logout = users.create_logout_url('/')
-    self.response.out.write(template.render('views/requests.html', {'viewer': user, 'requests': requests, 'logout':logout}))
+    self.response.out.write(template.render('views/requests.html', {'viewer': user, 'requests': requests}))
   def post(self):
-    requestor = User.get_by_id(users.get_current_user().user_id())
+    requestor = self.user_model
     q = User.query(User.username == self.request.get('requestee'))
     requestee = q.get()
     #Querying datastore to check for open connection request
@@ -127,7 +128,7 @@ class DisplayConnections(SessionHandler):
   def get(self):
     username = cgi.escape(self.request.get('username'))
     user = User.query(User.username == username).get()
-    viewer = User.get_by_id(users.get_current_user().user_id())
+    viewer = self.user_model
     class Friend():
       def __init__(self):
         self.first_name = ""
@@ -147,9 +148,8 @@ class DisplayConnections(SessionHandler):
       friend.profession = connection.profession + " at " + connection.employer
       friend.key_urlsafe = connection.key.urlsafe
       connection_list.append(friend)
-      logout = users.create_logout_url('/')
     self.response.out.write(template.render('views/connections.html',
-      {'connections': connection_list, 'user':user, 'viewer':viewer, 'logout':logout}))
+      {'connections': connection_list, 'user':user, 'viewer':viewer}))
 
 
 class SearchHandler(SessionHandler):
@@ -203,22 +203,21 @@ class CommentHandler(SessionHandler):
 
 class MessageHandler(SessionHandler):
   """ Handler to process user messages"""
+  @login_required
   def get(self):
-    user = User.get_by_id(users.get_current_user().user_id())
+    user = self.user_model
     user.message_count = 0
     user.put()
     messages = Message.query(Message.recipient == user.username).order(-Message.time)
-    logout = users.create_logout_url('/')
-    self.response.out.write(template.render('views/messages.html', {'viewer': user, 'messages': messages, 'logout':logout}))
+    self.response.out.write(template.render('views/messages.html', {'viewer': user, 'messages': messages}))
 
 class ComposeMessage(SessionHandler):
+  @login_required
   def get(self):
     recipient = cgi.escape(self.request.get('recipient'))
-    viewer_email = users.get_current_user()
-    v = User.query(User.email == viewer_email.email())
-    viewer = v.get()
-    logout = users.create_logout_url('/')
-    self.response.out.write(template.render('views/composeMessage.html', {'logout': logout,
+    viewer = self.user_model
+    v = User.query(User.email == viewer.email_address)
+    self.response.out.write(template.render('views/composeMessage.html', {
                                                                     'viewer':viewer, 'user':viewer, 'recipient':recipient}))
   def post(self):
     text = cgi.escape(self.request.get('text'))
@@ -259,26 +258,22 @@ class DeleteMessage(SessionHandler):
 
 class ReadMessage(SessionHandler):
   def get(self, message_id):
-    viewer_email = users.get_current_user()
-    v = User.query(User.email == viewer_email.email())
-    viewer = v.get()
+    viewer = self.user_model
+    viewer_email = viewer.email_address
+    v = User.query(User.email == viewer_email)
     message_key = ndb.Key(urlsafe=message_id)
     message = message_key.get()
-    logout = users.create_logout_url('/')
-    self.response.out.write(template.render('views/readMessage.html', {'logout': logout,
-                                                                    'viewer':viewer, 'message': message}))
+    self.response.out.write(template.render('views/readMessage.html', {'viewer':viewer, 'message': message}))
 
 class FeedHandler(SessionHandler):
   """ Handler for handling user feed """
   def get(self):
-    user = User.get_by_id(users.get_current_user().user_id())
-    logout = users.create_logout_url('/')
+    user = self.user_model
     comments = Comment.query().order(-Comment.time)
     if user:
       self.response.out.write(template.render('views/feed.html',
                                               {'viewer':user,
-                                              'comments': comments,
-                                              'logout':logout}))
+                                              'comments': comments}))
 
 class FeedListHandler(SessionHandler):
   def get(self):
@@ -307,7 +302,7 @@ class ForumHandler(SessionHandler):
   """ Handles the forum """
   def get(self, forum_id):
     forum_id = forum_id.lower()
-    user = User.get_by_id(users.get_current_user().user_id())
+    user = self.user_model
     forum_posts = ForumPost.query(ForumPost.forum_name == forum_id)
     self.response.out.write(template.render('views/forum.html', {'viewer': user,
                                       'posts': forum_posts, 'forum_name': forum_id}))
@@ -330,20 +325,21 @@ class ForumHandler(SessionHandler):
 
 class SubmissionHandler(SessionHandler):
   """Handles user submissions to forums"""
+  @login_required
   def get(self):
-    user = User.get_by_id(users.get_current_user().user_id())
+    user = self.user_model
     forum_name = cgi.escape(self.request.get('forum_name'))
     self.response.out.write(template.render('views/submitPost.html', {'viewer': user, 'forum_name':forum_name}))
 
 class ForumCommentHandler(SessionHandler):
   """retrieves the correct forum post"""
   def get(self, forum_id, post_reference):
-    user = User.get_by_id(users.get_current_user().user_id())
+    user = self.user_model
     post = ForumPost.query(ForumPost.forum_name == forum_id, ForumPost.reference == post_reference).get()
     comments = Comment.query(ancestor=post.key).fetch()
     self.response.out.write(template.render('views/forumComments.html', {'viewer': user, 'post':post, 'forum_name':forum_id, 'comments':comments}))
   def post(self, forum_id, post_reference):
-    user = User.get_by_id(users.get_current_user().user_id())
+    user = self.user_model
     post = ForumPost.query(ForumPost.forum_name == forum_id, ForumPost.reference == post_reference).get()
     text = cgi.escape(self.request.get('text'))
     sender = cgi.escape(self.request.get('sender'))
