@@ -2,42 +2,48 @@
 
 
 {% block content %}
+<style>
+.vertical-center {
+  padding-left: 125px;
+}
+</style>
 <div class="container">
-    <div class="row">
-      <div class="col-md-3"></div>
-
-      <div class="col-md-6">
-        <div class="well">
-          <form class="form-horizontal" enctype="multipart/form-data"  action="/" method="POST">
-            <fieldset>
-              <div id="legend">
-                <legend class="">Log In</legend>
+  <div class="row"></div>
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <img class="vertical-center" src="http://goo.gl/dK5Qy7"></img>
+      <div class="well">
+        <form class="form-horizontal" enctype="multipart/form-data"  action="/" method="POST">
+          <fieldset>
+            <div id="legend">
+              <legend class="">Log In <small class="label label-danger pull-right">{{error}}</small></legend>
+            </div>
+            <div class="control-group">
+              <h4>Username or Email<small id="available" class="label label-success pull-right" style="display:none;"></small></h4>
+              <div class="controls">
+                <input type="text" name="username" placeholder="" class="form-control input-lg" required>
               </div>
-              <div class="control-group">
-                <h4>Username or Email<small id="available" class="label label-success pull-right" style="display:none;"></small></h4>
-                <div class="controls">
-                  <input type="text" name="username" placeholder="" class="form-control input-lg" required>
-                </div>
-              </div>    
-              <div class="control-group">
-                <h4>Password</h4>
-                <div class="controls">
-                  <input class="focused required form-control input-lg" name="password" type="password" placeholder="" required>
-                </div>
+            </div>    
+            <div class="control-group">
+              <h4>Password</h4>
+              <div class="controls">
+                <input class="focused required form-control input-lg" name="password" type="password" placeholder="" required>
               </div>
-              <br></br>
-              <div class="control-group">
-                <!-- Button -->
-                <div class="controls">
-                  <button class="btn btn-primary btn-lg" type="submit" style="display: block; width: 100%;">Sign In</button>
-                </div>
+            </div>
+            <br></br>
+            <div class="control-group">
+              <!-- Button -->
+              <div class="controls">
+                <button class="btn btn-primary btn-lg" type="submit" style="display: block; width: 100%;">Sign In</button>
               </div>
-            </fieldset>
-          </form>
-        </div>
+            </div>
+          </fieldset>
+        </form>
       </div>
-      
     </div>
+
   </div>
+</div>
 
 {% endblock %}

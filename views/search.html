@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {% for user in results %}
-    {% if user != None %}
-    <div class="page-header">
+<div class="page-header">
       <h2>Search results for "{{search_string}}"
       </h2>
     </div>
+  {% for user in results %}
+    {% if user != None %}
     <div class="list-group">
      <a href="profile/{{user.username}}" class="row list-group-item">
       <div class="col-md-2">

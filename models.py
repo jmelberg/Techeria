@@ -17,6 +17,7 @@ class User(auth_models.User):
   request_count = ndb.IntegerProperty(default = 0)
   skills = ndb.KeyProperty(kind = "Skill", repeated=True)
   avatar =  ndb.BlobProperty()
+  email_address = ndb.StringProperty()
 
 class Comment(ndb.Model):
   sender = ndb.StringProperty()

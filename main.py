@@ -17,6 +17,7 @@ import string
 import datetime
 from BaseHandler import SessionHandler
 from BaseHandler import login_required
+import time
 
 """Techeria is a professional social network for techies"""
 
@@ -34,8 +35,9 @@ class LoginHandler(SessionHandler):
       u = self.auth.get_user_by_password(username, password, remember=True,
       save_session=True)
       self.redirect('/profile/{}'.format(self.user_model.username))
-    except( auth.InvalidAuthIDError, auth.InvalidPasswordError):
+    except( auth.InvalidAuthIdError, auth.InvalidPasswordError):
       error = "Invalid Email/Password"
+      self.response.out.write(template.render('views/login.html', {'error':error}))
 
 class RegisterHandler(SessionHandler):
   def get(self):
@@ -54,7 +56,7 @@ class RegisterHandler(SessionHandler):
       unique_properties, username=username,
       email_address=email, first_name=first_name, password_raw=password,
       last_name=last_name, avatar = avatar, verified=False)
-    self.redirect('/profile/{}'.format(self.user_model.username))
+    self.redirect('/profile/{}'.format(username))
 
 class LogoutHandler(SessionHandler):
     """Destroy the user session and return them to the login screen."""
@@ -66,6 +68,7 @@ class LogoutHandler(SessionHandler):
 class ProfileHandler(SessionHandler):
   """handler to display a profile page"""
   def get(self, profile_id):
+    #TODO remove sleep below for deployment,, for testing only
     viewer = self.user_model
     q = User.query(User.username == profile_id)
     user = q.get()
@@ -163,7 +166,7 @@ class SearchHandler(SessionHandler):
     for search_string in search_list:
       search_string = search_string.strip(' ')
       if "@" in search_string:
-        q = User.query(User.email == search_string)
+        q = User.query(User.email_address == search_string)
         if q:
           results.append(q.get())
       elif " " in search_string:
@@ -181,7 +184,7 @@ class SearchHandler(SessionHandler):
         if first_name.get() is not None:
           for result in first_name.fetch(10):
             results.append(result)
-    self.response.out.write(template.render('views/search.html', {'results':results}))
+    self.response.out.write(template.render('views/search.html', {'results':results, 'search_string':search_string}))
 
 class CommentHandler(SessionHandler):
   """Handler to process user comments"""
