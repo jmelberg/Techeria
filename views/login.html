@@ -22,7 +22,7 @@
             <div class="control-group">
               <h4>Username or Email<small id="available" class="label label-success pull-right" style="display:none;"></small></h4>
               <div class="controls">
-                <input type="text" name="username" placeholder="" class="form-control input-lg" required>
+                <input id="login" type="text" name="username" placeholder="" class="form-control input-lg" required>
               </div>
             </div>    
             <div class="control-group">
@@ -45,5 +45,11 @@
 
   </div>
 </div>
+
+<script>
+$(function(){
+  $('#login').focus();
+});
+</script>
 
 {% endblock %}

@@ -1,39 +1,57 @@
 {% extends "base.html" %}
 {% block content %}
+
+<style>
+      .nav-tabs > li.active > a,
+        .nav-tabs > li.active > a:hover,
+        .nav-tabs > li.active > a:focus{
+            color: #555555;
+            background-color: #BFEFFF;
+        } 
+</style>
 <form class="form-horizontal" action="/tech/{{forum_name}}" method="post">
   <fieldset>
     <legend>New Post</legend>
+    <div class="row">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8" style="padding-left:20px;">
+    <ul class = "nav nav-tabs">
+      <li role="presentation" class = "active" id="linkPost"><a>Link</a></li>
+      <li role="presentation" id="textPost"><a>Text</a></li>
+    </ul>
+    </div>
+    </div>
     <div class="form-group">
       <label for="forum" class="col-lg-2 control-label">/tech/</label>
-      <div class="col-lg-10">
+      <div class="col-lg-8">
         <input type="text" class="form-control" name="forum" placeholder="Forum Title" value={{forum_name}}>
           </div>
     </div>
     <div class="form-group">
       <label for="title" class="col-lg-2 control-label">Title</label>
-      <div class="col-lg-10">
+      <div class="col-lg-8">
         <input type="text" class="form-control" name="title" placeholder="Post Title">
           <input type="hidden" class="form-control" name="author" placeholder="Post Title" value={{viewer.username}}>
             </div>
     </div>
-    <div class="form-group">
+    <div class="form-group" id="url">
       <label for="url" class="col-lg-2 control-label">URL</label>
-      <div class="col-lg-10">
-        <input type="text" class="form-control" name="url" placeholder="URL">
+      <div class="col-lg-8">
+        <input id="urlInput" type="text" class="form-control" name="url" placeholder="URL">
           </div>
     </div>
     <div class="form-group">
       <label for="text" class="col-lg-2 control-label">Text</label>
-      <div class="col-lg-10">
+      <div class="col-lg-8">
         <textarea class="form-control" rows="4" name="text"></textarea>
       </div>
     </div>
     <div class="form-group">
-      <div class="col-lg-10">
+      <div class="col-lg-8">
       </div>
     </div>
     <div class="form-group">
-      <div class="col-lg-10 col-lg-offset-2">
+      <div class="col-lg-8 col-lg-offset-2">
         <button type="reset" class="btn btn-default">Cancel</button>
         <button type="submit" class="btn btn-primary">Submit</button>
       </div>
@@ -41,4 +59,22 @@
   </fieldset>
 </form>
 
+<script>
+   $(function () {
+                  
+                  $('#textPost').click(function () {
+                    $('#url').hide();
+                    $('#linkPost').removeAttr("class");
+                    $('#urlInput').val('');
+                    $('#textPost').attr("class", "active");
+                                                  });
+                  $('#linkPost').click(function () {
+                    $('#url').show();
+                    $('#linkPost').attr("class", "active"); 
+                    $('#textPost').removeAttr("class");                                           
+                                                  });
+                  
+                  });
+                  
+</script>
 {% endblock %}

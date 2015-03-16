@@ -1,5 +1,23 @@
+ 
+<div class="panel panel-default" style="display:none; padding:0;" id="reply-box">
+  <div class="panel-heading">
+    <h3 class="panel-title">Reply</h3>
+  </div>
+  <div class="panel-body">
+    <form role="form" action="/comment" method="post">
+      <div class="form-group">
+        <textarea style="font-size: 18px;" name="text" class="form-control" rows="3" id="replycommentBox"></textarea>
+        <ol style="visibility:hidden;"></ol>
+        <input  type="hidden" name="recipient" class="form-control" value={{viewer.username}}>
+          <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
+            <input  type="hidden" name="origin" class="form-control" value='feed'>
+              <button type="submit" class="btn btn-primary pull-right" id="postButton"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Reply</button>
+              </div>
+    </form>
+  </div>
+</div>
  {% for comment in comments %}
- <div class="panel panel-info">
+ <div id="comment" class="panel panel-info" style="margin:0;">
   <div class="panel-heading">
     <h2 class="panel-title">
       {{comment.sender}}
@@ -9,7 +27,9 @@
       <span><p class="panel-title pull-right">{{comment.time}}</p></span></h2>
     </div>
     <div class="panel-body">
-      <h4>{{comment.text}}</h4>
+      <h4>{{comment.text}} </h4>
+      <a id="reply" style="padding-left:15px;" class="pull-right" id="reply">Reply</a>
+      <a style="padding-left:15px;" class="pull-right">Share</a>
     </div>
   </div>
 </div>
@@ -17,3 +37,11 @@
 <div id = "loading" style = "display: none;">Loading...</div>
 <div id="more-{{page}}" style = "display:none;"> {{more}}</div>
 
+<script>
+  $('#reply').click(function(){
+    $('#reply-box').show().insertAfter('#comment');
+    $('#reply').hide();
+    $('#replycommentBox').focus();
+
+  });
+</script>

@@ -17,7 +17,6 @@ import string
 import datetime
 from BaseHandler import SessionHandler
 from BaseHandler import login_required
-import time
 
 """Techeria is a professional social network for techies"""
 
@@ -56,7 +55,7 @@ class RegisterHandler(SessionHandler):
       unique_properties, username=username,
       email_address=email, first_name=first_name, password_raw=password,
       last_name=last_name, avatar = avatar, verified=False)
-    self.redirect('/profile/{}'.format(username))
+    self.redirect('/')
 
 class LogoutHandler(SessionHandler):
     """Destroy the user session and return them to the login screen."""
