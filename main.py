@@ -11,6 +11,7 @@ from models import Message
 from models import ConnectionRequest
 from models import ForumPost
 from models import Skill
+from models import Forum
 import logging
 import random
 import string
@@ -123,7 +124,7 @@ class ConfirmConnection(SessionHandler):
     requestor.put()
     requestee.put()
     connection_request.key.delete()
-    self.redirect('/confirmconnect')
+    self.redirect('/connect')
     
 class DisplayConnections(SessionHandler):
   """ Will display all friends/connections of a user"""
@@ -147,7 +148,7 @@ class DisplayConnections(SessionHandler):
       friend.first_name = connection.first_name
       friend.last_name = connection.last_name
       friend.username = connection.username
-      if friend.professions != None:
+      if connection.profession != None:
         friend.profession = connection.profession + " at " + connection.employer
       friend.key_urlsafe = connection.key.urlsafe
       connection_list.append(friend)
@@ -325,20 +326,26 @@ class ForumHandler(SessionHandler):
                                       'posts': forum_posts, 'forum_name': forum_id}))
   def post(self, forum_id):
     author = cgi.escape(self.request.get('author'))
-    forum = cgi.escape(self.request.get('forum'))
+    forum_name = cgi.escape(self.request.get('forum'))
     title = cgi.escape(self.request.get('title'))
     url = cgi.escape(self.request.get('url'))
     text = cgi.escape(self.request.get('text'))
     post = ForumPost()
+    forum = Forum.query(Forum.name == forum_name).get()
+    if forum != None:
+      forum.posts += 1
+    else:
+      forum = Forum(name=forum_name, posts=1)
+    forum.put()
     post.text = text
     post.author = author
-    post.forum_name = forum
+    post.forum_name = forum_name
     post.title = title
     post.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
     post.url = url
     post.reference = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
     post.put()
-    self.redirect('/tech/{}'.format(forum))
+    self.redirect('/tech/{}'.format(forum_name))
 
 class SubmissionHandler(SessionHandler):
   """Handles user submissions to forums"""
@@ -410,6 +417,11 @@ class UpdateProfile(SessionHandler):
     user.put()
     self.redirect('/profile/{}'.format(user.username))
 
+class ForumViewer(SessionHandler):
+  def get(self):
+    forums = Forum.query().order(-Forum.posts)
+    self.response.out.write(template.render('views/forumViewer.html', {'viewer': self.user_model, 'forums':forums}))
+
 config = {}
 config['webapp2_extras.sessions'] = {
     'secret_key': 'zomg-this-key-is-so-secret',
@@ -442,4 +454,6 @@ app = webapp2.WSGIApplication([
                                ('/checkusername', CheckUsername),
                                ('/updateprofile', UpdateProfile),
                                ('/logout', LogoutHandler),
+                               ('/tech', ForumViewer),
+                               ('/tech/', ForumViewer)
                                ], debug=True, config=config)
