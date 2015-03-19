@@ -25,6 +25,8 @@ class Comment(ndb.Model):
   text = ndb.StringProperty()
   time = ndb.DateTimeProperty(auto_now_add=True)
   vote_count = ndb.IntegerProperty(default = 0)
+  root = ndb.BooleanProperty(default = True)
+  parent = ndb.KeyProperty()
 
 class Message(ndb.Model):
   sender = ndb.StringProperty()

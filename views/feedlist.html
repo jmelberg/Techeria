@@ -1,4 +1,13 @@
- 
+ <style type="text/css">
+ a:hover {
+  cursor:pointer;
+ }
+ button {
+  margin:0;
+ }
+</style>
+
+
 <div class="panel panel-default" style="display:none; padding:0;" id="reply-box">
   <div class="panel-heading">
     <h3 class="panel-title">Reply</h3>
@@ -11,13 +20,14 @@
         <input  type="hidden" name="recipient" class="form-control" value={{viewer.username}}>
           <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
             <input  type="hidden" name="origin" class="form-control" value='feed'>
-              <button type="submit" class="btn btn-primary pull-right" id="postButton"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Reply</button>
+            <input type="hidden" id="parent" name="parent" class="form-control">
+              <button type="submit" class="btn btn-primary pull-right" id="postreplyButton"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Reply</button>
               </div>
     </form>
   </div>
 </div>
  {% for comment in comments %}
- <div id="comment" class="panel panel-info" style="margin:0;">
+ <div id="comment"  {% if comment.root%} class="panel panel-info" style="margin-bottom:0; margin-top:40;" {%else%} class="list-group-item" style="margin-left:40; margin-top:0;margin-bottom:0;"{% endif %}>
   <div class="panel-heading">
     <h2 class="panel-title">
       {{comment.sender}}
@@ -28,8 +38,10 @@
     </div>
     <div class="panel-body">
       <h4>{{comment.text}} </h4>
-      <a id="reply" style="padding-left:15px;" class="pull-right" id="reply">Reply</a>
-      <a style="padding-left:15px;" class="pull-right">Share</a>
+      <div class="btn-group pull-right">
+      <button id="reply" style="padding-left:15px;" class="btn btn-xs pull-right" id="reply-{{forloop.counter}}" value={{comment.key.urlsafe}}>Reply</button>
+      <button style="padding-left:15px;" class="btn btn-xs pull-right">Share</button>
+      </div>
     </div>
   </div>
 </div>
@@ -40,8 +52,12 @@
 <script>
   $('#reply').click(function(){
     $('#reply-box').show().insertAfter('#comment');
+    var parent = $('#reply').val();
+    $('#parent').val(parent);
     $('#reply').hide();
     $('#replycommentBox').focus();
 
   });
+  $('#postreplyButton').click(function(){
+          alert('hello');  });
 </script>

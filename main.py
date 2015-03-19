@@ -147,7 +147,8 @@ class DisplayConnections(SessionHandler):
       friend.first_name = connection.first_name
       friend.last_name = connection.last_name
       friend.username = connection.username
-      friend.profession = connection.profession + " at " + connection.employer
+      if friend.professions != None:
+        friend.profession = connection.profession + " at " + connection.employer
       friend.key_urlsafe = connection.key.urlsafe
       connection_list.append(friend)
     self.response.out.write(template.render('views/connections.html',
@@ -192,10 +193,19 @@ class CommentHandler(SessionHandler):
     text = cgi.escape(self.request.get('text'))
     sender = cgi.escape(self.request.get('sender'))
     recipient = cgi.escape(self.request.get('recipient'))
+    replied_to_urlsafe = cgi.escape(self.request.get('parent'))
     comment = Comment()
+    if len(replied_to_urlsafe) != 0:
+      replied_to_key = ndb.Key(urlsafe=replied_to_urlsafe)
+      comment.parent = replied_to_key
+      recipient_comment = ndb.Key(urlsafe=replied_to_urlsafe).get()
+      comment.recipient = recipient_comment.sender
+      comment.sender = self.user_model.username
+      comment.root = False;
+    else:
+      comment.sender = sender
+      comment.recipient = recipient
     comment.text = text
-    comment.sender = sender
-    comment.recipient = recipient
     comment.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
     comment.put()
     if origin == "feed":
@@ -218,7 +228,7 @@ class ComposeMessage(SessionHandler):
   def get(self):
     recipient = cgi.escape(self.request.get('recipient'))
     viewer = self.user_model
-    v = User.query(User.email == viewer.email_address)
+    v = User.query(User.email_address == viewer.email_address)
     self.response.out.write(template.render('views/composeMessage.html', {
                                                                     'viewer':viewer, 'user':viewer, 'recipient':recipient}))
   def post(self):
@@ -279,15 +289,20 @@ class FeedHandler(SessionHandler):
 
 class FeedListHandler(SessionHandler):
   def get(self):
+    threaded_comments = []
     page = int(cgi.escape(self.request.get('page')))
     offset_count = 10*page
     more = 0
-    comments = Comment.query().order(-Comment.time).fetch(10, offset=offset_count)
+    comments = Comment.query(Comment.root==True).order(-Comment.time).fetch(10, offset=offset_count)
     for comment in comments:
+      threaded_comments.append(comment)
+      children = Comment.query(Comment.parent == comment.key).order(Comment.time).fetch()
+      if children != None:
+        threaded_comments.extend(children)
       if comment != None:
         more += 1
     self.response.out.write(template.render('views/feedlist.html', {
-                                              'comments': comments, 'more':more, 'page':page
+                                              'comments': threaded_comments, 'more':more, 'page':page
                                               }))
 
 class VoteHandler(SessionHandler):

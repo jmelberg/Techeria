@@ -12,12 +12,35 @@ indexes:
 
 - kind: Comment
   properties:
+  - name: parent
+  - name: time
+
+- kind: Comment
+  properties:
+  - name: parent
+  - name: time
+    direction: desc
+
+- kind: Comment
+  properties:
   - name: recipient
   - name: time
 
 - kind: Comment
   properties:
   - name: recipient
+  - name: time
+    direction: desc
+
+- kind: Comment
+  properties:
+  - name: root
+  - name: time
+    direction: desc
+
+- kind: Comment
+  ancestor: yes
+  properties:
   - name: time
     direction: desc
 
