@@ -11,9 +11,11 @@
   <div class="list-group-item">
     <div class="row">
       <div class="col-md-1 text-center">
-        <button class="btn btn-default" value = "{{post.key.urlsafe}}" id = "upVote-{{forloop.counter}}"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></button>
+        <button class="btn btn-default" value = "{{post.key.urlsafe}}" id = "upVote-{{forloop.counter}}" {% if viewer.key in post.up_voters %}style = "background: orange;" disabled{% endif %}><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" ></span></button>
+
         <h4 id="voteCount{{forloop.counter}}">{{post.vote_count}}</h4>
-        <button class="btn btn-default" value = "{{post.key.urlsafe}}" id = "downVote-{{forloop.counter}}"><span class="glyphicon glyphicon-arrow-down" aria-hidden="true" ></span></button>
+
+        <button class="btn btn-default" value = "{{post.key.urlsafe}}" id = "downVote-{{forloop.counter}}" {% if viewer.key in post.down_voters %}style = "background: #4682B4  ;" disabled{% endif %}><span class="glyphicon glyphicon-arrow-down" aria-hidden="true" ></span></button>
       </div>
       <div class="col-md-11">
         <h3><a href="{{post.url}}">{{post.title}}</a></h3>
@@ -24,12 +26,13 @@
   </div>
 
 {% endfor %}
-
+<div id = "voter" style = "display: none;">{{viewer.key.urlsafe}}</div>
 <script>
   $(document).ready(function(){
     var key;
     var count = 0;
     var counter = 0;
+    var voter = document.getElementById('voter').innerHTML;
     $("[id^='upVote-']").click(function(){
       this.style.backgroundColor = 'orange';
       key = $(this).val();
@@ -38,12 +41,18 @@
       $('#downVote-' + counter).removeAttr("style");
       var number = document.getElementById('voteCount'+counter);
       var voteCount = number.innerHTML;
+      if ($('#downVote-' + counter).is(":disabled")){
+        voteCount++;
+      }
       voteCount++;
       number.innerHTML = voteCount;
+      $(this).prop('disabled', true);
+
+      $('#downVote-' + counter).prop('disabled', false);
       $.ajax({
         type: "POST",
         url: "/vote",
-        data: {'key' : key, 'change': change},
+        data: {'key' : key, 'change': change, 'voter': voter},
       });
     });
 
@@ -51,16 +60,22 @@
       this.style.backgroundColor = '4682B4  ';
       key = $(this).val();
       change = -1;
+      var voter = document.getElementById('voter').innerHTML;
       var counter = $(this).attr('id').split('-')[1];
       $('#upVote-' + counter).removeAttr("style");
       var number = document.getElementById('voteCount'+counter);
       var voteCount = number.innerHTML;
+            if ($('#upVote-' + counter).is(":disabled")){
+        voteCount--;
+      }
       voteCount--;
       number.innerHTML = voteCount;
+      $(this).prop('disabled', true);
+      $('#upVote-' + counter).prop('disabled', false);
       $.ajax({
         type: "POST",
         url: "/vote",
-        data: {'key' : key, 'change': change},
+        data: {'key' : key, 'change': change, 'voter': voter},
       });
     });
 

@@ -310,11 +310,22 @@ class VoteHandler(SessionHandler):
   def post(self):
     post = cgi.escape(self.request.get('key'))
     change = int(cgi.escape(self.request.get('change')))
+    voter = cgi.escape(self.request.get('voter'))
     post_key = ndb.Key(urlsafe=post)
     new_post = post_key.get()
+    user_key = ndb.Key(urlsafe=voter)
+    if change == 1:
+      if user_key in new_post.down_voters:
+        change+=1
+        new_post.down_voters.remove(user_key);
+      new_post.up_voters.append(user_key)
+    else:
+      if user_key in new_post.up_voters:
+        change-=1
+        new_post.up_voters.remove(user_key);
+      new_post.down_voters.append(user_key)
     new_post.vote_count+=change
     new_post.put()
-
 
 class ForumHandler(SessionHandler):
   """ Handles the forum """

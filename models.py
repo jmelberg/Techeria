@@ -52,6 +52,8 @@ class ForumPost(ndb.Model):
   time = ndb.DateTimeProperty(auto_now_add=True)
   text = ndb.StringProperty()
   categories = ndb.KeyProperty(kind= "Skill", repeated=True)
+  up_voters = ndb.KeyProperty(kind = "User", repeated=True)
+  down_voters = ndb.KeyProperty(kind = "User", repeated=True)
 
 class Forum(ndb.Model):
   name = ndb.StringProperty()
