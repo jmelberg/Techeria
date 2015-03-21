@@ -18,6 +18,9 @@ import string
 import datetime
 from BaseHandler import SessionHandler
 from BaseHandler import login_required
+from Messages import *
+from Forum import *
+from Feed import *
 
 """Techeria is a professional social network for techies"""
 
@@ -187,206 +190,6 @@ class SearchHandler(SessionHandler):
             results.append(result)
     self.response.out.write(template.render('views/search.html', {'results':results, 'search_string':search_string}))
 
-class CommentHandler(SessionHandler):
-  """Handler to process user comments"""
-  def post(self):
-    origin = cgi.escape(self.request.get('origin'))
-    text = cgi.escape(self.request.get('text'))
-    sender = cgi.escape(self.request.get('sender'))
-    recipient = cgi.escape(self.request.get('recipient'))
-    replied_to_urlsafe = cgi.escape(self.request.get('parent'))
-    comment = Comment()
-    if len(replied_to_urlsafe) != 0:
-      replied_to_key = ndb.Key(urlsafe=replied_to_urlsafe)
-      comment.parent = replied_to_key
-      recipient_comment = ndb.Key(urlsafe=replied_to_urlsafe).get()
-      comment.recipient = recipient_comment.sender
-      comment.sender = self.user_model.username
-      comment.root = False;
-    else:
-      comment.sender = sender
-      comment.recipient = recipient
-    comment.text = text
-    comment.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
-    comment.put()
-    if origin == "feed":
-      self.redirect('/feed')
-    else:
-      self.redirect('/profile/{}'.format(recipient))
-
-class MessageHandler(SessionHandler):
-  """ Handler to process user messages"""
-  @login_required
-  def get(self):
-    user = self.user_model
-    user.message_count = 0
-    user.put()
-    messages = Message.query(Message.recipient == user.username).order(-Message.time)
-    self.response.out.write(template.render('views/messages.html', {'viewer': user, 'messages': messages}))
-
-class ComposeMessage(SessionHandler):
-  @login_required
-  def get(self):
-    recipient = cgi.escape(self.request.get('recipient'))
-    viewer = self.user_model
-    v = User.query(User.email_address == viewer.email_address)
-    self.response.out.write(template.render('views/composeMessage.html', {
-                                                                    'viewer':viewer, 'user':viewer, 'recipient':recipient}))
-  def post(self):
-    text = cgi.escape(self.request.get('text'))
-    sender = cgi.escape(self.request.get('sender'))
-    recipient = cgi.escape(self.request.get('recipient'))
-    subject = cgi.escape(self.request.get('subject'))
-    parent_message = cgi.escape(self.request.get('parent'))
-    q = User.query(User.username == recipient)
-    user = q.get()
-    if(user):
-      if len(parent_message) > 0:
-        message_key = ndb.Key(urlsafe=parent_message)
-        message = Message(parent = message_key)
-      else:
-        message = Message()
-      message.subject = subject
-      message.text = text
-      message.sender = sender
-      message.recipient = recipient
-      message.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
-      message.put()
-      #Increment message count for navbar
-      q = User.query(User.username == recipient)
-      user = q.get()
-      user.message_count += 1
-      user.put()
-      self.redirect('/messages')
-    else:
-      self.redirect('/compose')
-
-class DeleteMessage(SessionHandler):
-  def post(self):
-    key_array = cgi.escape(self.request.get('array'))
-    for key in key_array.split(","):
-      message_key = ndb.Key(urlsafe=key)
-      message_key.delete()
-    self.redirect('/messages')
-
-class ReadMessage(SessionHandler):
-  def get(self, message_id):
-    viewer = self.user_model
-    viewer_email = viewer.email_address
-    v = User.query(User.email == viewer_email)
-    message_key = ndb.Key(urlsafe=message_id)
-    message = message_key.get()
-    self.response.out.write(template.render('views/readMessage.html', {'viewer':viewer, 'message': message}))
-
-class FeedHandler(SessionHandler):
-  """ Handler for handling user feed """
-  def get(self):
-    user = self.user_model
-    comments = Comment.query().order(-Comment.time)
-    if user:
-      self.response.out.write(template.render('views/feed.html',
-                                              {'viewer':user,
-                                              'comments': comments}))
-
-class FeedListHandler(SessionHandler):
-  def get(self):
-    threaded_comments = []
-    page = int(cgi.escape(self.request.get('page')))
-    offset_count = 10*page
-    more = 0
-    comments = Comment.query(Comment.root==True).order(-Comment.time).fetch(10, offset=offset_count)
-    for comment in comments:
-      threaded_comments.append(comment)
-      children = Comment.query(Comment.parent == comment.key).order(Comment.time).fetch()
-      if children != None:
-        threaded_comments.extend(children)
-      if comment != None:
-        more += 1
-    self.response.out.write(template.render('views/feedlist.html', {
-                                              'comments': threaded_comments, 'more':more, 'page':page
-                                              }))
-
-class VoteHandler(SessionHandler):
-  def post(self):
-    post = cgi.escape(self.request.get('key'))
-    change = int(cgi.escape(self.request.get('change')))
-    voter = cgi.escape(self.request.get('voter'))
-    post_key = ndb.Key(urlsafe=post)
-    new_post = post_key.get()
-    user_key = ndb.Key(urlsafe=voter)
-    if change == 1:
-      if user_key in new_post.down_voters:
-        change+=1
-        new_post.down_voters.remove(user_key);
-      new_post.up_voters.append(user_key)
-    else:
-      if user_key in new_post.up_voters:
-        change-=1
-        new_post.up_voters.remove(user_key);
-      new_post.down_voters.append(user_key)
-    new_post.vote_count+=change
-    new_post.put()
-
-class ForumHandler(SessionHandler):
-  """ Handles the forum """
-  def get(self, forum_id):
-    forum_id = forum_id.lower()
-    user = self.user_model
-    forum_posts = ForumPost.query(ForumPost.forum_name == forum_id)
-    self.response.out.write(template.render('views/forum.html', {'viewer': user,
-                                      'posts': forum_posts, 'forum_name': forum_id}))
-  def post(self, forum_id):
-    author = cgi.escape(self.request.get('author'))
-    forum_name = cgi.escape(self.request.get('forum'))
-    title = cgi.escape(self.request.get('title'))
-    url = cgi.escape(self.request.get('url'))
-    text = cgi.escape(self.request.get('text'))
-    post = ForumPost()
-    forum = Forum.query(Forum.name == forum_name).get()
-    if forum != None:
-      forum.posts += 1
-    else:
-      forum = Forum(name=forum_name, posts=1)
-    forum.put()
-    post.text = text
-    post.author = author
-    post.forum_name = forum_name
-    post.title = title
-    post.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
-    post.url = url
-    post.reference = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
-    post.put()
-    self.redirect('/tech/{}'.format(forum_name))
-
-class SubmissionHandler(SessionHandler):
-  """Handles user submissions to forums"""
-  @login_required
-  def get(self):
-    user = self.user_model
-    forum_name = cgi.escape(self.request.get('forum_name'))
-    self.response.out.write(template.render('views/submitPost.html', {'viewer': user, 'forum_name':forum_name}))
-
-class ForumCommentHandler(SessionHandler):
-  """retrieves the correct forum post"""
-  def get(self, forum_id, post_reference):
-    user = self.user_model
-    post = ForumPost.query(ForumPost.forum_name == forum_id, ForumPost.reference == post_reference).get()
-    comments = Comment.query(ancestor=post.key).fetch()
-    self.response.out.write(template.render('views/forumComments.html', {'viewer': user, 'post':post, 'forum_name':forum_id, 'comments':comments}))
-  def post(self, forum_id, post_reference):
-    user = self.user_model
-    post = ForumPost.query(ForumPost.forum_name == forum_id, ForumPost.reference == post_reference).get()
-    text = cgi.escape(self.request.get('text'))
-    sender = cgi.escape(self.request.get('sender'))
-    recipient = cgi.escape(self.request.get('recipient'))
-    comment = Comment(parent=post.key)
-    comment.text = text
-    comment.sender = sender
-    comment.recipient = recipient
-    comment.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
-    comment.put()
-    self.redirect('/tech/{}/{}'.format(forum_id, post_reference))
-
 class Image(SessionHandler):
   """Serves the image associated with an avatar"""
   def get(self):
@@ -428,11 +231,6 @@ class UpdateProfile(SessionHandler):
     user.put()
     self.redirect('/profile/{}'.format(user.username))
 
-class ForumViewer(SessionHandler):
-  def get(self):
-    forums = Forum.query().order(-Forum.posts)
-    self.response.out.write(template.render('views/forumViewer.html', {'viewer': self.user_model, 'forums':forums}))
-
 config = {}
 config['webapp2_extras.sessions'] = {
     'secret_key': 'zomg-this-key-is-so-secret',
@@ -440,7 +238,6 @@ config['webapp2_extras.sessions'] = {
 config['webapp2_extras.auth'] = {
     'user_model': User,
 }
-
 
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
