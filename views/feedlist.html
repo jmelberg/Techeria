@@ -8,7 +8,7 @@
 </style>
 
 
-<div class="panel panel-default" style="display:none; padding:0;" id="reply-box">
+<div class="panel panel-default" style="display:none; padding:0;" id="replybox">
   <div class="panel-heading">
     <h3 class="panel-title">Reply</h3>
   </div>
@@ -27,7 +27,7 @@
   </div>
 </div>
  {% for comment in comments %}
- <div id="comment"  {% if comment.root%} class="panel panel-info" style="margin-bottom:0; margin-top:40;" {%else%} class="list-group-item" style="margin-left:40; margin-top:0;margin-bottom:0;"{% endif %}>
+ <div id="comment{{forloop.counter}}"  {% if comment.root%} class="panel panel-info" style="margin-bottom:0; margin-top:40;" {%else%} class="list-group-item" style="margin-left:40; margin-top:0;margin-bottom:0;"{% endif %}>
   <div class="panel-heading">
     <h2 class="panel-title">
       {{comment.sender}}
@@ -39,7 +39,7 @@
     <div class="panel-body">
       <h4>{{comment.text}} </h4>
       <div class="btn-group pull-right">
-      <button id="reply" style="padding-left:15px;" class="btn btn-xs pull-right" id="reply-{{forloop.counter}}" value={{comment.key.urlsafe}}>Reply</button>
+      <button style="padding-left:15px;" class="btn btn-xs pull-right" id="reply-{{forloop.counter}}" value={{comment.key.urlsafe}}>Reply</button>
       <button style="padding-left:15px;" class="btn btn-xs pull-right">Share</button>
       </div>
     </div>
@@ -50,13 +50,19 @@
 <div id="more-{{page}}" style = "display:none;"> {{more}}</div>
 
 <script>
-  $('#reply').click(function(){
-    $('#reply-box').show().insertAfter('#comment');
-    var parent = $('#reply').val();
+
+$(document).ready(function(){
+  $("[id^='reply-']").click(function(){
+    var counter = $(this).attr('id').split('-')[1];
+    alert(counter);
+    $('#replybox').show().insertAfter('#comment'+counter);
+    var parent = $(this).val();
     $('#parent').val(parent);
-    $('#reply').hide();
+    $(this).hide();
     $('#replycommentBox').focus();
   });
   $('#postreplyButton').click(function(){
           alert('hello');  });
+
+});
 </script>
