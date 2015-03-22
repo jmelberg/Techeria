@@ -21,52 +21,8 @@ from BaseHandler import login_required
 from Messages import *
 from Forum import *
 from Feed import *
-
+from Authentication import *
 """Techeria is a professional social network for techies"""
-
-class LoginHandler(SessionHandler):
-  def get(self):
-    if self.user_model != None:
-      self.redirect('/profile/{}'.format(self.user_model.username))
-    else:
-      self.response.out.write(template.render('views/login.html', {'user' : self.user_model}))
-  def post(self):
-    username = cgi.escape(self.request.get('username'))
-    password = cgi.escape(self.request.get('password'))
-    #TODO Check for non characters in username.
-    try:
-      u = self.auth.get_user_by_password(username, password, remember=True,
-      save_session=True)
-      self.redirect('/profile/{}'.format(self.user_model.username))
-    except( auth.InvalidAuthIdError, auth.InvalidPasswordError):
-      error = "Invalid Email/Password"
-      self.response.out.write(template.render('views/login.html', {'error':error}))
-
-class RegisterHandler(SessionHandler):
-  def get(self):
-    self.response.out.write(template.render('views/register.html',{}))
-  def post(self):
-    """Registers the user and updates datastore"""
-    first_name = cgi.escape(self.request.get('first_name')).strip()
-    last_name = cgi.escape(self.request.get('last_name')).strip()
-    username = cgi.escape(self.request.get('username')).strip().lower()
-    email = cgi.escape(self.request.get('email')).strip().lower()
-    password = cgi.escape(self.request.get('password'))
-    avatar = self.request.get('img')
-    avatar = images.resize(avatar,400,400) 
-    unique_properties = ['email_address']
-    user_data = User.create_user(username,
-      unique_properties, username=username,
-      email_address=email, first_name=first_name, password_raw=password,
-      last_name=last_name, avatar = avatar, verified=False)
-    self.redirect('/')
-
-class LogoutHandler(SessionHandler):
-    """Destroy the user session and return them to the login screen."""
-    @login_required
-    def get(self):
-        self.auth.unset_session()
-        self.redirect('/')
 
 class ProfileHandler(SessionHandler):
   """handler to display a profile page"""

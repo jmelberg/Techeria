@@ -4,7 +4,9 @@
 <div class="page-header">
   <h1>{{forum_name}}
     <a href="/submit?forum_name={{forum_name}}" type="button" class="btn btn-primary pull-right" align="right">
-      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Submit Post</a>
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Submit Post</a>
+      <a href="/submit?forum_name={{forum_name}}" type="button" class="btn btn-warning pull-right" align="right">
+      <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  Subscribe</a>
     </h1>
   </div>
   {% for post in posts %}
@@ -18,7 +20,7 @@
         <button class="btn btn-default" value = "{{post.key.urlsafe}}" id = "downVote-{{forloop.counter}}" {% if viewer.key in post.down_voters %}style = "background: #4682B4  ;" disabled{% endif %}><span class="glyphicon glyphicon-arrow-down" aria-hidden="true" ></span></button>
       </div>
       <div class="col-md-11">
-        <h3><a href="{{post.url}}">{{post.title}}</a></h3>
+        <h3><a href="{{post.url}}">{{post.title}}</a><small style="padding-left:15px;">({{post.url_host}})</small></h3>
         <p> submitted {{post.time}} by {{post.author}}</p>
         <a href="/tech/{{forum_name}}/{{post.reference}}" class="badge badge-default pull-right">Comments</a>
       </div>

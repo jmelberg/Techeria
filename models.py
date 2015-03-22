@@ -44,6 +44,7 @@ class ConnectionRequest(ndb.Model):
 class ForumPost(ndb.Model):
   forum_name = ndb.StringProperty()
   url = ndb.StringProperty()
+  url_host = ndb.StringProperty()
   title = ndb.StringProperty()
   author = ndb.StringProperty()
   reference = ndb.StringProperty()
@@ -58,6 +59,7 @@ class ForumPost(ndb.Model):
 class Forum(ndb.Model):
   name = ndb.StringProperty()
   posts = ndb.IntegerProperty()
+  subscribers = ndb.KeyProperty(kind = "User", repeated=True)
 
 
 class Skill(ndb.Model):

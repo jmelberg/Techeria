@@ -59,7 +59,7 @@ class="img-rounded"/>
             <div class="col-xs-12">
               <ul class="nav nav-pills nav-justified thumbnail setup-panel">
                 <li class="active"><a href="#step1">
-                  <h4 class="list-group-item-heading">Who are you?</h4></a>
+                  <h4 class="list-group-item-heading">Role</h4></a>
                 </li>
                 <li class="disabled"><a href="#step2">
                   <h4 class="list-group-item-heading">Specialty</h4></a>
@@ -73,36 +73,40 @@ class="img-rounded"/>
           <!-- What field -->
           <div class="row setup-content" id="step1">
             <div class="col-xs-12">
-              <div class="col-md-12 well text-center">
-                <h1> What field are you in?</h1>
+              <div class="col-md-2"></div>
+              <div class="col-md-8 well">
+                <div class="page-header"><h1>My role in tech is  <span id="role">___________</span>  related.</h1></div>
                 <div class="checkbox">
                 <label><input type="radio" id="business"> Business</label></div>
                 <div class="checkbox">
-                <label><input type="radio" id="tech"> Tech</label></div>
+                <label><input type="radio" id="tech"> Engineering</label></div>
                 <h3/>
-                <button id="activate2" class="btn btn-primary btn-lg">Next</button>
+                <button id="activate2" class="btn btn-primary btn-lg pull-right">Next</button>
               </div>
+              <div class="col-md-2"></div>
             </div>
           </div>
           <!-- Tech - Question 2 -->
           <div class="row setup-content" id="step2">
             <div class="col-xs-12">
-              <div class="col-md-12 well text-center">
-                <h1>Do you code?</h1>
+              <div class="col-md-2"></div>
+              <div class="col-md-8 well">
+                <div class="page-header"><h1>Do you code?</h1></div>
                 <div class="checkbox">
                 <label><input type="radio" id="yes"> Yes</label></div>
                 <div class="checkbox">
                 <label><input type="radio" id="no"> No</label></div>
                 <h3/>
-                <button id="activate3" class="btn btn-primary btn-lg">Next</button>
+                <button id="activate3" class="btn btn-primary btn-lg pull-right">Next</button>
               </div>
+              <div class="col-md-2"></div>
             </div>
           </div>
           <!-- Tech - Question 3 -->
           <div class="row setup-content" id="step3">
             <div class="col-xs-12">
-             <div class="col-md-12 well text-center">
-                <h1>What type of Developer?</h1>
+             <div class="col-md-12 well">
+                <div class="page-header"><h1>What type of Developer?</h1></div>
                 <div class="checkbox">
                 <label><input type="radio" id="mobile"> Mobile Applications</label></div>
                 <div class="checkbox">
@@ -116,7 +120,7 @@ class="img-rounded"/>
                 <div class="checkbox">
                 <label><input type="radio" id="quality"> Quality Assurance</label></div>
                 <h3/>
-                <button id="done" class="btn btn-primary btn-lg" data-dismiss="modal">Done</button>
+                <button id="done" class="btn btn-primary btn-lg pull-right" data-dismiss="modal">Done</button>
               </div>
             </div>
           </div>
@@ -147,9 +151,11 @@ class="img-rounded"/>
     // Click one or the other
     $('#business').click(function(){
       $('#tech').prop("checked", false);
+      $('#role').html("business");
     });
     $('#tech').click(function(){
       $('#business').prop("checked", false);
+      $('#role').html("engineering");
     });
     $('#yes').click(function(){
       $('#no').prop("checked", false);

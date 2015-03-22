@@ -18,6 +18,7 @@ import string
 import datetime
 from BaseHandler import SessionHandler
 from BaseHandler import login_required
+from urlparse import urlparse
 
 class VoteHandler(SessionHandler):
   """ Handles upvoting and downvoting on forum postings """
@@ -68,6 +69,7 @@ class ForumHandler(SessionHandler):
     post.title = title
     post.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
     post.url = url
+    post.url_host = urlparse(url).hostname
     post.reference = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
     post.put()
     self.redirect('/tech/{}'.format(forum_name))
