@@ -20,6 +20,7 @@ from BaseHandler import SessionHandler
 from BaseHandler import login_required
 
 class VoteHandler(SessionHandler):
+  """ Handles upvoting and downvoting on forum postings """
   def post(self):
     post = cgi.escape(self.request.get('key'))
     change = int(cgi.escape(self.request.get('change')))

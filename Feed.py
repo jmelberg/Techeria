@@ -59,6 +59,11 @@ class FeedHandler(SessionHandler):
                                               'comments': comments}))
 
 class FeedListHandler(SessionHandler):
+  """ Handler to handle output of all comments pulled from all users.
+      
+      CURRENT: Loads 10 comments per page, with ability to load more when user reaches
+      end of page.
+  """
   def get(self):
     threaded_comments = []
     page = int(cgi.escape(self.request.get('page')))

@@ -25,7 +25,7 @@ class="img-rounded"/>
         </div>
         <div class = "col-md-1"><button class = "btn btn-warning" id="cancel" type="reset">Cancel</button></div>
         <div class = "col-md-1"><button class = "btn btn-primary" id = "save" type="submit">Save</button></div>
-    </form>
+      </form>
     </div>
   </div>
   <h2 id= "test" >{{user.first_name}} {{user.last_name}}
@@ -40,137 +40,166 @@ class="img-rounded"/>
       {% if viewer.key not in user.friends %}
       <!-- IF USER IS NOT FRIENDS -->
       <button type="submit" class="btn btn-primary">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>          Connect</button>
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>          Connect
+      </button>
       {% endif %}
-        <a href="/compose?recipient={{user.username}}" type="button" class="btn btn-primary">
-          <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>          Message</a>
-        </form>
-      {% else %}
-      <!-- User owns profile -->
-        <button type="button" class="btn btn-primary pull-right" align="right" id="edit">
-        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>   Edit</button>
-        <!-- Modal -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-          <div class="container">
-            <div class="row form-group">
-              <div class="col-xs-12">
-                <ul class="nav nav-pills nav-justified thumbnail setup-panel">
-                  <li class="active"><a href="#step-1">
-                      <h4 class="list-group-item-heading">Who are you?</h4>
-                    </a></li>
-                  <li class="disabled"><a href="#step-2">
-                      <h4 class="list-group-item-heading">Specialty</h4>
-                    </a></li>
-                  <li class="disabled"><a href="#step-3">
-                      <h4 class="list-group-item-heading">Skills</h4>
-                  </a></li>
+      <a href="/compose?recipient={{user.username}}" type="button" class="btn btn-primary">
+        <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>          Message
+      </a>
+    </form>
+    {% else %}
+    <!-- User owns profile -->
+      <button type="button" class="btn btn-primary pull-right" align="right" id="edit">
+      <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>   Edit</button>
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="container">
+          <div class="row form-group">
+            <!-- Main tabs -->
+            <div class="col-xs-12">
+              <ul class="nav nav-pills nav-justified thumbnail setup-panel">
+                <li class="active"><a href="#step1">
+                  <h4 class="list-group-item-heading">Who are you?</h4></a>
+                </li>
+                <li class="disabled"><a href="#step2">
+                  <h4 class="list-group-item-heading">Specialty</h4></a>
+                </li>
+                <li class="disabled"><a href="#step3">
+                  <h4 class="list-group-item-heading">Skills</h4></a>
+                </li>
                 </ul>
             </div>
           </div>
-          <div class="row setup-content" id="step-1">
+          <!-- What field -->
+          <div class="row setup-content" id="step1">
             <div class="col-xs-12">
               <div class="col-md-12 well text-center">
                 <h1> What field are you in?</h1>
                 <div class="checkbox">
-                <label><input type="radio"> Business</label></div>
+                <label><input type="radio" id="business"> Business</label></div>
                 <div class="checkbox">
-                <label><input type="radio"> Tech</label></div>
+                <label><input type="radio" id="tech"> Tech</label></div>
                 <h3/>
-                <button id="activate-2" class="btn btn-primary btn-lg">Next</button>
+                <button id="activate2" class="btn btn-primary btn-lg">Next</button>
               </div>
             </div>
           </div>
-       <div class="row setup-content" id="step-2">
-          <div class="col-xs-12">
-            <div class="col-md-12 well text-center">
+          <!-- Tech - Question 2 -->
+          <div class="row setup-content" id="step2">
+            <div class="col-xs-12">
+              <div class="col-md-12 well text-center">
                 <h1>Do you code?</h1>
                 <div class="checkbox">
-                <label><input type="radio"> Yes</label></div>
+                <label><input type="radio" id="yes"> Yes</label></div>
                 <div class="checkbox">
-                <label><input type="radio"> No</label></div>
+                <label><input type="radio" id="no"> No</label></div>
                 <h3/>
-                <button id="activate-3" class="btn btn-primary btn-lg">Next</button>
+                <button id="activate3" class="btn btn-primary btn-lg">Next</button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row setup-content" id="step-3">
-          <div class="col-xs-12">
-            <div class="col-md-12 well text-center">
-                <h1>What are your skills?</h1>
+          <!-- Tech - Question 3 -->
+          <div class="row setup-content" id="step3">
+            <div class="col-xs-12">
+             <div class="col-md-12 well text-center">
+                <h1>What type of Developer?</h1>
                 <div class="checkbox">
-                <label><input type="radio"> Java</label></div>
+                <label><input type="radio" id="mobile"> Mobile Applications</label></div>
                 <div class="checkbox">
-                <label><input type="radio"> C++</label></div>
+                <label><input type="radio" id="system"> Systems</label></div>
                 <div class="checkbox">
-                <label><input type="radio"> Python</label></div>
+                <label><input type="radio" id="web"> Web</label></div>
                 <div class="checkbox">
-                <label><input type="radio"> UX</label></div>
+                <label><input type="radio" id="embedSystem"> Embedded Systems</label></div>
                 <div class="checkbox">
-                <label><input type="radio"> Google App Engine</label></div>
+                <label><input type="radio" id="bigdata"> Big Data</label></div>
                 <div class="checkbox">
-                <label><input type="radio"> XML</label></div>
+                <label><input type="radio" id="quality"> Quality Assurance</label></div>
                 <h3/>
                 <button id="done" class="btn btn-primary btn-lg" data-dismiss="modal">Done</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-          <script>
-          $(document).ready(function(){
-            var user = $('#user').val();
-            var visitor = $('#visitor').val();
+  </h2>
+</div>
 
-            $('#myModal').modal(); // Instatiates modal
-            var navListItems = $('ul.setup-panel li a'),
-              allWells = $('.setup-content');
-            allWells.hide();
-            navListItems.click(function(e)
-            { 
-              e.preventDefault();
-              var $target = $($(this).attr('href')),
-              $item = $(this).closest('li');
+<script>
+  $(document).ready(function(){
+    $('#myModal').modal(); // Instatiates modal
+    var navListItems = $('ul.setup-panel li a'),
+      allWells = $('.setup-content');
+    allWells.hide();
+    navListItems.click(function(e){ 
+      e.preventDefault();
+      var $target = $($(this).attr('href')),
+        $item = $(this).closest('li');
               
-              if (!$item.hasClass('disabled')) {
-               navListItems.closest('li').removeClass('active');
-                $item.addClass('active');
-                allWells.hide();
-                $target.show();
-              }
-            });
-            $('ul.setup-panel li.active a').trigger('click');
-            //Let other tabs be accessable //
-            $('#activate-2').on('click', function(e) {
-              $('ul.setup-panel li:eq(1)').removeClass('disabled');
-              $('ul.setup-panel li a[href="#step-2"]').trigger('click');
-              $(this).remove();
-            });   
-            $('#activate-3').on('click', function(e) {
-              $('ul.setup-panel li:eq(2)').removeClass('disabled');
-              $('ul.setup-panel li a[href="#step-3"]').trigger('click');
-              $(this).remove();
-            });
-          });         
+      if (!$item.hasClass('disabled')) {
+        navListItems.closest('li').removeClass('active');
+        $item.addClass('active');
+        allWells.hide();
+        $target.show();
+      }
+    });
 
-          $(function () {
-            $('#edit').click(function () {
-              $('#test').hide();
-              $('#editField').show();
-            });
-            $('#cancel').click(function(){
-              $('#test').show();
-              $('#editField').hide();
-            });
-          });
-          </script>
-          {% endif %}
-            </h2>
-          </div>
+    // Click one or the other
+    $('#business').click(function(){
+      $('#tech').prop("checked", false);
+    });
+    $('#tech').click(function(){
+      $('#business').prop("checked", false);
+    });
+    $('#yes').click(function(){
+      $('#no').prop("checked", false);
+    });
+    $('#no').click(function(){
+      $('#yes').prop("checked", false);
+    });
+
+    $('ul.setup-panel li.active a').trigger('click');
+      //Let other tabs be accessable //
+      $('#activate2').on('click', function(e) {
+        if(document.getElementById("business").checked == true){
+          alert("Moving to Business");
+        }
+        else{
+          alert("Moving to Tech");
+        }
+        $('ul.setup-panel li:eq(1)').removeClass('disabled');
+        $('ul.setup-panel li a[href="#step2"]').trigger('click');
+        $(this).remove();
+      });   
+      $('#activate3').on('click', function(e) {
+        if(document.getElementById("yes").checked== true){
+          alert("Coder!");
+        }
+        else{
+          alert("Non-coder");
+        }
+        $('ul.setup-panel li:eq(2)').removeClass('disabled');
+        $('ul.setup-panel li a[href="#step3"]').trigger('click');
+        $(this).remove();
+      });
+    });         
+
+    $(function () {
+      $('#edit').click(function () {
+        $('#test').hide();
+        $('#editField').show();
+      });
+      $('#cancel').click(function(){
+        $('#test').show();
+        $('#editField').hide();
+      });
+    });
+</script>
+    {% endif %}
+
     <!-- END MODAL -->
-
         <div class="row">
           <div class="col-md-4">
-
             <ul class="list-group">
               <a class="list-group-item" href="/connections?username={{user.username}}">
                 Connections
@@ -231,12 +260,8 @@ class="img-rounded"/>
 </div>
 
 <script>
-
-
 $(function () {
-
   $('#commentBox').data('holder', $('#commentBox').attr('placeholder'));
-
   $('#commentBox').focusin(function () {
    $(this).attr('placeholder', '');
    $(this).attr('rows', 2);
@@ -249,8 +274,7 @@ $(function () {
       $("#postButton").hide("fast");
     }
   });
-
-
 });
 </script>
+
 {% endblock %}

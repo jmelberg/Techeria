@@ -177,16 +177,22 @@ class SearchHandler(SessionHandler):
         person = search_string.split(' ')
         first_name = person[0]
         last_name = person[1]
+        query_first = User.first_name
+        query_last = User.last_name
         full_name = User.query(User.first_name == first_name, User.last_name == last_name)
         if full_name:
           results.append(full_name.get())
       else:
         first_name = User.query(User.first_name == search_string)
+        last_name = User.query(User.last_name == search_string)
         username = User.query(User.username == search_string)
         if username.get() is not None:
           results.append(username.get())
         if first_name.get() is not None:
           for result in first_name.fetch(10):
+            results.append(result)
+        if last_name.get() is not None:
+          for result in last_name.fetch(10):
             results.append(result)
     self.response.out.write(template.render('views/search.html', {'results':results, 'search_string':search_string}))
 
@@ -207,6 +213,7 @@ class Image(SessionHandler):
       self.response.out.write(user.avatar)
 
 class CheckUsername(SessionHandler):
+  """ Used to ensure no two users can have the same username """
   def get(self):
     username = cgi.escape(self.request.get('username'))
     user_query = User.query(User.username == username)
@@ -217,6 +224,7 @@ class CheckUsername(SessionHandler):
       self.response.out.write('Username is taken')
 
 class UpdateProfile(SessionHandler):
+  """ In place update profile capabilities on the user profile page """
   def post(self):
     first_name = cgi.escape(self.request.get('first'))
     last_name = cgi.escape(self.request.get('last'))

@@ -30,6 +30,7 @@ class MessageHandler(SessionHandler):
     self.response.out.write(template.render('views/messages.html', {'viewer': user, 'messages': messages}))
 
 class ComposeMessage(SessionHandler):
+  """ Handler to compose messages from one user to another """
   @login_required
   def get(self):
     recipient = cgi.escape(self.request.get('recipient'))
@@ -67,6 +68,7 @@ class ComposeMessage(SessionHandler):
       self.redirect('/compose')
 
 class DeleteMessage(SessionHandler):
+  """ Handler to delete messages from the datastore """
   def post(self):
     key_array = cgi.escape(self.request.get('array'))
     for key in key_array.split(","):
@@ -75,6 +77,7 @@ class DeleteMessage(SessionHandler):
     self.redirect('/messages')
 
 class ReadMessage(SessionHandler):
+  """ Handler to read individual message """
   def get(self, message_id):
     viewer = self.user_model
     viewer_email = viewer.email_address
