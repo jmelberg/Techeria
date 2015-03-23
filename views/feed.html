@@ -5,81 +5,25 @@
   <div class="panel-heading">
     <h3 class="panel-title">Comment</h3>
   </div>
+  
   <div class="panel-body">
     <form role="form" action="/comment" method="post">
       <div class="form-group">
-        <textarea style="resize:none; font-size: 18px;" name="text" class="form-control" rows="1" id="commentBox" placeholder="What's new?"></textarea>
+        <textarea style="resize:none; font-size: 18px;" name="text" class="form-control" rows="1" id="commentBox" placeholder="What's new?">
+        </textarea>
         <ol style="visibility:hidden;"></ol>
         <input  type="hidden" name="recipient" class="form-control" value={{viewer.username}}>
-          <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
-            <input  type="hidden" name="origin" class="form-control" value='feed'>
-              <button type="submit" class="btn btn-primary pull-right" style="display:none;" id="postButton"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post</button>
-              </div>
+        <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
+        <input  type="hidden" name="origin" class="form-control" value='feed'>
+        <button type="submit" class="btn btn-primary pull-right" style="display:none;" id="postButton"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post</button>
+      </div>
     </form>
   </div>
 </div>
-<div id = "feedlist">
-</div>
-<script>
-  var done = 0;
-  jQuery(document).ready(function() {
-    var count = 1;
-    var multiplier = 0.5;
-    var bodyheight = $('body').height();
-    $(window).scroll(function(){
-       if ($(window).scrollTop() > 100) {
-          $('.scroll-top-wrapper').addClass('show');
-        } else {
-          $('.scroll-top-wrapper').removeClass('show');
-        }
-      if($(window).scrollTop() + bodyheight >= .75*$('body').height()) {
-      if(done == 0){
-       updateFeed(count);
-       $('#loading').show();
-       count++;
-     }
-     }
-    });
-  });
 
+<div id = "feedlist"> </div>
 
-   
-   $('#commentBox').data('holder', $('#commentBox').attr('placeholder'));
-   
-   $('#commentBox').focusin(function () {
-                      $(this).attr('placeholder', '');
-                      $(this).attr('rows', 2);
-                      $("#postButton").show("fast");
-                      });
-   $('#commentBox').focusout(function () {
-                    if($(this).val().length == 0){
-                       $(this).attr('placeholder', "What's New?");
-                       $(this).attr('rows', 1);
-                       $("#postButton").hide("fast");
-                    }
-                       });
-   
-   $('#postButton').click(function() {
-           updateFeed(0);
-    }); 
-   
-   
-  function updateFeed(page) {
-    $.ajax({
-           url: "/feedlist",
-           cache: false,
-           data: {'page': page},
+<!-- Update Feed JS -->
+<script type="text/javascript" src = "js/updateFeed.js"></script>
 
-           success: function(frag){
-           $("#feedlist").append(frag);
-           $('#loading').hide();
-           var id = "#more-" + page;
-           if(parseInt($(id).text()) < 10){
-            done = 1;
-           }
-           }
-           });
-  }
-  updateFeed(0);
-  </script>
 {% endblock %}

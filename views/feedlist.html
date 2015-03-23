@@ -18,11 +18,11 @@
         <textarea style="font-size: 18px;" name="text" class="form-control" rows="3" id="replycommentBox"></textarea>
         <ol style="visibility:hidden;"></ol>
         <input  type="hidden" name="recipient" class="form-control" value={{viewer.username}}>
-          <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
-            <input  type="hidden" name="origin" class="form-control" value='feed'>
-            <input type="hidden" id="parent" name="parent" class="form-control">
-              <button type="submit" class="btn btn-primary pull-right" id="postreplyButton"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Reply</button>
-              </div>
+        <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
+        <input  type="hidden" name="origin" class="form-control" value='feed'>
+        <input type="hidden" id="parent" name="parent" class="form-control">
+        <button type="submit" class="btn btn-primary pull-right" id="postreplyButton"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Reply</button>
+      </div>
     </form>
   </div>
 </div>
@@ -49,20 +49,5 @@
 <div id = "loading" style = "display: none;">Loading...</div>
 <div id="more-{{page}}" style = "display:none;"> {{more}}</div>
 
-<script>
-
-$(document).ready(function(){
-  $("[id^='reply-']").click(function(){
-    var counter = $(this).attr('id').split('-')[1];
-    alert(counter);
-    $('#replybox').show().insertAfter('#comment'+counter);
-    var parent = $(this).val();
-    $('#parent').val(parent);
-    $(this).hide();
-    $('#replycommentBox').focus();
-  });
-  $('#postreplyButton').click(function(){
-          alert('hello');  });
-
-});
-</script>
+<!-- Reply to Feed JS -->
+<script type="text/javascript" src = "js/reply.js"></script>

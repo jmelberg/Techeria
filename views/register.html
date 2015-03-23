@@ -6,115 +6,71 @@
       </h1>
     </div>
     <div class="row">
-        <div class="col-md-3"></div>
-        
-        <div class="col-md-6">
-          <div class="well">
-          <form class="form-horizontal" enctype="multipart/form-data"  action="/register" method="POST">
-            <fieldset>
-              <div id="legend">
-                <legend class="">Sign Up</legend>
-              </div>
-              <div class="control-group">
-                <h4>Username <small id="available" class="label label-success pull-right" style="display:none;"></small></h4>
-                <div class="controls">
-                  <input type="text" id="username" name="username" placeholder="" class="form-control input-lg" required>
-                    <p class="help-block">Username can contain any letters or numbers, without spaces</p>
-                    </div>
-              </div>
-              
-              <script>
-                $(function () {
-
-                  
-                  $('#username').focus();
-                  $('#username').focusout(function () {
-                                            if($(this).val().length != 0){
-                                                checkUsername($(this).val().toLowerCase());
-                                            }
-                                          else{
-                                            $("#available").hide();
-                                          }
-                                            });
-                  
-                  });
-                  
-                  function checkUsername(username) {
-                    $.ajax({
-                           url: "/checkusername",
-                           cache: false,
-                           data:{'username' : username},
-                           success: function(result){
-                           $("#available").text(result);
-                           if(result == 'Username is available'){
-                             $("#available").attr('class', 'label label-success pull-right');
-                             $("#available").show();
-                             $("#signup").prop('disabled', false);
-                           }
-                           else {
-                             $("#available").attr('class', 'label label-danger pull-right');
-                             $("#available").show();
-                             $("#signup").prop('disabled', true);
-                           }
-                           }});
-                  }
-
-
-              </script>
-              
-              <div class="control-group">
-                <h4>First Name</h4>
-                <div class="controls">
-                  <input type="text" id="first_name" name="first_name" placeholder="" class="form-control input-lg" required>
-                    </div>
-              </div>
-              
-              <div class="control-group">
-                <h4>Last Name</h4>
-                <div class="controls">
-                  <input type="text" id="last_name" name="last_name" placeholder="" class="form-control input-lg" required>
-                    </div>
-              </div>
-              
-              <div class="control-group">
-                <h4>Email</h4>
-                <div class="controls">
-                  <input type="email" id="email" name="email" placeholder="" class="form-control input-lg" required>
-                    </div>
-              </div>
-
-              <div class="control-group">
-                <h4>Password</h4>
-                <div class="controls">
-                  <input type="password" id="password" name="password" placeholder="" class="form-control input-lg" required>
-                    </div>
-              </div>
-              
-              <div class="control-group">
-                <h4>Confirm Password</h4>
-                <div class="controls">
-                  <input type="password" id="c_password" name="c_password" placeholder="" class="form-control input-lg" required>
-                    </div>
-              </div>
-              <div class="control-group">
-                <h4>Profile Picture</h4>
-                <div class="controls">
-                  <input type="file" id="avatar" name="img"  class="form-control input-lg" required>
-                    </div>
-              </div>
-
-              <br></br>
-              <div class="control-group">
-                <!-- Button -->
-                <div class="controls">
-                  <button class="btn btn-success btn-lg" id="signup" style="display: block; width: 100%;">Sign Up</button>
-                </div>
-              </div>
-            </fieldset>
-          </form>
+      <div class="col-md-3"></div>
+      <div class="col-md-6">
+        <div class="well">
+        <form class="form-horizontal" enctype="multipart/form-data"  action="/register" method="POST">
+        <fieldset>
+          <div id="legend">
+          <legend class="">Sign Up</legend>
           </div>
+          <div class="control-group">
+          <h4>Username <small id="available" class="label label-success pull-right" style="display:none;"></small>
+          </h4>
+            <div class="controls">
+            <input type="text" id="username" name="username" placeholder="" class="form-control input-lg" required>
+            <p class="help-block">Username can contain any letters or numbers, without spaces</p>
+            </div>
+          </div>
+          <!-- CHECK USERNAME -->
+          <script type="text/javascript" src= "js/checkusername.js"></script> 
+          <div class="control-group">
+            <h4>First Name</h4>
+            <div class="controls">
+              <input type="text" id="first_name" name="first_name" placeholder="" class="form-control input-lg" required>
+            </div>
+          </div>     
+          <div class="control-group">
+          <h4>Last Name</h4>
+            <div class="controls">
+            <input type="text" id="last_name" name="last_name" placeholder="" class="form-control input-lg" required>
+            </div>
+          </div>
+          <div class="control-group">
+            <h4>Email</h4>
+            <div class="controls">
+            <input type="email" id="email" name="email" placeholder="" class="form-control input-lg" required>
+            </div>
+          </div>
+          <div class="control-group">
+            <h4>Password</h4>
+            <div class="controls">
+              <input type="password" id="password" name="password" placeholder="" class="form-control input-lg" required>
+            </div>
+          </div>
+          <div class="control-group">
+          <h4>Confirm Password</h4>
+            <div class="controls">
+            <input type="password" id="c_password" name="c_password" placeholder="" class="form-control input-lg" required>
+            </div>
+          </div>
+          <div class="control-group">
+            <h4>Profile Picture</h4>
+            <div class="controls">
+              <input type="file" id="avatar" name="img"  class="form-control input-lg" required>
+            </div>
+          </div>
+          <br></br>
+          <div class="control-group">
+          <!-- Button -->
+            <div class="controls">
+              <button class="btn btn-success btn-lg" id="signup" style="display: block; width: 100%;">Sign Up</button>
+            </div>
+          </div>
+        </fieldset>
+        </form>
         </div>
-      
+      </div>
     </div>
   </div>
 {% endblock %}

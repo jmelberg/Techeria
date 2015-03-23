@@ -59,22 +59,6 @@
   </fieldset>
 </form>
 
-<script>
-   $(function () {
-                  
-                  $('#textPost').click(function () {
-                    $('#url').hide();
-                    $('#linkPost').removeAttr("class");
-                    $('#urlInput').val('');
-                    $('#textPost').attr("class", "active");
-                                                  });
-                  $('#linkPost').click(function () {
-                    $('#url').show();
-                    $('#linkPost').attr("class", "active"); 
-                    $('#textPost').removeAttr("class");                                           
-                                                  });
-                  
-                  });
-                  
-</script>
+<!-- Post To Forum JS -->
+<script type="text/javascript" src="./js/forumPost.js"> </script>
 {% endblock %}

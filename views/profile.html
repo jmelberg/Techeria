@@ -129,108 +129,37 @@ class="img-rounded"/>
   </h2>
 </div>
 
-<script>
-  $(document).ready(function(){
-    $('#myModal').modal(); // Instatiates modal
-    var navListItems = $('ul.setup-panel li a'),
-      allWells = $('.setup-content');
-    allWells.hide();
-    navListItems.click(function(e){ 
-      e.preventDefault();
-      var $target = $($(this).attr('href')),
-        $item = $(this).closest('li');
-              
-      if (!$item.hasClass('disabled')) {
-        navListItems.closest('li').removeClass('active');
-        $item.addClass('active');
-        allWells.hide();
-        $target.show();
-      }
-    });
+<!-- User engagement Questionnaire -->
+<script type="text/javascript" src="../js/engagement.js"> </script>
 
-    // Click one or the other
-    $('#business').click(function(){
-      $('#tech').prop("checked", false);
-      $('#role').html("business");
-    });
-    $('#tech').click(function(){
-      $('#business').prop("checked", false);
-      $('#role').html("engineering");
-    });
-    $('#yes').click(function(){
-      $('#no').prop("checked", false);
-    });
-    $('#no').click(function(){
-      $('#yes').prop("checked", false);
-    });
-
-    $('ul.setup-panel li.active a').trigger('click');
-      //Let other tabs be accessable //
-      $('#activate2').on('click', function(e) {
-        if(document.getElementById("business").checked == true){
-          alert("Moving to Business");
-        }
-        else{
-          alert("Moving to Tech");
-        }
-        $('ul.setup-panel li:eq(1)').removeClass('disabled');
-        $('ul.setup-panel li a[href="#step2"]').trigger('click');
-        $(this).remove();
-      });   
-      $('#activate3').on('click', function(e) {
-        if(document.getElementById("yes").checked== true){
-          alert("Coder!");
-        }
-        else{
-          alert("Non-coder");
-        }
-        $('ul.setup-panel li:eq(2)').removeClass('disabled');
-        $('ul.setup-panel li a[href="#step3"]').trigger('click');
-        $(this).remove();
-      });
-    });         
-
-    $(function () {
-      $('#edit').click(function () {
-        $('#test').hide();
-        $('#editField').show();
-      });
-      $('#cancel').click(function(){
-        $('#test').show();
-        $('#editField').hide();
-      });
-    });
-</script>
     {% endif %}
 
-    <!-- END MODAL -->
+<!-- END MODAL -->
         <div class="row">
           <div class="col-md-4">
             <ul class="list-group">
-              <a class="list-group-item" href="/connections?username={{user.username}}">
-                Connections
-                {% if user.friend_count > 0 %}
-                <span class="badge">{{user.friend_count}}</span>
-                {% endif %}
-              </a>
-              <a class="list-group-item" href="/connections?username={{user.username}}">
-                Projects
-                <span class="badge">1690</span>
-              </a>
-              <a class="list-group-item" href="/connections?username={{user.username}}">
-                Hacks
-                <span class="badge">15</span>
-              </a>
-              <a class="list-group-item" href="/connections?username={{user.username}}">
-                Skills
-                <span class="badge">14</span>
-              </a>
+            <a class="list-group-item" href="/connections?username={{user.username}}">
+              Connections
+              {% if user.friend_count > 0 %}
+              <span class="badge">{{user.friend_count}}</span>
+              {% endif %}
+            </a>
+            <a class="list-group-item" href="/connections?username={{user.username}}">
+              Projects
+              <span class="badge">1690</span>
+            </a>
+            <a class="list-group-item" href="/connections?username={{user.username}}">
+              Hacks
+            <span class="badge">15</span>
+            </a>
+            <a class="list-group-item" href="/connections?username={{user.username}}">
+              Skills
+            <span class="badge">14</span>
+            </a>
             </ul>
-
           </div>
 
-          <div class="col-md-2">
-          </div>
+          <div class="col-md-2"></div>
 
           <div class="col-md-6">
             <div class="panel panel-default">
@@ -265,22 +194,7 @@ class="img-rounded"/>
  </div>
 </div>
 
-<script>
-$(function () {
-  $('#commentBox').data('holder', $('#commentBox').attr('placeholder'));
-  $('#commentBox').focusin(function () {
-   $(this).attr('placeholder', '');
-   $(this).attr('rows', 2);
-   $("#postButton").show("fast");
- });
-  $('#commentBox').focusout(function () {
-    if($(this).val().length == 0){
-      $(this).attr('placeholder', "Leave {{user.first_name}} a comment.");
-      $(this).attr('rows', 1);
-      $("#postButton").hide("fast");
-    }
-  });
-});
-</script>
+<!-- Comment JS -->
+<script type="text/javascript" src="../js/comment.js"> </script>
 
 {% endblock %}

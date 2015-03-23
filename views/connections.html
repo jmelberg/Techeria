@@ -10,16 +10,16 @@
 <ul class = "list-group">
   {% for connection in connections %}
   <div class="list-group">
-     <a href="profile/{{connection.username}}" class="row list-group-item">
-      <div class="col-md-1" >
-          <img src="/img?user_id={{connection.key_urlsafe}}&height=75&width=75" class="img-rounded" ></img>
-       </div>
-      <div class="col-md-11" >
-          <h4 >{{connection.first_name}}  {{connection.last_name}}</h4>
-          <p >{{connection.profession}}{{connection.employer}}</p>
+    <a href="profile/{{connection.username}}" class="row list-group-item">
+      <div class="col-md-1">
+        <img src="/img?user_id={{connection.key_urlsafe}}&height=75&width=75" class="img-rounded" ></img>
       </div>
-     </a>
-    </div>
+      <div class="col-md-11">
+        <h4>{{connection.first_name}}  {{connection.last_name}}</h4>
+        <p>{{connection.profession}}{{connection.employer}}</p>
+      </div>
+    </a>
+  </div>
   {% endfor %}
 </ul>
 {% endblock %}

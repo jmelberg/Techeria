@@ -72,50 +72,13 @@
     <div class="container">
       {% block content %}{% endblock %}
     </div>
-  <div class="scroll-top-wrapper ">
+    <div class="scroll-top-wrapper ">
     <span class="scroll-top-inner">
-      <div class="glyphicon glyphicon-chevron-up" style="width:100%;"></div>
+        <div class="glyphicon glyphicon-chevron-up" style="width:100%;"></div>
     </span>
-  </div>
+    </div>
   </body>
-  
-  <script>
-    $(function () {
-      
-      $('#seachBox').data('holder', $('#searchBox').attr('placeholder'));
-      
-      $('#searchBox').focusin(function () {
-                               $(this).attr('placeholder', '');
-                               });
-      $('#searchBox').focusout(function () {
-                                if($(this).val().length == 0){
-                                $(this).attr('placeholder', "Search");
-                                }
-                                });    
-      
-      });
-
-    $(function(){
-
-      $(document).on( 'scroll', function(){
-
-        if ($(window).scrollTop() > 100) {
-          $('.scroll-top-wrapper').addClass('show');
-        } else {
-          $('.scroll-top-wrapper').removeClass('show');
-        }
-      });
-
-      $('.scroll-top-wrapper').on('click', scrollToTop);
-    });
-
-    function scrollToTop() {
-      verticalOffset = typeof(verticalOffset) != 'undefined' ? verticalOffset : 0;
-      element = $('body');
-      offset = element.offset();
-      offsetTop = offset.top;
-      $('html, body').animate({scrollTop: offsetTop}, 500, 'linear');
-    }
-
-  </script>
+  <!-- Search and Scroll to Top JS -->
+  <script type="text/javascript" src="js/search.js"></script>
+  <script type="text/javascript" src= "js/scrollTop.js"></script>
 </html>

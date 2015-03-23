@@ -38,47 +38,6 @@
     </ul>
   </div>
 </div>
-
-<script>
-  $(document).ready(function() {
-    var key;
-    var count = 0;
-    $( "[id^='checkbox']" ).click(function() {
-        if($(this).children(':visible').length == 0){
-        $( this).children().show( "fast", function() {
-          // Animation complete.
-          key = $(this).val();
-          $("#delete").show("fast");
-          count++;
-        });
-        }
-        else {
-        $(this).children().hide("fast", function() {
-          // Animation complete.
-          count--;
-          if(count==0){
-            $("#delete").hide("fast", function(){
-            });
-          }
-          });
-        }
-    });  
-    $("#delete").click(function(){
-      // Delete function
-      var array = []
-      $("[id^='checkbox']").each(function(index, key){
-        if($(this).children(':visible').length > 0){
-          array.push(key.value);
-        }
-      });
-      var json_array = array.toString();
-      $.ajax({
-        type: "POST",
-        url: "/trash",
-        data: {'array' : json_array},
-      });
-      top.location.href = '/messages';
-    });                
-  });
-</script>
+<!-- Check for checked items to delete
+ --><script type ="text/javascript" src="js/selectMessage.js"></script>
 {% endblock %}
