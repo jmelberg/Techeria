@@ -40,6 +40,7 @@ $(document).ready(function(){
     }
     else{
       alert("Moving to Tech");
+
     }
     $('ul.setup-panel li:eq(1)').removeClass('disabled');
     $('ul.setup-panel li a[href="#step2"]').trigger('click');
