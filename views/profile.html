@@ -2,6 +2,58 @@
 
 {% block content %}
 
+<style>
+.ui-autocomplete {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 5000;
+  float: left;
+  display: none;
+  min-width: 160px;
+  _width: 160px;
+  padding: 4px 0;
+  margin: 2px 0 0 0;
+  list-style: none;
+  background-color: #ffffff;
+  border-color: #ccc;
+  border-color: rgba(0, 0, 0, 0.2);
+  border-style: solid;
+  border-width: 1px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -webkit-background-clip: padding-box;
+  -moz-background-clip: padding;
+  background-clip: padding-box;
+  *border-right-width: 2px;
+  *border-bottom-width: 2px;
+ 
+  .ui-menu-item > a.ui-corner-all {
+    display: block;
+    padding: 3px 15px;
+    clear: both;
+    font-weight: normal;
+    line-height: 18px;
+    color: #555555;
+    white-space: nowrap;
+ 
+    &.ui-state-hover, &.ui-state-active {
+      color: #ffffff;
+      text-decoration: none;
+      background-color: #0088cc;
+      border-radius: 0px;
+      -webkit-border-radius: 0px;
+      -moz-border-radius: 0px;
+      background-image: none;
+    }
+  }
+}
+.ui-helper-hidden-accessible { display:none; }
+</style>
 <!-- Main user Profile -->
 <div id = "viewer" style="display: none;">{{viewer.username}}</div>
 <img src="/img?user_id={{user.key.urlsafe}}"
@@ -148,6 +200,47 @@ class="img-rounded"/>
                 <div class="checkbox">
                 <label><input type="radio" id="no"> No</label></div>
                 <h3/>
+                <!-- Autocomplete programming languages -->
+                <div id="languages-form" style="display:none;">
+                  <div class="page-header">Which programming languages?</div>
+                  <input class="input-lg" type="text" id="languages"></input>
+                </div>
+                <script>
+                $(function() {
+                 var availableTags = [
+                 "ActionScript",
+                 "AppleScript",
+                 "Asp",
+                 "BASIC",
+                 "C",
+                 "C++",
+                 "Clojure",
+                 "COBOL",
+                 "ColdFusion",
+                 "Erlang",
+                 "Fortran",
+                 "Groovy",
+                 "Go",
+                 "Haskell",
+                 "Java",
+                 "JavaScript",
+                 "Lisp",
+                 "Objective C",
+                 "Perl",
+                 "PHP",
+                 "Python",
+                 "Ruby",
+                 "Scala",
+                 "Scheme",
+                 "Swift",
+                 ];
+                 $( "#languages" ).autocomplete({
+                  source: availableTags
+                });
+               });
+                </script>
+                <!-- End autocomplete programming languages -->
+                <br></br>
                 <button id="activate3" class="btn btn-primary btn-lg pull-right">Next</button>
               </div>
               <div class="col-md-2"></div>

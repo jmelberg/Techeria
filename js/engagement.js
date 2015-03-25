@@ -27,9 +27,12 @@ $(document).ready(function(){
   });
   $('#yes').click(function(){
     $('#no').prop("checked", false);
+    $('#languages-form').show();
   });
   $('#no').click(function(){
     $('#yes').prop("checked", false);
+    //programming languages form
+    $('#languages-form').hide();
   });
 
   $('ul.setup-panel li.active a').trigger('click');
