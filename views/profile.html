@@ -7,6 +7,9 @@
 <img src="/img?user_id={{user.key.urlsafe}}"
 class="img-rounded"/>
 <div class="page-header">
+
+
+  <!-- Edit information -->
   <div class = "row">
     <div class = "col-md-12">
       <form class = "form-inline" action = "/updateprofile" method = "post" style = "display: none;" id = "editField">
@@ -29,6 +32,9 @@ class="img-rounded"/>
       </form>
     </div>
   </div>
+  <!-- End edit information -->
+
+
   <h2 id= "test" >{{user.first_name}} {{user.last_name}}
     <small id = "profession">      {{user.profession}}    </small>
     <small> @ </small>
@@ -44,16 +50,19 @@ class="img-rounded"/>
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>          Connect
       </button>
       {% endif %}
-      <a href="/compose?recipient={{user.username}}" type="button" class="btn btn-primary">
+      <!-- <a href="/compose?recipient={{user.username}}" type="button" class="btn btn-primary">
         <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>          Message
-      </a>
+      </a> -->
 
       <!-- Notes:
       Here is the button to create a modal message.
       What works: Modal created and recipient is carried over.
       What doesn't: jquery gets all fields, but doesn't send them to composemessage -->
 
-      <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#messageModal" data-recipient={{user.username}}>Message</button> -->
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#messageModal" data-recipient={{user.username}}><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>  Message</button>
+    </form>
+</div>
+      <!-- NEW MESSAGE SELECTED -->
 
       <!-- NEW MESSAGE MODAL SELECTED -->
       <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageLabel" aria-hidden="true">
@@ -67,15 +76,15 @@ class="img-rounded"/>
               <form>
                 <div class="form-group">
                   <label for="recipient-name" class="control-label">Recipient:</label>
-                  <input type="text" class="form-control" id="recipient">
+                  <input type="text" class="form-control input-lg" id="recipient">
                 </div>
                 <div class = "form-group">
                   <label for="message-subject" class="control-label">Subject:</label>
-                  <textarea class = "form-control" id="message-subject"></textarea>
+                  <input class = "form-control input-lg" id="message-subject"></input>
                 </div>
                 <div class="form-group">
                   <label for="message-text" class="control-label">Message:</label>
-                  <textarea class="form-control" id="message-text"></textarea>
+                  <textarea class="form-control" id="message-text" rows="10"></textarea>
                 </div>
                </form>
             </div>
@@ -86,8 +95,6 @@ class="img-rounded"/>
           </div>
         </div>
       </div>
-    </form>
-      <!-- NEW MESSAGE SELECTED -->
       <script type="text/javascript" src="/js/newMessage.js"> </script>
       
     {% else %}
@@ -236,7 +243,6 @@ class="img-rounded"/>
      </div>
    </div>
  </div>
-</div>
 
 <!-- Comment JS -->
 <script type="text/javascript" src="../js/comment.js"> </script>

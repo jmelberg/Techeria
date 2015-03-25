@@ -3,7 +3,7 @@ $('#messageModal').on('show.bs.modal', function (event) {
         var recipient = button.data('recipient')
         var modal = $(this)
         modal.find('.modal-title').text('New message to ' + recipient)
-        modal.find('.modal-body input').val(recipient)
+        modal.find('.modal-body #recipient').val(recipient)
       });
 $("#sendMessage").click(function(){
   var sender = document.getElementById("viewer").innerHTML;
@@ -11,7 +11,7 @@ $("#sendMessage").click(function(){
   var text = document.getElementById("message-text").innerHTML;
   $.ajax({
     type:"POST",
-    url: "/compose?recipient={{user.username}}",
+    url: "/compose",
     data:{'recipient':recipient, 'text':text, 'sender':sender,
           'subject':subject},
   });
