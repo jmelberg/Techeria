@@ -7,8 +7,8 @@ $(document).ready(function(){
     modal.find('.modal-body #recipient').val(recipient)
     $("#sendMessage").click(function(){
       var sender = document.getElementById("viewer").innerHTML;
-      var subject = $('#message-text').val();
-      var text = $('#message-subject').val();
+      var subject = $('#message-subject').val();
+      var text = $('#message-text').val();
       $.ajax({
         type:"POST",
         url: "/compose",

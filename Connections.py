@@ -29,6 +29,7 @@ class ConnectHandler(SessionHandler):
   def post(self):
     requestor = self.user_model
     q = User.query(User.username == self.request.get('requestee'))
+    text = cgi.escape(self.request.get('text'))
     requestee = q.get()
     #Querying datastore to check for open connection request
     incoming_query = ConnectionRequest.query(ConnectionRequest.requestor == requestee.username, ConnectionRequest.requestee == requestor.username)
@@ -41,6 +42,7 @@ class ConnectHandler(SessionHandler):
       connection_request.requestor = requestor.username
       connection_request.requestee = requestee.username
       connection_request.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
+      connection_request.text = text
       connection_request.put()
       requestee.request_count += 1
       requestee.put()

@@ -98,16 +98,48 @@ class="img-rounded"/>
       </div>
       {% if viewer.key not in user.friends %}
       <!-- IF USER IS NOT FRIENDS -->
-      <button type="submit" class="btn btn-primary">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>          Connect
-      </button>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#connectModal" data-requestee={{user.username}}><span class ="glyphicon glyphicon-plus" aria-hidden="true"></span>          Connect</button>
       {% endif %}
 
       <!-- Here is the button to create a modal message. -->
-
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#messageModal" data-recipient={{user.username}}><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>  Message</button>
     </form>
 </div>
+
+<!-- NEW CONNECTION MODAL SELECTED -->
+      <div class="modal fade" id="connectModal" tabindex="-1" role="dialog" aria-labelledby="connectionLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="connectionLabel">Connection Request</h4>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class = "media">
+                  <div class = "media-left">
+                    <img src="/img?user_id={{user.key.urlsafe}}&height=100&width=100" class="img-rounded"/> 
+                  </div>
+                  <div class = "media-body">
+                  <h4 class = "media-heading">{{user.first_name}} {{user.last_name}}<br>{{user.profession}} at {{user.employer}}</br>      
+                  </div>
+                </div>
+                <h2></h2>
+                <div class="form-group">
+                  <label for="connection-text" class="control-label">Message:</label>
+                  <textarea class="form-control" id="connection-text" rows="3">Hi {{user.first_name}}! I'd like to connect with you.</textarea>
+                </div>
+               </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" id="connectRequest">Connect</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script type="text/javascript" src="/js/newConnection.js"> </script>
+
       <!-- NEW MESSAGE MODAL SELECTED -->
       <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageLabel" aria-hidden="true">
         <div class="modal-dialog">
