@@ -1,5 +1,11 @@
 $(document).ready(function(){
+
+  var field;
+  var languages;
+  var count = document.getElementById("skill_count").value;
+  if( count == 0){
   $('#myModal').modal(); // Instatiates modal
+}
   var navListItems = $('ul.setup-panel li a'),
     allWells = $('.setup-content');
   allWells.hide();
@@ -39,11 +45,10 @@ $(document).ready(function(){
     //Let other tabs be accessable //
   $('#activate2').on('click', function(e) {
     if(document.getElementById("business").checked == true){
-      alert("Moving to Business");
+      field = "business";
     }
     else{
-      alert("Moving to Tech");
-
+      field = "engineering";
     }
     $('ul.setup-panel li:eq(1)').removeClass('disabled');
     $('ul.setup-panel li a[href="#step2"]').trigger('click');
@@ -51,7 +56,7 @@ $(document).ready(function(){
   });   
   $('#activate3').on('click', function(e) {
     if(document.getElementById("yes").checked== true){
-      alert("Coder!");
+      languages = document.getElementById("languages").value;
     }
     else{
       alert("Non-coder");
@@ -60,6 +65,13 @@ $(document).ready(function(){
     $('ul.setup-panel li a[href="#step3"]').trigger('click');
     $(this).remove();
   });
+  $("#done").click(function(){
+      $.ajax({
+        type:"POST",
+        url: "/newskill",
+        data:{'field':field, 'languages':languages}
+      });
+    });
 });         
 
 // Edit and Cancel Buttons

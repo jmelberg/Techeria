@@ -16,6 +16,7 @@ class User(auth_models.User):
   message_count = ndb.IntegerProperty(default = 0)
   request_count = ndb.IntegerProperty(default = 0)
   skills = ndb.KeyProperty(kind = "Skill", repeated=True)
+  skills_count = ndb.IntegerProperty(default = 0)
   avatar =  ndb.BlobProperty()
   email_address = ndb.StringProperty()
 

@@ -227,7 +227,7 @@ class="img-rounded"/>
                 <!-- Autocomplete programming languages -->
                 <div id="languages-form" style="display:none;">
                   <div class="page-header">Which programming languages?</div>
-                  <input class="input-lg" type="text" id="languages" data-role="tagsinput"></input>
+                  <input class="input-lg" type="text" value="Java" id="languages" data-role="tagsinput"></input>
                 </div>
                 <script>
                 $(function() {
@@ -288,7 +288,7 @@ class="img-rounded"/>
                 <div class="checkbox">
                 <label><input type="radio" id="quality"> Quality Assurance</label></div>
                 <h3/>
-                <button id="done" class="btn btn-primary btn-lg pull-right" data-dismiss="modal">Done</button>
+                <button id="done" type="submit" class="btn btn-primary btn-lg pull-right" data-dismiss="modal">Done</button>
               </div>
             </div>
           </div>
@@ -323,6 +323,7 @@ class="img-rounded"/>
             <a class="list-group-item" href="/connections?username={{user.username}}">
               Skills
             <span class="badge">14</span>
+            <input type="hidden" id="skill_count" name="variable" value="{{user.skills_count}}">
             </a>
             </ul>
           </div>

@@ -133,6 +133,26 @@ config['webapp2_extras.auth'] = {
     'user_model': User,
 }
 
+class SkillsHandler(SessionHandler):
+  def post(self):
+    user = self.user_model
+    field = cgi.escape(self.request.get('field'))
+    languages = cgi.escape(self.request.get('languages'))
+    language_list = languages.split(',')
+    new_skills_count = 1
+    for i in language_list:
+      new_skill = Skill(name=i.lower().trim())
+      new_skill.put()
+      user.skills.append(new_skill.key)
+      new_skills_count += 1
+    field_skill = Skill(name=field.lower().trim())
+    field_skill.put()
+    user.skills.append(field_skill.key)
+    user.skills_count += new_skills_count
+    user.put()
+
+
+
 app = webapp2.WSGIApplication([
                                ('/', LoginHandler),
                                ('/register', RegisterHandler),
@@ -157,5 +177,6 @@ app = webapp2.WSGIApplication([
                                ('/updateprofile', UpdateProfile),
                                ('/logout', LogoutHandler),
                                ('/tech', ForumViewer),
-                               ('/tech/', ForumViewer)
+                               ('/tech/', ForumViewer),
+                               ('/newskill', SkillsHandler)
                                ], debug=True, config=config)
