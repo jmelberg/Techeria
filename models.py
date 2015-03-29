@@ -1,7 +1,6 @@
 from google.appengine.ext import ndb
 import webapp2_extras.appengine.auth.models as auth_models
 
-
 class User(auth_models.User):
   first_name = ndb.StringProperty()
   last_name = ndb.StringProperty()
@@ -61,7 +60,6 @@ class Forum(ndb.Model):
   name = ndb.StringProperty()
   posts = ndb.IntegerProperty()
   subscribers = ndb.KeyProperty(kind = "User", repeated=True)
-
 
 class Skill(ndb.Model):
   name = ndb.StringProperty()

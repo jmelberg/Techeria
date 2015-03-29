@@ -32,6 +32,9 @@ class ProfileHandler(SessionHandler):
     viewer = self.user_model
     q = User.query(User.username == profile_id)
     user = q.get()
+    skill_list = []
+    for skill in user.skills:
+      skill_list.append(skill.get())
     connection_list = []
     """Get friend count """
     counter = 0
@@ -43,7 +46,7 @@ class ProfileHandler(SessionHandler):
     if user:
       self.response.out.write(template.render('views/profile.html',
                                         {'user':user, 'comments': comments,
-                                        'viewer':viewer}))
+                                        'viewer':viewer, 'skills':skill_list,}))
 
 class SearchHandler(SessionHandler):
   """Handler to search for users/jobs"""
@@ -125,14 +128,6 @@ class UpdateProfile(SessionHandler):
     user.put()
     self.redirect('/profile/{}'.format(user.username))
 
-config = {}
-config['webapp2_extras.sessions'] = {
-    'secret_key': 'zomg-this-key-is-so-secret',
-}
-config['webapp2_extras.auth'] = {
-    'user_model': User,
-}
-
 class SkillsHandler(SessionHandler):
   def post(self):
     user = self.user_model
@@ -141,15 +136,24 @@ class SkillsHandler(SessionHandler):
     language_list = languages.split(',')
     new_skills_count = 1
     for i in language_list:
-      new_skill = Skill(name=i.lower().trim())
+      new_skill = Skill(name=i.lower().strip())
       new_skill.put()
       user.skills.append(new_skill.key)
       new_skills_count += 1
-    field_skill = Skill(name=field.lower().trim())
+    field_skill = Skill(name=field.lower().strip())
     field_skill.put()
     user.skills.append(field_skill.key)
     user.skills_count += new_skills_count
     user.put()
+
+config = {}
+config['webapp2_extras.sessions'] = {
+    'secret_key': 'zomg-this-key-is-so-secret',
+}
+config['webapp2_extras.auth'] = {
+    'user_model': User,
+}
+
 
 
 

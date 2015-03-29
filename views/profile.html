@@ -305,29 +305,89 @@ class="img-rounded"/>
 <!-- END MODAL -->
         <div class="row">
           <div class="col-md-4">
-            <ul class="list-group">
-            <a class="list-group-item" href="/connections?username={{user.username}}">
-              Connections
-              {% if user.friend_count > 0 %}
-              <span class="badge">{{user.friend_count}}</span>
-              {% endif %}
-            </a>
-            <a class="list-group-item" href="/connections?username={{user.username}}">
-              Projects
-              <span class="badge">1690</span>
-            </a>
-            <a class="list-group-item" href="/connections?username={{user.username}}">
-              Hacks
-            <span class="badge">15</span>
-            </a>
-            <a class="list-group-item" href="/connections?username={{user.username}}">
-              Skills
-            <span class="badge">14</span>
-            <input type="hidden" id="skill_count" name="variable" value="{{user.skills_count}}">
-            </a>
-            </ul>
-          </div>
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                  <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    About Me
+                  </h4>
+                  </a>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                  <div class="panel-body">
+                    Website: 
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingTwo">
+                  <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    {% if user.skills_count > 0 %}
+                    Skills
+                    <span class="badge pull-right">{{user.skills_count}}</span>
+                    {% endif %}
+                    <input type="hidden" id="skill_count" name="variable" value="{{user.skills_count}}">
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                  <div class="panel-body">
+                    Skills:
+                    <br></br>
+                    {% for skill in skills %}
+                    {{skill.name}} <br></br>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingThree">
+                  <h4 class="panel-title">
+                    <a class = "collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Projects
+                    <span class="badge pull-right">1690</span>
+                    </a>
+                  </h4>
+                </div>
+              <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body">
+                  Project Listing
+                </div>
+              </div>
+            </div>
 
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingFour">
+                <h4 class="panel-title">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Hacks
+                    <span class="badge pull-right">15</span>
+                  </a>
+                </h4>
+              </div>
+              <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                <div class="panel-body">
+                  Hack Listing
+                </div>
+              </div>
+            </div>
+                
+            <div class="panel panel-default">
+              <div class="panel-heading" role="tab" id="headingFive">
+                <h4 class="panel-title">
+                  <a href="/connections?username={{user.username}}">
+                    Connections
+                    {% if user.friend_count > 0 %}
+                    <span class="badge pull-right">{{user.friend_count}}</span>
+                    {% endif %}
+                  </a>
+                </h4>
+              </div>
+            </div>
+          </div>
+        </div>
           <div class="col-md-2"></div>
 
           <div class="col-md-6">
