@@ -177,7 +177,6 @@ class="img-rounded"/>
     <!-- User owns profile -->
       <button type="button" class="btn btn-primary pull-right" align="right" id="edit">
       <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>   Edit</button>
-      
       <!-- Modal -->
       <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="container">
@@ -185,15 +184,9 @@ class="img-rounded"/>
             <!-- Main tabs -->
             <div class="col-xs-12">
               <ul class="nav nav-pills nav-justified thumbnail setup-panel">
-                <li class="active"><a href="#step1">
-                  <h4 class="list-group-item-heading">Role</h4></a>
-                </li>
-                <li class="disabled"><a href="#step2">
-                  <h4 class="list-group-item-heading">Specialty</h4></a>
-                </li>
-                <li class="disabled"><a href="#step3">
-                  <h4 class="list-group-item-heading">Skills</h4></a>
-                </li>
+                <li class="active"><a href="#step1"><h4 class="list-group-item-heading">Role</h4></a></li>
+                <li class="disabled"><a href="#step2"><h4 class="list-group-item-heading">Specialty</h4></a></li>
+                <li class="disabled"><a href="#step3"><h4 class="list-group-item-heading">Current Profession</h4></a></li>
                 </ul>
             </div>
           </div>
@@ -203,10 +196,8 @@ class="img-rounded"/>
               <div class="col-md-2"></div>
               <div class="col-md-8 well">
                 <div class="page-header"><h1>My role in tech is  <span id="role">___________</span>  related.</h1></div>
-                <div class="checkbox">
-                <label><input type="radio" id="business"> Business</label></div>
-                <div class="checkbox">
-                <label><input type="radio" id="tech"> Engineering</label></div>
+                <div class="checkbox"><label><input type="radio" id="business"> Business</label></div>
+                <div class="checkbox"><label><input type="radio" id="tech"> Engineering</label></div>
                 <h3/>
                 <button id="activate2" class="btn btn-primary btn-lg pull-right">Next</button>
               </div>
@@ -214,81 +205,114 @@ class="img-rounded"/>
             </div>
           </div>
           <!-- Tech - Question 2 -->
-          <div class="row setup-content" id="step2">
+          <div class="row setup-content" id="step2t">
             <div class="col-xs-12">
               <div class="col-md-2"></div>
               <div class="col-md-8 well">
                 <div class="page-header"><h1>Do you code?</h1></div>
-                <div class="checkbox">
-                <label><input type="radio" id="yes"> Yes</label></div>
-                <div class="checkbox">
-                <label><input type="radio" id="no"> No</label></div>
+                <div class="checkbox"><label><input type="radio" id="yes"> Yes</label></div>
+                <div class="checkbox"><label><input type="radio" id="no"> No</label></div>
                 <h3/>
                 <!-- Autocomplete programming languages -->
                 <div id="languages-form" style="display:none;">
                   <div class="page-header">Which programming languages?</div>
                   <input class="input-lg" type="text" value="Java" id="languages" data-role="tagsinput"></input>
                 </div>
-                <script>
-                $(function() {
-                 var availableTags = [
-                 "ActionScript",
-                 "AppleScript",
-                 "Asp",
-                 "BASIC",
-                 "C",
-                 "C++",
-                 "Clojure",
-                 "COBOL",
-                 "ColdFusion",
-                 "Erlang",
-                 "Fortran",
-                 "Groovy",
-                 "Go",
-                 "Haskell",
-                 "Java",
-                 "JavaScript",
-                 "Lisp",
-                 "Objective C",
-                 "Perl",
-                 "PHP",
-                 "Python",
-                 "Ruby",
-                 "Scala",
-                 "Scheme",
-                 "Swift",
-                 ];
-                 $( "#languages" ).autocomplete({
-                  source: availableTags
-                });
-               });
-                </script>
-                <!-- End autocomplete programming languages -->
+                <!-- LANGUAGES SCRIPT -->
+                <script type="text/javascript" src="/js/languages.js"> </script>
                 <br></br>
-                <button id="activate3" class="btn btn-primary btn-lg pull-right">Next</button>
+                <button id="activate3t" class="btn btn-primary btn-lg pull-right">Next</button>
+              </div>
+              <div class="col-md-2"></div>
+            </div>
+          </div>
+          <!-- Business - Question 2 -->
+          <div class="row setup-content" id="step2b">
+            <div class="col-xs-12">
+              <div class="col-md-2"></div>
+              <div class="col-md-8 well">
+                <div class="page-header"><h1>Specialization?</h1></div>
+                <div class="checkbox"><label><input type="radio" id="finance"> Finance</label></div>
+                <div class="checkbox"><label><input type="radio" id="marketing"> Marketing</label></div>
+                <div class="checkbox"><label><input type="radio" id="sales"> Sales</label></div>
+                <h3/>
+                <!-- Autocomplete Tools for Business -->
+                <!-- FINANCE -->
+                <div id="finance-form" style="display:none;">
+                  <div class="page-header">What Tools?</div><input class="input-lg" type="text" value="Microsoft Excel" id="financetools" data-role="tagsinput"></input>
+                </div>
+                <script type="text/javascript" src="/js/financetools.js"> </script>
+                <!-- MARKETING -->
+                <div id="marketing-form" style="display:none;">
+                  <div class="page-header">What Tools?</div><input class="input-lg" type="text" value="Microsoft Excel" id="marketingtools" data-role="tagsinput"></input>
+                </div>
+                <script type="text/javascript" src="/js/marketingtools.js"> </script>
+                <!-- SALES -->
+                <div id="sales-form" style="display:none;">
+                  <div class="page-header">What Tools?</div><input class="input-lg" type="text" value="Microsoft Excel" id="salestools" data-role="tagsinput"></input>
+                </div>
+                <script type="text/javascript" src="/js/salestools.js"> </script>
+                <br></br>
+                <button id="activate3b" class="btn btn-primary btn-lg pull-right">Next</button>
               </div>
               <div class="col-md-2"></div>
             </div>
           </div>
           <!-- Tech - Question 3 -->
-          <div class="row setup-content" id="step3">
+          <div class="row setup-content" id = "step3t">
             <div class="col-xs-12">
-             <div class="col-md-12 well">
+             <div class="col-md-12 well" >
                 <div class="page-header"><h1>What type of Developer?</h1></div>
-                <div class="checkbox">
-                <label><input type="radio" id="mobile"> Mobile Applications</label></div>
-                <div class="checkbox">
-                <label><input type="radio" id="system"> Systems</label></div>
-                <div class="checkbox">
-                <label><input type="radio" id="web"> Web</label></div>
-                <div class="checkbox">
-                <label><input type="radio" id="embedSystem"> Embedded Systems</label></div>
-                <div class="checkbox">
-                <label><input type="radio" id="bigdata"> Big Data</label></div>
-                <div class="checkbox">
-                <label><input type="radio" id="quality"> Quality Assurance</label></div>
+                <div class="checkbox"><label><input type="radio" id="mobile"> Mobile Applications</label></div>
+                <div class="checkbox"><label><input type="radio" id="system"> Systems</label></div>
+                <div class="checkbox"><label><input type="radio" id="web"> Web</label></div>
+                <div class="checkbox"><label><input type="radio" id="embedSystem"> Embedded Systems</label></div>
+                <div class="checkbox"><label><input type="radio" id="bigdata"> Big Data</label></div>
+                <div class="checkbox"><label><input type="radio" id="quality"> Quality Assurance</label></div>
+                <div class="checkbox"><label><input type="radio" id="e_student"> Student</label></div>
                 <h3/>
-                <button id="done" type="submit" class="btn btn-primary btn-lg pull-right" data-dismiss="modal">Done</button>
+                <button id="done_t" type="submit" class="btn btn-primary btn-lg pull-right" data-dismiss="modal">Done</button>
+              </div>
+            </div>
+          </div>
+          <div class="row setup-content" id = "step3m">
+            <div class="col-xs-12">          
+              <div class="col-md-12 well">
+                <div class="page-header"><h1>What kind of Marketing?</h1></div>
+                <div class="checkbox"><label><input type="radio" id="online_marketing"> Online Marketing</label></div>
+                <div class="checkbox"><label><input type="radio" id="business_marketing"> Business to Business</label></div>
+                <div class="checkbox"><label><input type="radio" id="consumer_marketing"> Business to Consumer</label></div>
+                <div class="checkbox"><label><input type="radio" id="partner_marketing"> Partner Marketing</label></div>
+                <div class="checkbox"><label><input type="radio" id="m_student"> Student</label></div>
+                <h3/>
+                <button id="done_m" type="submit" class="btn btn-primary btn-lg pull-right" data-dismiss="modal">Done</button>
+              </div>
+            </div>
+          </div>
+          <div class="row setup-content" id = "step3f">
+            <div class="col-xs-12">
+              <div class="col-md-12 well">
+                <div class="page-header"><h1>What kind of Finance?</h1></div>
+                <div class="checkbox"><label><input type="radio" id="personal_finance"> Personal</label></div>
+                <div class="checkbox"><label><input type="radio" id="corporate_finance"> Corporate</label></div>
+                <div class="checkbox"><label><input type="radio" id="investment"> Investment</label></div>
+                <div class="checkbox"><label><input type="radio" id="f_student"> Student</label></div>
+                <h3/>
+                <button id="done_f" type="submit" class="btn btn-primary btn-lg pull-right" data-dismiss="modal">Done</button>
+              </div>
+            </div>
+          </div>
+          <div class="row setup-content" id = "step3s">
+            <div class="col-xs-12">
+              <div class="col-md-12 well">
+                <div class="page-header"><h1>What kind of Sales?</h1></div>
+                <div class="checkbox"><label><input type="radio" id="inside_sales"> Inside</label></div>
+                <div class="checkbox"><label><input type="radio" id="outside_sales"> Outside</label></div>
+                <div class="checkbox"><label><input type="radio" id="support_sales"> Support</label></div>
+                <div class="checkbox"><label><input type="radio" id="commission_sales"> Commission</label></div>
+                <div class="checkbox"><label><input type="radio" id="s_sales"> Student</label></div>
+                <h3/>
+                <button id="done_s" type="submit" class="btn btn-primary btn-lg pull-right" data-dismiss="modal">Done</button>
               </div>
             </div>
           </div>
@@ -299,10 +323,9 @@ class="img-rounded"/>
 
 <!-- User engagement Questionnaire -->
 <script type="text/javascript" src="../js/engagement.js"> </script>
-
     {% endif %}
-
 <!-- END MODAL -->
+
         <div class="row">
           <div class="col-md-4">
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -315,9 +338,7 @@ class="img-rounded"/>
                   </a>
                 </div>
                 <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                  <div class="panel-body">
-                    Website: 
-                  </div>
+                  <div class="panel-body">Website:</div>
                 </div>
               </div>
               <div class="panel panel-default">

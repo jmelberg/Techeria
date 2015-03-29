@@ -132,17 +132,22 @@ class SkillsHandler(SessionHandler):
   def post(self):
     user = self.user_model
     field = cgi.escape(self.request.get('field'))
-    languages = cgi.escape(self.request.get('languages'))
-    language_list = languages.split(',')
-    new_skills_count = 1
-    for i in language_list:
-      new_skill = Skill(name=i.lower().strip())
-      new_skill.put()
-      user.skills.append(new_skill.key)
-      new_skills_count += 1
+    tools = cgi.escape(self.request.get('tools'))
+    specialty = cgi.escape(self.request.get('specialty'))
+    tool_list = tools.split(',')
+    new_skills_count = 2 #for field and specialty
+    for i in tool_list:
+      if(i != " "):
+        new_skill = Skill(name=i.lower().strip())
+        new_skill.put()
+        user.skills.append(new_skill.key)
+        new_skills_count += 1
     field_skill = Skill(name=field.lower().strip())
+    specialty_skill = Skill(name=specialty.lower().strip())
     field_skill.put()
+    specialty_skill.put()
     user.skills.append(field_skill.key)
+    user.skills.append(specialty_skill.key)
     user.skills_count += new_skills_count
     user.put()
 
@@ -153,8 +158,6 @@ config['webapp2_extras.sessions'] = {
 config['webapp2_extras.auth'] = {
     'user_model': User,
 }
-
-
 
 
 app = webapp2.WSGIApplication([
