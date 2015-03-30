@@ -1,11 +1,21 @@
   $(function () {
     $('#username').focus();
-    $('#username').focusout(function () {
+    $('#username').keyup(function () {
       if($(this).val().length != 0){
         checkUsername($(this).val().toLowerCase());
       }
       else{
         $("#available").hide();
+      }
+    });
+    $('#c_password').keyup(function () {
+      if($(this).val() != $('#password').val()){
+        $('#passwords_match').show();
+        $('#signup').prop('disabled', true);
+      }
+      else{
+        $('#passwords_match').hide();
+        $('#signup').prop('disabled', false);
       }
     });             
   });

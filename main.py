@@ -137,10 +137,16 @@ class SkillsHandler(SessionHandler):
     tool_list = tools.split(',')
     new_skills_count = 2 #for field and specialty
     for i in tool_list:
-      if(i != " "):
-        new_skill = Skill(name=i.lower().strip())
-        new_skill.put()
-        user.skills.append(new_skill.key)
+      if i != " ":
+        i = i.lower().strip()
+        skill_query = Skill.query(Skill.name == i).get()
+        #don't add duplicate skill
+        if skill_query == None:
+          new_skill = Skill(name=i)
+          new_skill.put()
+          user.skills.append(new_skill.key)
+        else:
+          user.skills.append(skill_query.key)
         new_skills_count += 1
     field_skill = Skill(name=field.lower().strip())
     specialty_skill = Skill(name=specialty.lower().strip())
