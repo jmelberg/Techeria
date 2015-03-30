@@ -48,8 +48,9 @@ class ForumHandler(SessionHandler):
     forum_id = forum_id.lower()
     user = self.user_model
     forum_posts = ForumPost.query(ForumPost.forum_name == forum_id)
+    forum = Forum.query(Forum.name == forum_id).get()
     self.response.out.write(template.render('views/forum.html', {'viewer': user,
-                                      'posts': forum_posts, 'forum_name': forum_id}))
+                                      'posts': forum_posts, 'forum': forum, 'forum_name': forum_id}))
   def post(self, forum_id):
     author = cgi.escape(self.request.get('author'))
     forum_name = cgi.escape(self.request.get('forum'))
@@ -106,13 +107,23 @@ class ForumCommentHandler(SessionHandler):
 class ForumViewer(SessionHandler):
   def get(self):
     forums = Forum.query().order(-Forum.posts)
-    self.response.out.write(template.render('views/forumViewer.html', {'viewer': self.user_model, 'forums':forums}))    
+    self.response.out.write(template.render('views/forumViewer.html', {'viewer': self.user_model, 'forums':forums}))
+
+class SubscriptionHandler(SessionHandler):
+  def post(self):
+    forum_name = cgi.escape(self.request.get('forum_name'))
+    user_key = self.user_model.key
+    forum_model = Forum.query(Forum.name == forum_name).get()
+    forum_model.subscribers.append(user_key)
+    forum_model.put()
+    self.redirect('/tech/{}'.format(forum_name))   
 
 app = webapp2.WSGIApplication([
                                ('/tech/(\w+)', ForumHandler),
                                ('/submit', SubmissionHandler),
                                ('/tech/(\w+)/(\w+)', ForumCommentHandler),
                                ('/tech', ForumViewer),
-                               ('/tech/', ForumViewer)
+                               ('/tech/', ForumViewer),
+                               ('/subscribe', SubscriptionHandler)
                                ], debug=True)
 

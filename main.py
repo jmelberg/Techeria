@@ -185,5 +185,6 @@ app = webapp2.WSGIApplication([
                                ('/logout', LogoutHandler),
                                ('/tech', ForumViewer),
                                ('/tech/', ForumViewer),
-                               ('/newskill', SkillsHandler)
+                               ('/newskill', SkillsHandler),
+                               ('/subscribe', SubscriptionHandler)
                                ], debug=True, config=config)

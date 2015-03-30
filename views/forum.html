@@ -5,8 +5,13 @@
   <h1>{{forum_name}}
     <a href="/submit?forum_name={{forum_name}}" type="button" class="btn btn-primary pull-right" align="right">
       <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Submit Post</a>
-      <a href="/submit?forum_name={{forum_name}}" type="button" class="btn btn-warning pull-right" align="right">
-      <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  Subscribe</a>
+      {% if forum != None and viewer.key not in forum.subscribers%}
+      <form action="/subscribe" method="post">
+        <input type="hidden" name="forum_name" value={{forum_name}}>
+      <button type="submit" class="btn btn-warning pull-right" align="right">
+      <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  Subscribe</button>
+      </form>
+      {% endif %}
     </h1>
   </div>
   {% for post in posts %}
@@ -20,7 +25,14 @@
         <button class="btn btn-default" value = "{{post.key.urlsafe}}" id = "downVote-{{forloop.counter}}" {% if viewer.key in post.down_voters %}style = "background: #4682B4  ;" disabled{% endif %}><span class="glyphicon glyphicon-arrow-down" aria-hidden="true" ></span></button>
       </div>
       <div class="col-md-11">
-        <h3><a href="{{post.url}}">{{post.title}}</a><small style="padding-left:15px;">({{post.url_host}})</small></h3>
+        {% if post.url_host != None %}
+        <h3><a  href="{{post.url}}">{{post.title}}</a><small style="padding-left:15px;">
+          ({{post.url_host}})
+          {% else %}
+          <h3><a  href="/tech/{{forum_name}}/{{post.reference}}">{{post.title}}</a><small style="padding-left:15px;">
+          (Text Post)
+          {% endif %}
+        </small></h3>
         <p> submitted {{post.time}} by {{post.author}}</p>
         <a href="/tech/{{forum_name}}/{{post.reference}}" class="badge badge-default pull-right">Comments</a>
       </div>
