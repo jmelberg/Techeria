@@ -345,8 +345,8 @@ class="img-rounded"/>
                 <div class="panel-heading" role="tab" id="headingTwo">
                   <h4 class="panel-title">
                     <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    {% if user.skills_count > 0 %}
                     Skills
+                    {% if user.skills_count > 0 %}
                     <span class="badge pull-right">{{user.skills_count}}</span>
                     {% endif %}
                     <input type="hidden" id="skill_count" name="variable" value="{{user.skills_count}}">
@@ -375,22 +375,6 @@ class="img-rounded"/>
               <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
                 <div class="panel-body">
                   Project Listing
-                </div>
-              </div>
-            </div>
-
-            <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingFour">
-                <h4 class="panel-title">
-                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                    Hacks
-                    <span class="badge pull-right">15</span>
-                  </a>
-                </h4>
-              </div>
-              <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-                <div class="panel-body">
-                  Hack Listing
                 </div>
               </div>
             </div>

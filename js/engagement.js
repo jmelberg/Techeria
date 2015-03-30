@@ -237,7 +237,7 @@ $(document).ready(function(){
 
   $('#activate3t').on('click', function(e) {
     if(document.getElementById("yes").checked== true){
-      tools = document.getElementById("tools").value;
+      tools = document.getElementById("languages").value;
       $('ul.setup-panel li:eq(2)').removeClass('disabled');
       $('ul.setup-panel li a[href="#step3"]').trigger('click');
       $('#step3t').show();
