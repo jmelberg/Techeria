@@ -52,11 +52,9 @@ class FeedHandler(SessionHandler):
   """ Handler for handling user feed """
   def get(self):
     user = self.user_model
-    comments = Comment.query().order(-Comment.time)
     if user:
       self.response.out.write(template.render('views/feed.html',
-                                              {'viewer':user,
-                                              'comments': comments}))
+                                              {'viewer':user}))
 
 class FeedListHandler(SessionHandler):
   """ Handler to handle output of all comments pulled from all users.
@@ -67,19 +65,27 @@ class FeedListHandler(SessionHandler):
   def get(self):
     threaded_comments = []
     page = int(cgi.escape(self.request.get('page')))
+    items = self.request.get('items')
     offset_count = 10*page
     more = 0
-    comments = Comment.query(Comment.root==True).order(-Comment.time).fetch(10, offset=offset_count)
-    for comment in comments:
-      threaded_comments.append(comment)
-      children = Comment.query(Comment.parent == comment.key).order(Comment.time).fetch()
-      if children != None:
-        threaded_comments.extend(children)
-      if comment != None:
-        more += 1
-    self.response.out.write(template.render('views/feedlist.html', {
+    if items == '':
+      comments = Comment.query(Comment.root==True).order(-Comment.time).fetch(10, offset=offset_count)
+      for comment in comments:
+        threaded_comments.append(comment)
+        children = Comment.query(Comment.parent == comment.key).order(Comment.time).fetch()
+        if children != None:
+          threaded_comments.extend(children)
+        if comment != None:
+          more += 1
+      self.response.out.write(template.render('views/feedlist.html', {
                                               'comments': threaded_comments, 'more':more, 'page':page
                                               }))
+    else:
+      posts = ForumPost.query().order(-ForumPost.time).fetch(10, offset=offset_count)
+      self.response.out.write(template.render('views/feedlist.html', {
+                                              'posts': posts, 'more':more, 'page':page
+                                              }))
+
 
 app = webapp2.WSGIApplication([
                                ('/comment', CommentHandler),

@@ -1,4 +1,5 @@
 var done = 0;
+var items = getUrlParameter('q')
 jQuery(document).ready(function() {
   var count = 1;
   var multiplier = 0.5;
@@ -38,12 +39,22 @@ $('#commentBox').focusout(function () {
 $('#postButton').click(function() {
   updateFeed(0);
 }); 
+$('#commentsNav').click(function() {
+  updateFeed(0);
+  $('#postsNav').removeAttr("class");
+  $('#commentsNav').attr("class", "active");
+}); 
+$('#postsNav').click(function() {
+  updateFeed(0);
+  $('#commentsNav').removeAttr("class");
+  $('#postsNav').attr("class", "active");
+}); 
   
-function updateFeed(page) {
+function updateFeed(page, items) {
   $.ajax({
     url: "/feedlist",
     cache: false,
-    data: {'page': page},
+    data: {'page': page,'items': items},
     success: function(frag){
       $("#feedlist").append(frag);
       $('#loading').hide();
@@ -55,4 +66,27 @@ function updateFeed(page) {
   });
 }
 
-updateFeed(0);
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}
+if(items == 'posts'){
+  $('#commentDiv').hide();
+  $('#commentsNav').removeAttr("class");
+  $('#postsNav').attr("class", "active");
+}
+else{
+  $('#commentDiv').show();
+  $('#postsNav').removeAttr("class");
+  $('#commentsNav').attr("class", "active");
+}
+updateFeed(0, items);
