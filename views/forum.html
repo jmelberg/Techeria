@@ -7,11 +7,9 @@
     <a href="/submit?forum_name={{forum_name}}" type="button" class="btn btn-primary pull-right" align="right">
       <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Submit Post</a>
       {% if forum != None and viewer.key not in forum.subscribers%}
-      <form action="/subscribe" method="post">
-        <input type="hidden" name="forum_name" value={{forum_name}}>
-      <button type="submit" class="btn btn-warning pull-right" align="right">
+      <input type="hidden" id="forumName" name-"forum_name" value={{forum_name}}>
+      <button id="subscribeButton" class="btn btn-warning pull-right" align="right">
       <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  Subscribe</button>
-      </form>
       {% endif %}
     </h1>
   </div>
@@ -45,5 +43,6 @@
 
 <!-- Upvote/Downvote JS -->
 <script type="text/javascript" src="../js/voting.js"></script>
+<script type="text/javascript" src="../js/subscribe.js"></script>
 
 {% endblock %}

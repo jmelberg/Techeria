@@ -28,7 +28,7 @@
 </div>
 {% if comments %}
  {% for comment in comments %}
- <div id="comment{{forloop.counter}}"  {% if comment.root%} class="panel panel-info" style="margin-bottom:0; margin-top:40;" {%else%} class="list-group-item" style="margin-left:40; margin-top:0;margin-bottom:0;"{% endif %}>
+ <div id="comment{{forloop.counter}}"  {% if comment.root%} class="panel panel-info" style="margin-bottom:0; margin-top:10px;" {%else%} class="list-group-item" style="margin-left:40; margin-top:0;margin-bottom:0;"{% endif %}>
   <div class="panel-heading">
     <h2 class="panel-title">
       <a href="/profile/{{comment.sender}}" >{{comment.sender}}</a>
@@ -83,7 +83,5 @@
 
 <!-- Reply to Feed JS -->
 <script type="text/javascript" src = "js/reply.js"></script>
-<div id = "voter" style = "display: none;">{{viewer.key.urlsafe}}</div>
-
 <!-- Upvote/Downvote JS -->
 <script type="text/javascript" src="../js/voting.js"></script>

@@ -22,6 +22,12 @@
           </span>
           </form>
   </div>
+  {% empty %}
+          <div class = "row">
+          <div style="margin-left: 15px; margin-right: 15px;" class="list-group-item">
+            <h3 stlye="margin-left: 20px;"> No New Connection Requests </h3>
+          </div>
+        </div>
   {% endfor %}
 </ul>
 {% endblock %}

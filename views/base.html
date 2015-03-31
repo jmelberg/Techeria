@@ -46,6 +46,9 @@
     line-height: inherit;
   }
 
+  #searchBox {
+    width:250px;
+  }
   </style>
   <body>
     <nav class="navbar navbar-default">
@@ -67,7 +70,7 @@
             <li><a href='/logout'>Sign Out</a></li>
           </ul>
           <ul class="nav nav-pills navbar-left" role="tablist">
-            <li role="presentation"><a href="/feed"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><span class="badge"></span>
+            <li role="presentation"><a href="/feed?q=posts"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><span class="badge"></span>
               <span class="badge"></span>
             </a></li>
             <li role="presentation"><a href="/connect"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
@@ -87,7 +90,7 @@
             <div class="form-group">
               <input id="searchBox" name="search" type="text" class="form-control" placeholder="Search" required>
                 </div>
-            <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+            <button id="searchBoxButton" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
           </form>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.conaiiner-fluid -->
