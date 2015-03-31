@@ -26,15 +26,17 @@
     </form>
   </div>
 </div>
+{% if comments %}
  {% for comment in comments %}
  <div id="comment{{forloop.counter}}"  {% if comment.root%} class="panel panel-info" style="margin-bottom:0; margin-top:40;" {%else%} class="list-group-item" style="margin-left:40; margin-top:0;margin-bottom:0;"{% endif %}>
   <div class="panel-heading">
     <h2 class="panel-title">
-      {{comment.sender}}
+      <a href="/profile/{{comment.sender}}" >{{comment.sender}}</a>
       {% if comment.sender != comment.recipient %}
       <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>  {{comment.recipient}}
       {% endif %}
-      <span><p class="panel-title pull-right">{{comment.time}}</p></span></h2>
+      <span><p class="panel-title pull-right">{{comment.time}}</p></span>
+    </h2>
     </div>
     <div class="panel-body">
       <h4>{{comment.text}} </h4>
@@ -46,6 +48,10 @@
   </div>
 </div>
   {% endfor %}
+{% endif %}
+{% if posts %}
+
+{% endif %}
 <div id = "loading" style = "display: none;">Loading...</div>
 <div id="more-{{page}}" style = "display:none;"> {{more}}</div>
 

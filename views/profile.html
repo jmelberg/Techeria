@@ -355,10 +355,8 @@ class="img-rounded"/>
                 </div>
                 <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                   <div class="panel-body">
-                    Skills:
-                    <br></br>
                     {% for skill in skills %}
-                    {{skill.name}} <br></br>
+                    <p><a href="/tech/{{skill.name}}">{{skill.name}} </a></p>
                     {% endfor %}
                   </div>
                 </div>

@@ -1,16 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<ul class = "nav nav-tabs nav-justified">
+  <li role="presentation" class = "active"><a href="/feed?q=posts">Posts</a></li>
+  <li role="presentation"><a href ="/feed">Comments</a></li>
+</ul>
 <div class="panel panel-default">
   <div class="panel-heading">
     <h3 class="panel-title">Comment</h3>
   </div>
-  
   <div class="panel-body">
     <form role="form" action="/comment" method="post">
       <div class="form-group">
-        <textarea style="resize:none; font-size: 18px;" name="text" class="form-control" rows="1" id="commentBox" placeholder="What's new?">
-        </textarea>
+        <textarea style="resize:none; font-size: 18px;" name="text" class="form-control" rows="1" id="commentBox" placeholder="What's new?"></textarea>
         <ol style="visibility:hidden;"></ol>
         <input  type="hidden" name="recipient" class="form-control" value={{viewer.username}}>
         <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>

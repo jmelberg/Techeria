@@ -3,6 +3,7 @@ jQuery(document).ready(function() {
   var count = 1;
   var multiplier = 0.5;
   var bodyheight = $('body').height();
+
   $(window).scroll(function(){
     if ($(window).scrollTop() > 100) {
       $('.scroll-top-wrapper').addClass('show');

@@ -5,7 +5,8 @@ $(document).ready(function(){
   var specialty;
   var count = document.getElementById("skill_count").value;
   if( count == 0){
-    $('#myModal').modal(); // Instatiates modal
+    // $('#myModal').modal(); // Instatiates modal
+    $('#myModal').appendTo("body").modal('show');
   }
   var navListItems = $('ul.setup-panel li a'),
     allWells = $('.setup-content');

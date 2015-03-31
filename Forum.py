@@ -49,8 +49,13 @@ class ForumHandler(SessionHandler):
     user = self.user_model
     forum_posts = ForumPost.query(ForumPost.forum_name == forum_id)
     forum = Forum.query(Forum.name == forum_id).get()
+    if user == None:
+      override_base = "visitorBase.html"
+    else:
+      override_base = "base.html"
     self.response.out.write(template.render('views/forum.html', {'viewer': user,
-                                      'posts': forum_posts, 'forum': forum, 'forum_name': forum_id}))
+                                      'posts': forum_posts, 'forum': forum, 'forum_name': forum_id, 
+                                      'override_base': override_base}))
   def post(self, forum_id):
     author = cgi.escape(self.request.get('author'))
     forum_name = cgi.escape(self.request.get('forum'))
