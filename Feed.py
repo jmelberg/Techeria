@@ -67,6 +67,7 @@ class FeedListHandler(SessionHandler):
     page = int(cgi.escape(self.request.get('page')))
     items = self.request.get('items')
     offset_count = 10*page
+    viewer = self.user_model
     more = 0
     if items == '':
       comments = Comment.query(Comment.root==True).order(-Comment.time).fetch(10, offset=offset_count)
@@ -78,12 +79,12 @@ class FeedListHandler(SessionHandler):
         if comment != None:
           more += 1
       self.response.out.write(template.render('views/feedlist.html', {
-                                              'comments': threaded_comments, 'more':more, 'page':page
+                                              'comments': threaded_comments, 'more':more, 'page':page, 'viewer':viewer,
                                               }))
     else:
       posts = ForumPost.query().order(-ForumPost.time).fetch(10, offset=offset_count)
       self.response.out.write(template.render('views/feedlist.html', {
-                                              'posts': posts, 'more':more, 'page':page
+                                              'posts': posts, 'more':more, 'page':page, 'viewer':viewer
                                               }))
 
 
