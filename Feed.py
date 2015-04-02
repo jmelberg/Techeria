@@ -80,21 +80,8 @@ class FeedListHandler(SessionHandler):
     viewer = self.user_model
     more = 0
     if items == '':
-      comments = Comment.query(Comment.root==True).order(-Comment.time).fetch(10, offset=offset_count)
-      for comment in comments:
-        threaded_comments.append(comment)
-        children_query = Comment.query(Comment.parent == comment.key).order(Comment.time).get()
-        if children_query != None:
-          children = Comment.query(Comment.parent == comment.key).order(Comment.time).fetch()
-          for child in children:
-            threaded_comments.append(child)
-            grand_query = Comment.query(Comment.parent == child.key).order(Comment.time).get()
-            if grand_query != None:
-              grandchildren = Comment.query(Comment.parent == child.key).order(Comment.time).fetch()
-              for gc in grandchildren:
-                threaded_comments.append(gc)
-        if comment != None:
-          more += 1
+      threaded_comments = self.comment_list(offset_count)
+      more = len(threaded_comments)
       self.response.out.write(template.render('views/feedlist.html', {
                                               'comments': threaded_comments, 'more':more, 'page':page, 'viewer':viewer,
                                               }))
@@ -103,9 +90,9 @@ class FeedListHandler(SessionHandler):
       self.response.out.write(template.render('views/feedlist.html', {
                                               'posts': posts, 'more':more, 'page':page, 'viewer':viewer
                                               }))
-  def comment_list(self):
+  def comment_list(self, offset_count):
     index = 0
-    comments = Comment.query(Comment.root==True).order(-Comment.time).fetch()
+    comments = Comment.query(Comment.root==True).order(-Comment.time).fetch(10, offset=offset_count)
     while index < len(comments):
       print(comments[index].text)
       children = Comment.query(Comment.parent == comments[index].key).fetch()
