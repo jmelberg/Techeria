@@ -86,11 +86,13 @@ class FeedListHandler(SessionHandler):
         children_query = Comment.query(Comment.parent == comment.key).order(Comment.time).get()
         if children_query != None:
           children = Comment.query(Comment.parent == comment.key).order(Comment.time).fetch()
-          threaded_comments.extend(children)
-          grand_query = Comment.query(Comment.parent == children[0].key).order(Comment.time).get()
-          if grand_query != None:
-            grandchildren = Comment.query(Comment.parent == children[0].key).order(Comment.time).fetch()
-            threaded_comments.extend(grandchildren)
+          for child in children:
+            threaded_comments.append(child)
+            grand_query = Comment.query(Comment.parent == child.key).order(Comment.time).get()
+            if grand_query != None:
+              grandchildren = Comment.query(Comment.parent == child.key).order(Comment.time).fetch()
+              for gc in grandchildren:
+                threaded_comments.append(gc)
         if comment != None:
           more += 1
       self.response.out.write(template.render('views/feedlist.html', {
