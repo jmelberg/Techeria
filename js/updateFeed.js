@@ -16,6 +16,7 @@ jQuery(document).ready(function() {
         updateFeed(count);
         $('#loading').show();
         count++;
+        done = 1;
       }
     }
   });
@@ -54,11 +55,13 @@ function updateFeed(page, items) {
   $.ajax({
     url: "/feedlist",
     cache: false,
+    async: true,
     data: {'page': page,'items': items},
     success: function(frag){
       $("#feedlist").append(frag);
       $('#loading').hide();
       var id = "#more-" + page;
+      done = 0;
       if(parseInt($(id).text()) < 10){
         done = 1;
       }

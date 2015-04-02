@@ -80,8 +80,7 @@ class FeedListHandler(SessionHandler):
     viewer = self.user_model
     more = 0
     if items == '':
-      threaded_comments = self.comment_list(offset_count)
-      more = len(threaded_comments)
+      threaded_comments, more = self.comment_list(offset_count)
       self.response.out.write(template.render('views/feedlist.html', {
                                               'comments': threaded_comments, 'more':more, 'page':page, 'viewer':viewer,
                                               }))
@@ -93,12 +92,13 @@ class FeedListHandler(SessionHandler):
   def comment_list(self, offset_count):
     index = 0
     comments = Comment.query(Comment.root==True).order(-Comment.time).fetch(10, offset=offset_count)
+    more = len(comments)
     while index < len(comments):
       print(comments[index].text)
       children = Comment.query(Comment.parent == comments[index].key).fetch()
       index += 1
       comments[index:index] = children
-    return comments
+    return comments, more
 
 
 
