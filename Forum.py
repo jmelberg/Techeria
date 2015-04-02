@@ -133,6 +133,9 @@ class SubscriptionHandler(SessionHandler):
     forum_model = Forum.query(Forum.name == forum_name).get()
     forum_model.subscribers.append(user_key)
     forum_model.put()
+    user = self.user_model
+    user.subscriptions.append(forum_name)
+    user.put()
     self.redirect('/tech/{}'.format(forum_name))   
 
 app = webapp2.WSGIApplication([
