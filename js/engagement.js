@@ -298,6 +298,8 @@ $(document).ready(function(){
       url: "/newskill",
       data:{'field':field, 'specialty':specialty, 'tools':tools}
     });
+    window.location.href = '/';
+
   });
   $("#done_m").click(function(){
     if(document.getElementById("online_marketing").checked == true){
@@ -320,6 +322,8 @@ $(document).ready(function(){
       url: "/newskill",
       data:{'field':field, 'tools':tools, 'specialty':specialty}
     });
+    window.location.href = '/';
+
   });
   $("#done_f").click(function(){
     if(document.getElementById("personal_finance").checked == true){
@@ -339,6 +343,8 @@ $(document).ready(function(){
       url: "/newskill",
       data:{'field':field, 'tools':tools, 'specialty': specialty}
     });
+    window.location.href = '/';
+
   });
   $("#done_s").click(function(){
   if(document.getElementById("inside_sales").checked == true){
@@ -361,6 +367,8 @@ $(document).ready(function(){
       url: "/newskill",
       data:{'field':field, 'tools':tools, 'specialty':specialty}
     });
+    window.location.href = '/';
+
   });
 });         
 
