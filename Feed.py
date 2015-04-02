@@ -30,17 +30,23 @@ class CommentHandler(SessionHandler):
     comment = Comment()
     if len(replied_to_urlsafe) != 0:
       replied_to_key = ndb.Key(urlsafe=replied_to_urlsafe)
+      parent_comment = replied_to_key.get() #parent comment
       comment.parent = replied_to_key
+      comment.offset = parent_comment.offset + 20
       recipient_comment = ndb.Key(urlsafe=replied_to_urlsafe).get()
       comment.recipient = recipient_comment.sender
       comment.sender = self.user_model.username
-      comment.root = False;
+      comment.root = False
     else:
       comment.sender = sender
       comment.recipient = recipient
     comment.text = text
     comment.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
     comment.put()
+    if comment.root == False:
+      parent_comment.children.append(comment.key)
+      parent_comment.put()
+
     if origin == "feed":
       self.redirect('/feed')
     else:
@@ -65,6 +71,7 @@ class FeedListHandler(SessionHandler):
       CURRENT: Loads 10 comments per page, with ability to load more when user reaches
       end of page.
   """
+  # TODO: Work on nested comments
   def get(self):
     threaded_comments = []
     page = int(cgi.escape(self.request.get('page')))
@@ -76,9 +83,14 @@ class FeedListHandler(SessionHandler):
       comments = Comment.query(Comment.root==True).order(-Comment.time).fetch(10, offset=offset_count)
       for comment in comments:
         threaded_comments.append(comment)
-        children = Comment.query(Comment.parent == comment.key).order(Comment.time).fetch()
-        if children != None:
+        children_query = Comment.query(Comment.parent == comment.key).order(Comment.time).get()
+        if children_query != None:
+          children = Comment.query(Comment.parent == comment.key).order(Comment.time).fetch()
           threaded_comments.extend(children)
+          grand_query = Comment.query(Comment.parent == children[0].key).order(Comment.time).get()
+          if grand_query != None:
+            grandchildren = Comment.query(Comment.parent == children[0].key).order(Comment.time).fetch()
+            threaded_comments.extend(grandchildren)
         if comment != None:
           more += 1
       self.response.out.write(template.render('views/feedlist.html', {

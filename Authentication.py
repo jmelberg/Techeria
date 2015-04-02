@@ -1,5 +1,6 @@
 import cgi
 import webapp2
+import time
 from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
@@ -58,7 +59,15 @@ class RegisterHandler(SessionHandler):
       unique_properties, username=username,
       email_address=email, first_name=first_name, password_raw=password,
       last_name=last_name, avatar = avatar, verified=False)
-    self.redirect('/')
+    # TODO: Look for new wait method
+    time.sleep(1)
+    try:
+      u = self.auth.get_user_by_password(username, password, remember=True,
+      save_session=True)
+      self.redirect('/profile/{}'.format(self.user_model.username))
+    except( auth.InvalidAuthIdError, auth.InvalidPasswordError):
+      error = "Invalid Email/Password"
+      self.response.out.write(template.render('views/login.html', {'error':error}))
 
 class LogoutHandler(SessionHandler):
     """Destroy the user session and return them to the login screen."""

@@ -28,7 +28,7 @@
 </div>
 {% if comments %}
  {% for comment in comments %}
- <div id="comment{{forloop.counter}}"  {% if comment.root%} class="panel panel-info" style="margin-bottom:0; margin-top:10px;" {%else%} class="list-group-item" style="margin-left:40; margin-top:0;margin-bottom:0;"{% endif %}>
+ <div id="comment{{forloop.counter}}"  {% if comment.root%} class="panel panel-info" style="margin-bottom:0; margin-top:10px;" {%else%} class="list-group-item" style="margin-left: {{comment.offset}}; margin-top:0;margin-bottom:0;"{% endif %}>
   <div class="panel-heading">
     <h2 class="panel-title">
       <a href="/profile/{{comment.sender}}" >{{comment.sender}}</a>

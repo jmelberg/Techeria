@@ -27,6 +27,8 @@ class Comment(ndb.Model):
   vote_count = ndb.IntegerProperty(default = 0)
   root = ndb.BooleanProperty(default = True)
   parent = ndb.KeyProperty()
+  children = ndb.KeyProperty(kind="Comment", repeated=True)
+  offset = ndb.IntegerProperty(default = 0)
 
 class Message(ndb.Model):
   sender = ndb.StringProperty()
