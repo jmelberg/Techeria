@@ -6,7 +6,7 @@
   <h1>{{forum_name}}
     <a href="/submit?forum_name={{forum_name}}" type="button" class="btn btn-primary pull-right" align="right">
       <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Submit Post</a>
-      {% if forum != None and viewer.key not in forum.subscribers%}
+      {% if forum != None and viewer.key not in forum.subscribers and viewer != None %}
       <input type="hidden" id="forumName" name-"forum_name" value={{forum_name}}>
       <button id="subscribeButton" class="btn btn-warning pull-right" align="right">
       <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  Subscribe</button>

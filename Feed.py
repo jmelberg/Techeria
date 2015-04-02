@@ -52,9 +52,12 @@ class FeedHandler(SessionHandler):
   """ Handler for handling user feed """
   def get(self):
     user = self.user_model
-    if user:
-      self.response.out.write(template.render('views/feed.html',
-                                              {'viewer':user}))
+    if user == None:
+      override_base = "visitorBase.html"
+    else:
+      override_base = "base.html"
+    self.response.out.write(template.render('views/feed.html',
+                                              {'viewer':user, 'override_base':override_base}))
 
 class FeedListHandler(SessionHandler):
   """ Handler to handle output of all comments pulled from all users.

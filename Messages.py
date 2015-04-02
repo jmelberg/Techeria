@@ -78,6 +78,7 @@ class DeleteMessage(SessionHandler):
 
 class ReadMessage(SessionHandler):
   """ Handler to read individual message """
+  @login_required
   def get(self, message_id):
     viewer = self.user_model
     viewer_email = viewer.email_address

@@ -94,7 +94,11 @@ class ForumCommentHandler(SessionHandler):
     user = self.user_model
     post = ForumPost.query(ForumPost.forum_name == forum_id, ForumPost.reference == post_reference).get()
     comments = Comment.query(Comment.parent==post.key).fetch()
-    self.response.out.write(template.render('views/forumComments.html', {'viewer': user, 'post':post, 'forum_name':forum_id, 'comments':comments}))
+    if user == None:
+      override_base = "visitorBase.html"
+    else:
+      override_base = "base.html"
+    self.response.out.write(template.render('views/forumComments.html', {'override_base':override_base, 'viewer': user, 'post':post, 'forum_name':forum_id, 'comments':comments}))
   def post(self, forum_id, post_reference):
     user = self.user_model
     post = ForumPost.query(ForumPost.forum_name == forum_id, ForumPost.reference == post_reference).get()
@@ -111,8 +115,16 @@ class ForumCommentHandler(SessionHandler):
 
 class ForumViewer(SessionHandler):
   def get(self):
+    user = self.user_model
+    url = self.request.url
+    if url[-1] == '/':
+      self.redirect('/tech')
     forums = Forum.query().order(-Forum.posts)
-    self.response.out.write(template.render('views/forumViewer.html', {'viewer': self.user_model, 'forums':forums}))
+    if user == None:
+      override_base = "visitorBase.html"
+    else:
+      override_base = "base.html"
+    self.response.out.write(template.render('views/forumViewer.html', {'viewer': self.user_model, 'forums':forums, 'override_base':override_base}))
 
 class SubscriptionHandler(SessionHandler):
   def post(self):
