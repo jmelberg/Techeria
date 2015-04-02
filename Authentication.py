@@ -26,10 +26,14 @@ class LoginHandler(SessionHandler):
     else:
       self.response.out.write(template.render('views/login.html', {'user' : self.user_model}))
   def post(self):
-    username = cgi.escape(self.request.get('username'))
+    username = cgi.escape(self.request.get('username')).strip().lower()
     password = cgi.escape(self.request.get('password'))
     #TODO Check for non characters in username.
     try:
+      if '@' in username:
+        user_login = User.query(User.email_address == username).get()
+        if user_login != None:
+          username = user_login.username
       u = self.auth.get_user_by_password(username, password, remember=True,
       save_session=True)
       self.redirect('/profile/{}'.format(self.user_model.username))

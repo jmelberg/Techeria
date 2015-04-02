@@ -93,7 +93,7 @@ class ForumCommentHandler(SessionHandler):
   def get(self, forum_id, post_reference):
     user = self.user_model
     post = ForumPost.query(ForumPost.forum_name == forum_id, ForumPost.reference == post_reference).get()
-    comments = Comment.query(ancestor=post.key).fetch()
+    comments = Comment.query(Comment.parent==post.key).fetch()
     self.response.out.write(template.render('views/forumComments.html', {'viewer': user, 'post':post, 'forum_name':forum_id, 'comments':comments}))
   def post(self, forum_id, post_reference):
     user = self.user_model
