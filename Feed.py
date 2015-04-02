@@ -103,6 +103,16 @@ class FeedListHandler(SessionHandler):
       self.response.out.write(template.render('views/feedlist.html', {
                                               'posts': posts, 'more':more, 'page':page, 'viewer':viewer
                                               }))
+  def comment_list(self):
+    index = 0
+    comments = Comment.query(Comment.root==True).order(-Comment.time).fetch()
+    while index < len(comments):
+      print(comments[index].text)
+      children = Comment.query(Comment.parent == comments[index].key).fetch()
+      index += 1
+      comments[index:index] = children
+    return comments
+
 
 
 app = webapp2.WSGIApplication([
