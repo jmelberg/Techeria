@@ -64,7 +64,7 @@
 
         <div class="page-header"><h4 style="margin-left: 15px;">Subscriptions</h4></div> 
         {% for subscription in viewer.subscriptions %}
-        <li class="list-group-item"><a href="/tech/{{subscription}}"><h4>{{subscription}}</h4></a></li>
+        <li class="list-group-item" id="sublink{{forloop.counter}}"><a href="/tech/{{subscription}}"><h4>{{subscription}}</h4></a></li>
         {% empty %}
         <li class="list-group-item"><h6>No Added Forums Yet!</h6></li>
         {% endfor %}
@@ -74,6 +74,13 @@
     <script>
     $('#main').click(function(){
       $('.navbar').offcanvas()
+    });
+    $("[id^='sublink']").hover(function(){
+      $(this).css("background-color", "#e3e7ea");
+      $(this).find("h4").animate({"marginLeft" : "+=70px"}, 200);
+    }, function(){
+      $(this).removeAttr('style');
+      $(this).find("h4").animate({"marginLeft" : "-=70px"}, 200);
     });
     </script>
 
