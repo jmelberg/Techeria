@@ -6,6 +6,7 @@ class User(auth_models.User):
   last_name = ndb.StringProperty()
   username = ndb.StringProperty()
   friends = ndb.KeyProperty(kind= "User", repeated=True)
+  role = ndb.StringProperty()
   profession = ndb.StringProperty()
   employer = ndb.StringProperty()
   major = ndb.StringProperty()

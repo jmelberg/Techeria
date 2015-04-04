@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
   var field;
+  var role;
   var tools;
   var specialty;
   var count = document.getElementById("skill_count").value;
@@ -25,6 +26,22 @@ $(document).ready(function(){
   });
 
   // Click one or the other
+  // Student, Recruiter, or Professional
+  $('#student').click(function(){
+    $('#recruiter').prop("checked", false);
+    $('#professional').prop("checked", false);
+    $('#job').html("student");
+  });
+  $('#recruiter').click(function(){
+    $('#student').prop("checked", false);
+    $('#professional').prop("checked", false);
+    $('#job').html("recruiter");
+  });
+  $('#professional').click(function(){
+    $('#student').prop("checked", false);
+    $('#recruiter').prop("checked", false);
+    $('#job').html("professional");
+  });
   //Business or Engineering
   $('#business').click(function(){
     $('#tech').prop("checked", false);
@@ -78,7 +95,6 @@ $(document).ready(function(){
     $('#embedSystem').prop("checked", false);
     $('#bigdata').prop("checked", false);
     $('#quality').prop("checked", false);
-    $('#e_student').prop("checked", false);
   });
   $('#system').click(function(){
     $('#mobile').prop("checked", false);
@@ -86,7 +102,6 @@ $(document).ready(function(){
     $('#embedSystem').prop("checked", false);
     $('#bigdata').prop("checked", false);
     $('#quality').prop("checked", false);
-    $('#e_student').prop("checked", false);
   });
   $('#web').click(function(){
     $('#system').prop("checked", false);
@@ -94,7 +109,6 @@ $(document).ready(function(){
     $('#embedSystem').prop("checked", false);
     $('#bigdata').prop("checked", false);
     $('#quality').prop("checked", false);
-    $('#e_student').prop("checked", false);
   });
   $('#embedSystem').click(function(){
     $('#system').prop("checked", false);
@@ -102,7 +116,6 @@ $(document).ready(function(){
     $('#web').prop("checked", false);
     $('#bigdata').prop("checked", false);
     $('#quality').prop("checked", false);
-    $('#e_student').prop("checked", false);
   });
   $('#bigdata').click(function(){
     $('#system').prop("checked", false);
@@ -110,22 +123,12 @@ $(document).ready(function(){
     $('#embedSystem').prop("checked", false);
     $('#web').prop("checked", false);
     $('#quality').prop("checked", false);
-    $('#e_student').prop("checked", false);
   });
   $('#quality').click(function(){
     $('#system').prop("checked", false);
     $('#mobile').prop("checked", false);
     $('#embedSystem').prop("checked", false);
     $('#bigdata').prop("checked", false);
-    $('#web').prop("checked", false);
-    $('#e_student').prop("checked", false);
-  });
-  $('#e_student').click(function(){
-    $('#system').prop("checked", false);
-    $('#mobile').prop("checked", false);
-    $('#embedSystem').prop("checked", false);
-    $('#bigdata').prop("checked", false);
-    $('#quality').prop("checked", false);
     $('#web').prop("checked", false);
   });
 
@@ -134,30 +137,20 @@ $(document).ready(function(){
     $('#business_marketing').prop("checked", false);
     $('#consumer_marketing').prop("checked", false);
     $('#partner_marketing').prop("checked", false);
-    $('#m_student').prop("checked", false);
   });
   $('#busines_marketing').click(function(){
     $('#online_marketing').prop("checked", false);
     $('#consumer_marketing').prop("checked", false);
     $('#partner_marketing').prop("checked", false);
-    $('#m_student').prop("checked", false);
   });
   $('#consumer_marketing').click(function(){
     $('#business_marketing').prop("checked", false);
     $('#online_marketing').prop("checked", false);
     $('#partner_marketing').prop("checked", false);
-    $('#m_student').prop("checked", false);
   });
   $('#partner_marketing').click(function(){
     $('#business_marketing').prop("checked", false);
     $('#consumer_marketing').prop("checked", false);
-    $('#online_marketing').prop("checked", false);
-    $('#m_student').prop("checked", false);
-  });
-  $('#m_student').click(function(){
-    $('#business_marketing').prop("checked", false);
-    $('#consumer_marketing').prop("checked", false);
-    $('#partner_marketing').prop("checked", false);
     $('#online_marketing').prop("checked", false);
   });
 
@@ -165,23 +158,16 @@ $(document).ready(function(){
   $('#personal_finance').click(function(){
     $('#corporate_finance').prop("checked", false);
     $('#investment').prop("checked", false);
-    $('#f_student').prop("checked", false);
   });
   $('#corporate_finance').click(function(){
     $('#personal_finance').prop("checked", false);
     $('#investment').prop("checked", false);
-    $('#f_student').prop("checked", false);
   });
   $('#investment').click(function(){
     $('#corporate_finance').prop("checked", false);
     $('#personal_finance').prop("checked", false);
-    $('#f_student').prop("checked", false);
   });
-  $('#f_student').click(function(){
-    $('#corporate_finance').prop("checked", false);
-    $('#investment').prop("checked", false);
-    $('#personal_finance').prop("checked", false);
-  });
+
 
 // What kind of sales?
   $('#inside_sales').click(function(){
@@ -218,60 +204,101 @@ $(document).ready(function(){
 
   $('ul.setup-panel li.active a').trigger('click');
     //Let other tabs be accessable //
+
+  $('#activate1').on('click', function(e) {
+    if(document.getElementById("student").checked == true){
+      role = "student";
+    }
+    else if (document.getElementById("recruiter").checked == true){
+      role = "recruiter";
+    }
+    else{
+      role = "professional"
+    }
+    $('ul.setup-panel li:eq(1)').removeClass('disabled');
+    $('ul.setup-panel li a[href="#step1"]').trigger('click');
+    $('#step1').show();
+  }); 
+    
   $('#activate2').on('click', function(e) {
     if(document.getElementById("business").checked == true){
       field = "business";
-      $('ul.setup-panel li:eq(1)').removeClass('disabled');
+      $('ul.setup-panel li:eq(2)').removeClass('disabled');
       $('ul.setup-panel li a[href="#step2"]').trigger('click');
       $('#step2t').hide();
-      $('#step2b').show();
+      if(role == "recruiter"){
+        $('#step2rb').show();
+      }
+      else{
+        $('#step2b').show();
+      }
     }
     else{
       field = "engineering";
-      $('ul.setup-panel li:eq(1)').removeClass('disabled');
+      $('ul.setup-panel li:eq(2)').removeClass('disabled');
       $('ul.setup-panel li a[href="#step2"]').trigger('click');
       $('#step2b').hide();
+      if(role == "recruiter"){
+        $('#step2rt').show();
+      }
+      else{
       $('#step2t').show();
+      }
     }
-    //$(this).remove();
   }); 
+  //Recruiter Tech //
+  $('#activate3rt').on('click', function(e) {
+    if(document.getElementById("tech").checked== true){
+      tools = document.getElementById("recruitingtech").value;
+      $('ul.setup-panel li:eq(3)').removeClass('disabled');
+      $('ul.setup-panel li a[href="#step3"]').trigger('click');
+      $('#step3rt').show();
+    }
+  });
+
+  $('#activate3rb').on('click', function(e) {
+    if(document.getElementById("business").checked== true){
+      tools = document.getElementById("recruitingbusiness").value;
+      $('ul.setup-panel li:eq(3)').removeClass('disabled');
+      $('ul.setup-panel li a[href="#step3"]').trigger('click');
+      $('#step3rb').show();
+    }
+  });
 
   $('#activate3t').on('click', function(e) {
     if(document.getElementById("yes").checked== true){
       tools = document.getElementById("languages").value;
-      $('ul.setup-panel li:eq(2)').removeClass('disabled');
+      $('ul.setup-panel li:eq(3)').removeClass('disabled');
       $('ul.setup-panel li a[href="#step3"]').trigger('click');
       $('#step3t').show();
     }
     else{
       alert("No Skills Added");
-      $('ul.setup-panel li:eq(2)').removeClass('disabled');
+      $('ul.setup-panel li:eq(3)').removeClass('disabled');
       $('ul.setup-panel li a[href="#step3"]').trigger('click');
       $('#step3t').show();
     }
-    //$(this).remove();
   });
 
   $('#activate3b').on('click', function(e) {
     if(document.getElementById("finance").checked== true){
       tools = document.getElementById("financetools").value;
-      $('ul.setup-panel li:eq(2)').removeClass('disabled');
+      $('ul.setup-panel li:eq(3)').removeClass('disabled');
       $('ul.setup-panel li a[href="#step3"]').trigger('click');
       $('#step3f').show();
     }
     if(document.getElementById("marketing").checked== true){
       tools = document.getElementById("marketingtools").value;
-      $('ul.setup-panel li:eq(2)').removeClass('disabled');
+      $('ul.setup-panel li:eq(3)').removeClass('disabled');
       $('ul.setup-panel li a[href="#step3"]').trigger('click');
       $('#step3m').show();
     }
     if(document.getElementById("sales").checked== true){
       tools = document.getElementById("salestools").value;
-      $('ul.setup-panel li:eq(2)').removeClass('disabled');
+      $('ul.setup-panel li:eq(3)').removeClass('disabled');
       $('ul.setup-panel li a[href="#step3"]').trigger('click');
       $('#step3s').show();
     }
-    //$(this).remove();
   });
 
   $("#done_t").click(function(){
@@ -289,14 +316,11 @@ $(document).ready(function(){
     } 
     if(document.getElementById("quality").checked == true){
       specialty = "quality assurance developer";
-    }
-    if(document.getElementById("e_student").checked == true){
-      specialty = "software engineering student";
-    }           
+    }    
     $.ajax({
       type:"POST",
       url: "/newskill",
-      data:{'field':field, 'specialty':specialty, 'tools':tools}
+      data:{'field':field, 'specialty':specialty, 'role':role, 'tools':tools}
     });
     window.location.href = '/';
 
@@ -314,9 +338,7 @@ $(document).ready(function(){
     if(document.getElementById("partner_marketing").checked == true){
       specialty = "partner marketing";
     } 
-    if(document.getElementById("m_student").checked == true){
-      specialty = "marketing student";
-    } 
+
     $.ajax({
       type:"POST",
       url: "/newskill",
@@ -335,9 +357,6 @@ $(document).ready(function(){
     if(document.getElementById("investment").checked == true){
       specialty = "investment";
     }
-    if(document.getElementById("f_student").checked == true){
-      specialty = "finance student";
-    } 
     $.ajax({
       type:"POST",
       url: "/newskill",
@@ -358,19 +377,59 @@ $(document).ready(function(){
     }
     if(document.getElementById("commission_sales").checked == true){
       specialty = "commission sales";
-    } 
-    if(document.getElementById("s_sales").checked == true){
-      specialty = "sales student";
-    }     
+    }   
     $.ajax({
       type:"POST",
       url: "/newskill",
       data:{'field':field, 'tools':tools, 'specialty':specialty}
     });
     window.location.href = '/';
-
   });
-});         
+
+  $("#done_rt").click(function(){
+    if(document.getElementById("mobile").checked == true){
+      specialty = "mobile developer";
+    }
+    if(document.getElementById("system").checked == true){
+      specialty = "systems developer";
+    }
+    if(document.getElementById("embedSystem").checked == true){
+      specialty = "embedded systems developer";
+    }
+    if(document.getElementById("bigdata").checked == true){
+      specialty = "big data developer";
+    } 
+    if(document.getElementById("quality").checked == true){
+      specialty = "quality assurance developer";
+    }          
+    $.ajax({
+      type:"POST",
+      url: "/newskill",
+      data:{'field':field, 'specialty':specialty, 'role':role, 'tools':tools}
+    });
+    window.location.href = '/';
+});
+
+$("#done_rb").click(function(){
+    if(document.getElementById("r_finance").checked == true){
+      specialty = "finance";
+    }
+    if(document.getElementById("r_marketing").checked == true){
+      specialty = "marketing";
+    }
+    if(document.getElementById("r_sales").checked == true){
+      specialty = "sales";
+    }
+    
+    $.ajax({
+      type:"POST",
+      url: "/newskill",
+      data:{'field':field, 'specialty':specialty, 'role':role, 'tools':tools}
+    });
+    window.location.href = '/';   
+});
+});
+
 
 // Edit and Cancel Buttons
 $(function () {
