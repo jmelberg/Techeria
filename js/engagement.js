@@ -342,7 +342,7 @@ $(document).ready(function(){
     $.ajax({
       type:"POST",
       url: "/newskill",
-      data:{'field':field, 'tools':tools, 'specialty':specialty}
+      data:{'field':field, 'tools':tools, 'role':role, 'specialty':specialty}
     });
     window.location.href = '/';
 
@@ -360,7 +360,7 @@ $(document).ready(function(){
     $.ajax({
       type:"POST",
       url: "/newskill",
-      data:{'field':field, 'tools':tools, 'specialty': specialty}
+      data:{'field':field, 'tools':tools, 'role':role,  'specialty': specialty}
     });
     window.location.href = '/';
 
@@ -381,7 +381,7 @@ $(document).ready(function(){
     $.ajax({
       type:"POST",
       url: "/newskill",
-      data:{'field':field, 'tools':tools, 'specialty':specialty}
+      data:{'field':field, 'tools':tools, 'role':role, 'specialty':specialty}
     });
     window.location.href = '/';
   });
