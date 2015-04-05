@@ -156,7 +156,8 @@ class SkillsHandler(SessionHandler):
     user.skills.append(field_skill.key)
     user.skills.append(specialty_skill.key)
     user.skills_count += new_skills_count
-    user.role = role
+    user.account_type = role
+    user.profession = specialty
     user.put()
 
 config = {}
