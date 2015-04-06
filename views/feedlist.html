@@ -28,7 +28,7 @@
 </div>
 {% if comments %}
  {% for comment in comments %}
- <div id="comment{{forloop.counter}}"  {% if comment.root%} class="panel panel-info" style="margin-bottom:0; margin-top:10px;" {%else%} class="list-group-item" style="margin-left: {{comment.offset}}; margin-top:0;margin-bottom:0;"{% endif %}>
+ <div id="comment{{page}}a{{forloop.counter}}"  {% if comment.root%} class="panel panel-info" style="margin-bottom:0; margin-top:10px;" {%else%} class="list-group-item" style="margin-left: {{comment.offset}}; margin-top:0;margin-bottom:0;"{% endif %}>
   <div class="panel-heading">
     <h2 class="panel-title">
       <a href="/profile/{{comment.sender}}" >{{comment.sender}}</a>
@@ -39,9 +39,9 @@
     </h2>
     </div>
     <div class="panel-body">
-      <h4>{{comment.text}} </h4>
+      <h4>{{comment.text|linebreaks}} </h4>
       <div class="btn-group pull-right">
-      <button style="padding-left:15px;" class="btn btn-xs pull-right" id="reply-{{forloop.counter}}" value={{comment.key.urlsafe}}>Reply</button>
+      <button style="padding-left:15px;" class="btn btn-xs pull-right" id="reply-{{page}}a{{forloop.counter}}" value={{comment.key.urlsafe}}>Reply</button>
       <button style="padding-left:15px;" class="btn btn-xs pull-right">Share</button>
       </div>
     </div>

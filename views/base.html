@@ -58,15 +58,15 @@
     <nav id="myNavmenu" class="navmenu navmenu-default navmenu-fixed-left offcanvas" role="navigation">
       <a class="navmenu-brand" href="/feed?q=posts"><img src="/img?user_id={{viewer.key.urlsafe}}&height=150&width=150" class="img-rounded"/></a>
       <ul class="nav navmenu-nav">
-        <li><a href="/tech"><h3>Forums<h3></a></li>       
-        <li><a><h4>Blah</h4></a></li>
-        <li><a><h4>DiBlah</h4></a></li>
+        <li class="page-header"><h4 style="margin-left: 15px;">{{viewer.username}}</h4></li>
+        <li><a href="/tech"><h4>Forums<h4></a></li>       
+        <li><a href="/connections?username={{viewer.username}}"><h4>Connections</h4></a></li>
 
         <div class="page-header"><h4 style="margin-left: 15px;">Subscriptions</h4></div> 
         {% for subscription in viewer.subscriptions %}
         <li class="list-group-item" id="sublink{{forloop.counter}}"><a href="/tech/{{subscription}}"><h4>{{subscription}}</h4></a></li>
         {% empty %}
-        <li class="list-group-item"><h6>No Added Forums Yet!</h6></li>
+        <li class="list-group-item"><h6>You have not yet subscribed to any forums.</h6></li>
         {% endfor %}
       </ul>
     </nav>

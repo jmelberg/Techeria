@@ -1,13 +1,17 @@
 $(document).ready(function(){
   $("[id^='reply-']").click(function(){
     var counter = $(this).attr('id').split('-')[1];
-    $('#replybox').show().insertAfter('#comment'+counter);
+    $("[id^='replybox-']").remove();
+    $("[id^='reply-']").show();
+    $('#replybox').clone().show().attr('id', 'replybox-'+counter).insertAfter('#comment'+counter);
+    var margin = $('#comment'+counter).css('margin-left');
+    $('#replybox-'+counter).css('margin-left', margin);
     var parent = $(this).val();
     $('#parent').val(parent);
     $(this).hide();
-    $('#replycommentBox').focus();
+    $('#replybox-'+counter).find('textarea').focus();
   });
-  
+
   $('#postreplyButton').click(function(){
   });
 });

@@ -24,7 +24,7 @@ class User(auth_models.User):
 class Comment(ndb.Model):
   sender = ndb.StringProperty()
   recipient = ndb.StringProperty()
-  text = ndb.StringProperty()
+  text = ndb.TextProperty()
   time = ndb.DateTimeProperty(auto_now_add=True)
   vote_count = ndb.IntegerProperty(default = 0)
   root = ndb.BooleanProperty(default = True)
@@ -36,7 +36,7 @@ class Message(ndb.Model):
   sender = ndb.StringProperty()
   recipient = ndb.StringProperty()
   subject = ndb.StringProperty()
-  text = ndb.StringProperty()
+  text = ndb.TextProperty()
   time = ndb.DateTimeProperty(auto_now_add=True)
 
 class ConnectionRequest(ndb.Model):
@@ -55,7 +55,7 @@ class ForumPost(ndb.Model):
   vote_count = ndb.IntegerProperty(default = 0)
   comment_count = ndb.IntegerProperty(default = 0)
   time = ndb.DateTimeProperty(auto_now_add=True)
-  text = ndb.StringProperty()
+  text = ndb.TextProperty()
   categories = ndb.KeyProperty(kind= "Skill", repeated=True)
   up_voters = ndb.KeyProperty(kind = "User", repeated=True)
   down_voters = ndb.KeyProperty(kind = "User", repeated=True)
