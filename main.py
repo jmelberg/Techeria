@@ -51,6 +51,7 @@ class ProfileHandler(SessionHandler):
 class SearchHandler(SessionHandler):
   """Handler to search for users/jobs"""
   def get(self):
+    user = self.user_model
     search = cgi.escape(self.request.get('search'))
     #TODO normalize names in User model to ignore case
     search_list = search.split(',')
@@ -83,7 +84,7 @@ class SearchHandler(SessionHandler):
         if last_name.get() is not None:
           for result in last_name.fetch(10):
             results.append(result)
-    self.response.out.write(template.render('views/search.html', {'results':results, 'search_string':search_string}))
+    self.response.out.write(template.render('views/search.html', {'results':results, 'search_string':search_string, 'viewer':user}))
 
 class Image(SessionHandler):
   """Serves the image associated with an avatar"""
