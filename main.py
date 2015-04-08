@@ -4,7 +4,7 @@ from google.appengine.ext import ndb
 from google.appengine.ext.webapp import template
 from google.appengine.api import users
 from google.appengine.api import images
-from webapp2_extras import sessions, auth
+from webapp2_extras import sessions, auth, json
 from models import User
 from models import Comment
 from models import Message
@@ -23,6 +23,8 @@ from Forum import *
 from Feed import *
 from Authentication import *
 from Connections import *
+from jsonapi import ForumAPI, ForumViewerAPI, ProfileHandlerAPI, SearchHandlerAPI, DisplayConnectionsAPI
+import json
 """Techeria is a professional social network for techies"""
 
 class ProfileHandler(SessionHandler):
@@ -196,5 +198,11 @@ app = webapp2.WSGIApplication([
                                ('/tech', ForumViewer),
                                ('/tech/', ForumViewer),
                                ('/newskill', SkillsHandler),
-                               ('/subscribe', SubscriptionHandler)
+                               ('/subscribe', SubscriptionHandler),
+                               ('/api/tech/(\w+)', ForumAPI),
+                               ('/api/tech', ForumViewerAPI),
+                               ('/api/tech/', ForumViewerAPI),
+                               ('/api/profile/(\w+)', ProfileHandlerAPI),
+                               ('/api/search', SearchHandlerAPI),
+                               ('/api/connections', DisplayConnectionsAPI)
                                ], debug=True, config=config)
