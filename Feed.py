@@ -71,7 +71,6 @@ class FeedListHandler(SessionHandler):
       CURRENT: Loads 10 comments per page, with ability to load more when user reaches
       end of page.
   """
-  # TODO: Work on nested comments
   def get(self):
     threaded_comments = []
     page = int(cgi.escape(self.request.get('page')))
@@ -85,7 +84,7 @@ class FeedListHandler(SessionHandler):
                                               'comments': threaded_comments, 'more':more, 'page':page, 'viewer':viewer,
                                               }))
     else:
-      posts = ForumPost.query().order(-ForumPost.time).fetch(10, offset=offset_count)
+      posts, more = self.post_list(offset_count)
       self.response.out.write(template.render('views/feedlist.html', {
                                               'posts': posts, 'more':more, 'page':page, 'viewer':viewer
                                               }))
@@ -99,6 +98,11 @@ class FeedListHandler(SessionHandler):
       comments[index:index] = children
     return comments, more
 
+  def post_list(self, offset_count):
+    index = 0
+    posts = ForumPost.query().order(-ForumPost.time).fetch(10, offset=offset_count)
+    more = len(posts)
+    return posts, more
 
 
 app = webapp2.WSGIApplication([

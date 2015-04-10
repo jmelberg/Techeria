@@ -4,7 +4,6 @@ jQuery(document).ready(function() {
   var count = 1;
   var multiplier = 0.5;
   var bodyheight = $('body').height();
-
   $(window).scroll(function(){
     if ($(window).scrollTop() > 100) {
       $('.scroll-top-wrapper').addClass('show');
@@ -13,7 +12,7 @@ jQuery(document).ready(function() {
     }
     if($(window).scrollTop() + bodyheight >= .75*$('body').height()) {
       if(done == 0){
-        updateFeed(count);
+        updateFeed(count, items);
         $('#loading').show();
         count++;
         done = 1;

@@ -17,11 +17,11 @@
   <div class="list-group-item">
     <div class="row">
       <div class="col-md-1 text-center">
-        <button class="btn btn-default" value = "{{post.key.urlsafe}}" id = "upVote-{{forloop.counter}}" {% if viewer.key in post.up_voters %}style = "background: orange;" disabled{% endif %}><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" ></span></button>
+        <button class="btn btn-default" value = "{{post.key.urlsafe}}" id = "upVote-{{page}}a{{forloop.counter}}" {% if viewer.key in post.up_voters %}style = "background: orange;" disabled{% endif %}><span class="glyphicon glyphicon-arrow-up" aria-hidden="true" ></span></button>
 
-        <h4 id="voteCount{{forloop.counter}}">{{post.vote_count}}</h4>
+        <h4 id="voteCount{{page}}a{{forloop.counter}}">{{post.vote_count}}</h4>
 
-        <button class="btn btn-default" value = "{{post.key.urlsafe}}" id = "downVote-{{forloop.counter}}" {% if viewer.key in post.down_voters %}style = "background: #4682B4  ;" disabled{% endif %}><span class="glyphicon glyphicon-arrow-down" aria-hidden="true" ></span></button>
+        <button class="btn btn-default" value = "{{post.key.urlsafe}}" id = "downVote-{{page}}a{{forloop.counter}}" {% if viewer.key in post.down_voters %}style = "background: #4682B4  ;" disabled{% endif %}><span class="glyphicon glyphicon-arrow-down" aria-hidden="true" ></span></button>
       </div>
       <div class="col-md-11">
         {% if post.url_host != None %}

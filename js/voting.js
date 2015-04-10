@@ -1,7 +1,6 @@
 $(document).ready(function(){
   var key;
-  var count = 0;
-  var counter = 0;
+  var counter;
   var voter = document.getElementById('voter').innerHTML;
 
   // Upvote Selected
@@ -16,7 +15,9 @@ $(document).ready(function(){
     if ($('#downVote-' + counter).is(":disabled")){
       voteCount++;
     }
-    voteCount++;
+    if($('#upVote-'+ counter).is(":enabled")){
+      voteCount++;
+    }
     number.innerHTML = voteCount;
     $(this).prop('disabled', true);
 
@@ -38,10 +39,12 @@ $(document).ready(function(){
     $('#upVote-' + counter).removeAttr("style");
     var number = document.getElementById('voteCount'+counter);
     var voteCount = number.innerHTML;
-          if ($('#upVote-' + counter).is(":disabled")){
+    if ($('#upVote-' + counter).is(":disabled")){
       voteCount--;
     }
-    voteCount--;
+    if($('#downVote-'+ counter).is(":enabled")){
+      voteCount--;
+    }
     number.innerHTML = voteCount;
     $(this).prop('disabled', true);
     $('#upVote-' + counter).prop('disabled', false);
