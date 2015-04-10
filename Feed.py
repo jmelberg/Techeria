@@ -94,7 +94,6 @@ class FeedListHandler(SessionHandler):
     comments = Comment.query(Comment.root==True).order(-Comment.time).fetch(10, offset=offset_count)
     more = len(comments)
     while index < len(comments):
-      print(comments[index].text)
       children = Comment.query(Comment.parent == comments[index].key).fetch()
       index += 1
       comments[index:index] = children

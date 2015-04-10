@@ -7,7 +7,7 @@ $(document).ready(function(){
     var margin = $('#comment'+counter).css('margin-left');
     $('#replybox-'+counter).css('margin-left', margin);
     var parent = $(this).val();
-    $('#parent').val(parent);
+    $('#replybox-'+counter).find('#parent').val(parent);
     $(this).hide();
     $('#replybox-'+counter).find('textarea').focus();
   });
