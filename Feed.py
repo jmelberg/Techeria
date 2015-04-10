@@ -100,7 +100,9 @@ class FeedListHandler(SessionHandler):
 
   def post_list(self, offset_count):
     index = 0
-    posts = ForumPost.query().order(-ForumPost.time).fetch(10, offset=offset_count)
+    viewer = self.user_model
+    posts = ForumPost.query(ForumPost.forum_name.IN(viewer.subscriptions)).order(-ForumPost.time).fetch(10, offset=offset_count)
+
     more = len(posts)
     return posts, more
 
