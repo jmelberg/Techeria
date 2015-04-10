@@ -58,20 +58,35 @@ class ForumViewerAPI(SessionHandler):
 class ProfileHandlerAPI(SessionHandler):
   """handler to display a profile page"""
   def get(self, profile_id):
-    #TODO remove sleep below for deployment,, for testing only
     viewer = self.user_model
     q = User.query(User.username == profile_id)
     user = q.get()
     user_json = {}
     if user != None:
+      #User Vitals
       user_json['type'] = "user"
+      user_json['account_type'] = user.account_type
       user_json['username'] = user.username
       user_json['firstname'] = user.first_name
       user_json['lastname'] = user.last_name
-      comments = Comment.query(Comment.recipient == user.username).order(-Comment.time)
-
+      user_json['email'] = user.email_address
+      user_json['profession'] = user.profession
+      #User Profile Information
+      user_json['friends'] = user.friends
+      user_json['subscriptions'] = user.subscriptions
+      user_json['skill'] = getObjectsFromKey(user.skills)
+      user_json['friend_count'] = user.friend_count
+      user_json['picture'] = "/img?user_id={}".format(user.key.urlsafe())
     self.response.headers['Content-Type'] = 'application/json' 
     self.response.out.write(json.dumps(user_json))
+
+#Returns array object from given key
+def getObjectsFromKey(keys):
+  items = []
+  for key in keys:
+    items.append(key.get().name)
+  return items
+
 
 class SearchHandlerAPI(SessionHandler):
   """Handler to search for users/jobs"""
@@ -130,7 +145,6 @@ class DisplayConnectionsAPI(SessionHandler):
         self.username = ""
         self.profession = ""
         self.key_urlsafe = ""
-        #self.location = ""
         #self.picture = ""
     connection_list = []
     for connection_key in user.friends:
