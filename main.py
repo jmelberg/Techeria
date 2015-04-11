@@ -149,6 +149,7 @@ class SkillsHandler(SessionHandler):
           new_skill = Skill(name=i)
           new_skill.put()
           user.skills.append(new_skill.key)
+          user.subscriptions.append(new_skill.name.replace(" ",""))
         else:
           user.skills.append(skill_query.key)
         new_skills_count += 1

@@ -20,6 +20,8 @@ class User(auth_models.User):
   subscriptions = ndb.StringProperty(repeated=True)
 
 class Comment(ndb.Model):
+  sender_key = ndb.KeyProperty()
+  recipient_key = ndb.KeyProperty()
   sender = ndb.StringProperty()
   recipient = ndb.StringProperty()
   text = ndb.TextProperty()

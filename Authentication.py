@@ -55,10 +55,11 @@ class RegisterHandler(SessionHandler):
     avatar = self.request.get('img')
     avatar = images.resize(avatar,400,400) 
     unique_properties = ['email_address']
+    # Initial Creation of User 
     user_data = User.create_user(username,
       unique_properties, username=username,
       email_address=email, first_name=first_name, password_raw=password,
-      last_name=last_name, avatar = avatar, verified=False)
+      last_name=last_name, avatar = avatar, subscriptions=["news", "techeria"], verified=False)
     # TODO: Look for new wait method
     time.sleep(1)
     try:

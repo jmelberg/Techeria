@@ -27,6 +27,7 @@ class CommentHandler(SessionHandler):
     sender = cgi.escape(self.request.get('sender'))
     recipient = cgi.escape(self.request.get('recipient'))
     replied_to_urlsafe = cgi.escape(self.request.get('parent'))
+    viewer = self.user_model
     comment = Comment()
     if len(replied_to_urlsafe) != 0:
       replied_to_key = ndb.Key(urlsafe=replied_to_urlsafe)
@@ -40,6 +41,15 @@ class CommentHandler(SessionHandler):
     else:
       comment.sender = sender
       comment.recipient = recipient
+
+    # Not double adding User Keys
+    if sender != recipient:
+      comment.sender_key = User.query(User.username == sender).get().key
+      comment.recipient_key = User.query(User.username== recipient).get().key
+    else:
+      comment.sender_key = User.query(User.username == sender).get().key
+      comment.recipient_key = None
+
     comment.text = text
     comment.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
     comment.put()
@@ -90,7 +100,13 @@ class FeedListHandler(SessionHandler):
                                               }))
   def comment_list(self, offset_count):
     index = 0
-    comments = Comment.query(Comment.root==True).order(-Comment.time).fetch(10, offset=offset_count)
+    viewer = self.user_model
+    comments = Comment.query(Comment.root==True,
+      ndb.OR(Comment.sender_key.IN(viewer.friends),
+        Comment.recipient_key.IN(viewer.friends),
+        ndb.OR(Comment.recipient_key == viewer.key, Comment.sender_key==viewer.key)
+        )).order(-Comment.time).fetch(10, offset=offset_count)
+    
     more = len(comments)
     while index < len(comments):
       children = Comment.query(Comment.parent == comments[index].key).fetch()

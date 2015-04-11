@@ -34,6 +34,28 @@ indexes:
 
 - kind: Comment
   properties:
+  - name: recipient_key
+  - name: root
+  - name: sender_key
+  - name: time
+    direction: desc
+
+- kind: Comment
+  properties:
+  - name: recipient_key
+  - name: root
+  - name: time
+    direction: desc
+
+- kind: Comment
+  properties:
+  - name: root
+  - name: sender_key
+  - name: time
+    direction: desc
+
+- kind: Comment
+  properties:
   - name: root
   - name: time
     direction: desc
