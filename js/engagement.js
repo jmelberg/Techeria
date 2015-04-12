@@ -1,7 +1,8 @@
 $(document).ready(function(){
 
   var field;
-  var role;
+  var employer;
+  var job;
   var tools;
   var specialty;
   var count = document.getElementById("skill_count").value;
@@ -27,50 +28,30 @@ $(document).ready(function(){
 
   // Click one or the other
   // Student, Recruiter, or Professional
-  $('#student').click(function(){
-    $('#recruiter').prop("checked", false);
-    $('#professional').prop("checked", false);
-    $('#job').html("student");
-    $('#d_role').html("");
-    $('#dlanguages').html("");
-    $('#r_role').html("");
-    $('#rm_role').html("");
-    $('#rf_role').html("");
-    $('#rs_role').html("");
-  });
-  $('#recruiter').click(function(){
-    $('#student').prop("checked", false);
-    $('#professional').prop("checked", false);
-    $('#job').html("recruiter");
-    $('#d_role').html(" applicant");
-    $('#dlanguages').html(" desired");
-    $('#r_role').html(" applicant's desired");
-    $('#rm_role').html(" are desired");
-    $('#rf_role').html(" are desired");
-    $('#rs_role').html(" are desired");
-  });
-  $('#professional').click(function(){
-    $('#student').prop("checked", false);
-    $('#recruiter').prop("checked", false);
-    $('#job').html("professional");
-    $('#d_role').html("");
-    $('#dlanguages').html("");
-    $('#r_role').html("");
-    $('#rm_role').html("");
-    $('#rf_role').html("");
-    $('#rs_role').html("");
-
-
-  });
+  
   ///// Business or Engineering on/off switch /////
   $('#business').click(function(){
     $('#tech').prop("checked", false);
+    $('#other_role').prop("checked", false);
+    $('#other_role_text').hide();
     $('#role').html("business");
+    $('#employer_name').show();
   });
   $('#tech').click(function(){
     $('#business').prop("checked", false);
+    $('#other_role').prop("checked", false);
+    $('#other_role_text').hide();
     $('#role').html("engineering");
+    $('#employer_name').show();
   });
+  $('#other_role').click(function(){
+    $('#business').prop("checked", false);
+    $('#tech').prop("checked", false);
+    $('#other_role_text').show();
+    $('#role').html("alternativly");
+    $('#employer_name').show();
+  });
+
 
   /////// What kind of business on/off switch ///////
   $('#marketing').click(function(){
@@ -78,24 +59,28 @@ $(document).ready(function(){
     $('#finance').prop("checked", false);
     $('#b_other').prop("checked", false);
     $('#b_other_text').hide();
+    $('#b_position_name').show();
   });
   $('#sales').click(function(){
     $('#marketing').prop("checked", false);
     $('#finance').prop("checked", false);
     $('#b_other').prop("checked", false);
     $('#b_other_text').hide();
+    $('#b_position_name').show();
   });
   $('#finance').click(function(){
     $('#sales').prop("checked", false);
     $('#marketing').prop("checked", false);
     $('#b_other').prop("checked", false);
     $('#b_other_text').hide();
+    $('#b_position_name').show();
   });
   $('#b_other').click(function(){
     $('#sales').prop("checked", false);
     $('#marketing').prop("checked", false);
     $('#finance').prop("checked", false);
     $('#b_other_text').show();
+    $('#b_position_name').show();
   });
 
   //////// What kind of engineering on/off switch? /////
@@ -110,6 +95,7 @@ $(document).ready(function(){
     $('#software').prop("checked", false);
     $('#other').prop("checked", false);
     $('#other_text').hide();
+    $('#position_name').show();
   });
   $('#medical').click(function(){
     $('#air').prop("checked", false);
@@ -122,6 +108,7 @@ $(document).ready(function(){
     $('#software').prop("checked", false);
     $('#other').prop("checked", false);
     $('#other_text').hide();
+    $('#position_name').show();
   });
   $('#civil').click(function(){
     $('#medical').prop("checked", false);
@@ -134,6 +121,7 @@ $(document).ready(function(){
     $('#software').prop("checked", false);
     $('#other').prop("checked", false);
     $('#other_text').hide();
+    $('#position_name').show();
   });
   $('#computer').click(function(){
     $('#medical').prop("checked", false);
@@ -146,6 +134,7 @@ $(document).ready(function(){
     $('#software').prop("checked", false);
     $('#other').prop("checked", false);
     $('#other_text').hide();
+    $('#position_name').show();
   });
   $('#electrical').click(function(){
     $('#medical').prop("checked", false);
@@ -158,6 +147,7 @@ $(document).ready(function(){
     $('#software').prop("checked", false);
     $('#other').prop("checked", false);
     $('#other_text').hide();
+    $('#position_name').show();
   });
   $('#general').click(function(){
     $('#medical').prop("checked", false);
@@ -170,6 +160,7 @@ $(document).ready(function(){
     $('#software').prop("checked", false);
     $('#other').prop("checked", false);
     $('#other_text').hide();
+    $('#position_name').show();
   });
     $('#industrial').click(function(){
     $('#medical').prop("checked", false);
@@ -182,6 +173,7 @@ $(document).ready(function(){
     $('#software').prop("checked", false);
     $('#other').prop("checked", false);
     $('#other_text').hide();
+    $('#position_name').show();
   });
   $('#mechanical').click(function(){
     $('#medical').prop("checked", false);
@@ -194,6 +186,7 @@ $(document).ready(function(){
     $('#software').prop("checked", false);
     $('#other').prop("checked", false);
     $('#other_text').hide();
+    $('#position_name').show();
   });
   $('#software').click(function(){
     $('#medical').prop("checked", false);
@@ -206,6 +199,7 @@ $(document).ready(function(){
     $('#air').prop("checked", false);
     $('#other').prop("checked", false);
     $('#other_text').hide();
+    $('#position_name').show();
   });
   $('#other').click(function(){
     $('#medical').prop("checked", false);
@@ -218,6 +212,7 @@ $(document).ready(function(){
     $('#air').prop("checked", false);
     $('#software').prop("checked", false);
     $('#other_text').show();
+    $('#position_name').show();
   });  
 
   //////// What kind of developer on/off switch //////
@@ -298,7 +293,7 @@ $(document).ready(function(){
     $('#consumer_marketing').prop("checked", false);
     $('#partner_marketing').prop("checked", false);
   });
-  $('#busines_marketing').click(function(){
+  $('#business_marketing').click(function(){
     $('#online_marketing').prop("checked", false);
     $('#consumer_marketing').prop("checked", false);
     $('#partner_marketing').prop("checked", false);
@@ -370,15 +365,6 @@ $(document).ready(function(){
 
   //////// Gather Account Type //////
   $('#activate1').on('click', function(e) {
-    if(document.getElementById("student").checked == true){
-      role = "student";
-    }
-    else if (document.getElementById("recruiter").checked == true){
-      role = "recruiter";
-    }
-    else{
-      role = "professional"
-    }
     $('ul.setup-panel li:eq(1)').removeClass('disabled');
     $('ul.setup-panel li a[href="#step1"]').trigger('click');
     $('#step1').show();
@@ -386,22 +372,31 @@ $(document).ready(function(){
 
   ///////// Gather Business or Engineering ////// 
   $('#activate2').on('click', function(e) {
+    employer = $('#employer_text').val();
     if(document.getElementById("business").checked == true){
       field = "business";
       $('ul.setup-panel li:eq(2)').removeClass('disabled');
       $('ul.setup-panel li a[href="#step2"]').trigger('click');
       $('#step2b').show();
     }
-    else{
+    else if(document.getElementById("tech").checked == true){
       field = "engineering";
       $('ul.setup-panel li:eq(2)').removeClass('disabled');
       $('ul.setup-panel li a[href="#step2"]').trigger('click');
       $('#step2e').show();
     }
+    else{
+      field = $('#other_role_text').val();
+      $('#other_role_span').html(field);
+      $('ul.setup-panel li:eq(2)').removeClass('disabled');
+      $('ul.setup-panel li a[href="#step2"]').trigger('click');
+      $('#step2o').show();
+    }
   }); 
 
   ///////// Gather Engineering Type ///////
   $('#activate3e').on('click', function(e) {
+    job = $('#position_text').val();
     if(document.getElementById("air").checked== true){
       specialty = "Aerospace Engineering";
       $('ul.setup-panel li:eq(3)').removeClass('disabled');
@@ -460,6 +455,7 @@ $(document).ready(function(){
 
   ///////// Gather Business Type ////////
   $('#activate3b').on('click', function(e) {
+    job = $('#b_position_text').val()
     if(document.getElementById("finance").checked== true){
       specialty = "Finance";
       $('ul.setup-panel li:eq(3)').removeClass('disabled');
@@ -486,6 +482,14 @@ $(document).ready(function(){
     }
   });
 
+  $('#activate3o').on('click', function(e){
+    job = $('#o_position_text').val();
+    specialty = $('#o_other_text').val();
+    $('ul.setup-panel li:eq(3)').removeClass('disabled');
+    $('ul.setup-panel li a[href="#step3"]').trigger('click');
+    $('#step3e').show();
+  })
+
   //////// Software Engineer Submit //////
   $("#done_t").click(function(){
     if(document.getElementById("mobile").checked == true){
@@ -510,7 +514,7 @@ $(document).ready(function(){
     $.ajax({
       type:"POST",
       url: "/newskill",
-      data:{'field':field, 'specialty':specialty, 'role':role, 'tools':tools}
+      data:{'field':field, 'specialty':specialty, 'job':job, 'employer':employer, 'tools':tools}
     });
     window.location.href = '/';
   });
@@ -520,7 +524,7 @@ $(document).ready(function(){
     $.ajax({
       type:"POST",
       url: "/newskill",
-      data:{'field':field, 'specialty':specialty, 'role':role, 'tools':tools}
+      data:{'field':field, 'specialty':specialty, 'job':job, 'employer':employer, 'tools':tools}
     });
     window.location.href = '/';
   });
@@ -543,7 +547,7 @@ $(document).ready(function(){
     $.ajax({
       type:"POST",
       url: "/newskill",
-      data:{'field':field, 'tools':tools, 'role':role, 'specialty':specialty}
+      data:{'field':field, 'tools':tools, 'job':job, 'employer':employer, 'specialty':specialty}
     });
     window.location.href = '/';
   });
@@ -564,7 +568,7 @@ $(document).ready(function(){
     $.ajax({
       type:"POST",
       url: "/newskill",
-      data:{'field':field, 'tools':tools, 'role':role,  'specialty': specialty}
+      data:{'field':field, 'tools':tools, 'job':job, 'employer':employer,  'specialty': specialty}
     });
     window.location.href = '/';
   });
@@ -587,7 +591,7 @@ $(document).ready(function(){
     $.ajax({
       type:"POST",
       url: "/newskill",
-      data:{'field':field, 'tools':tools, 'role':role, 'specialty':specialty}
+      data:{'field':field, 'tools':tools, 'job':job, 'employer':employer, 'specialty':specialty}
     });
     window.location.href = '/';
   });

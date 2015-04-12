@@ -185,7 +185,7 @@ class="img-rounded"/>
             <div class="col-md-2"></div>
             <div class="col-xs-8">
               <ul class="nav nav-pills nav-justified thumbnail setup-panel">
-                <li class="active"><a href="#step0"><h4 class="list-group-item-heading">About Me</h4></a></li>
+                <li class="active"><a href="#step0"><h4 class="list-group-item-heading">Welcome</h4></a></li>
                 <li class="disabled"><a href="#step1"><h4 class="list-group-item-heading">Role</h4></a></li>
                 <li class="disabled"><a href="#step2"><h4 class="list-group-item-heading">Specialty</h4></a></li>
                 <li class="disabled"><a href="#step3"><h4 class="list-group-item-heading">Skills</h4></a></li>
@@ -198,11 +198,7 @@ class="img-rounded"/>
             <div class="col-xs-12">
               <div class="col-md-2"></div>
               <div class="col-md-8 well">
-                <div class="page-header"><h1 align="center">Welcome {{user.first_name}}! </h1><h3 align="center">Please take a minute to let us build your profile for you.<br><br>I am <b>currently</b> a  <span id="job">___________</span>.</h3></div>
-                <div class="checkbox"><label><input type="radio" id="student"> Student</label></div>
-                <div class="checkbox"><label><input type="radio" id="professional"> Professional</label></div>
-                <div class="checkbox"><label><input type="radio" id="recruiter"> Recruiter</label></div>
-                <h3/>
+                <div class="page-header"><h1 align="center">Welcome {{user.first_name}}! </h1><h3 align="center">Please take a minute to let us build your profile for you.</h3></div>
                 <button id="activate1" class="btn btn-primary pull-right">Next</button>
               </div>
               <div class="col-md-2"></div>
@@ -213,10 +209,20 @@ class="img-rounded"/>
             <div class="col-xs-12">
               <div class="col-md-2"></div>
               <div class="col-md-8 well">
-                <div class="page-header"><h3>My <b>role</b> in tech is  <span id="role">___________</span>  related.</h3></div>
+                <div class="page-header">
+                  <h3>
+                    {% if user.account_type == "Student" %}
+                    My major in school is
+                    {% else %}
+                    My role in tech is
+                    {% endif %}  <span id="role">___________</span>  related.</h3>
+                </div>
+                <div class="page-header">
                 <div class="checkbox"><label><input type="radio" id="business"> Business</label></div>
                 <div class="checkbox"><label><input type="radio" id="tech"> Engineering</label></div>
-                <h3/>
+                <div class="checkbox"><label><input type="radio" id="other_role">Other<input type="text" class="form-control" id="other_role_text" style="display:none;"></label></div>
+              </div>
+                <div style="display:none;" id='employer_name'><label>Where?<input type="text" class="form-control" id="employer_text"></label></div>
                 <button id="activate2" class="btn btn-primary pull-right">Next</button>
               </div>
               <div class="col-md-2"></div>
@@ -228,7 +234,14 @@ class="img-rounded"/>
             <div class="col-xs-12">
               <div class="col-md-2"></div>
              <div class="col-md-8 well">
-              <div class="page-header"><h3>Which <b>field</b> of Engineering?</h3></div>
+              <div class="page-header"><h3>Which field of Engineering
+                {% if user.account_type == "Student" %}
+                interests you?
+                {% else %}
+                ?
+                {% endif %}
+                </h3></div>
+              <div class="page-header">
               <div class="checkbox"><label><input type="radio" id="air">Aerospace</label></div>
               <div class="checkbox"><label><input type="radio" id="medical">Biomedical, Chemical, or Materials</label></div>
               <div class="checkbox"><label><input type="radio" id="civil"> Civil/ Environmental</label></div>
@@ -238,7 +251,16 @@ class="img-rounded"/>
               <div class="checkbox"><label><input type="radio" id="industrial"> Industrial and Systems</label></div>
               <div class="checkbox"><label><input type="radio" id="mechanical"> Mechanical</label></div>
               <div class="checkbox"><label><input type="radio" id="software"> Software</label></div>
-              <div class="checkbox"><label><input type="radio" id="other">Other<input type="text" class="form-control" id="other_text" style="display:none;"></label></div>
+              <div class="checkbox"><label><input type="radio" id="other">Other<input type="text" class="form-control" id="other_text" style="display:none;"></label>
+              </div>
+              </div>
+              <div id='position_name' style="display:none;"><label>
+              {% if user.account_type != "Student" %}
+              Current Postion
+              {% else %}
+              Major
+              {% endif %}
+              <input type="text" class="form-control" id="position_text"></label></div>
               <button id="activate3e" class="btn btn-primary pull-right">Next</button>
             </div>
             <div class="col-md-2"></div>
@@ -250,46 +272,78 @@ class="img-rounded"/>
           <div class="col-xs-12">
             <div class="col-md-2"></div>
             <div class="col-md-8 well">
-              <div class="page-header"><h3>What <b>field</b> of Business?</h3></div>
+              <div class="page-header"><h3>Which field in Business?</h3></div>
               <div class="checkbox"><label><input type="radio" id="finance"> Finance</label></div>
               <div class="checkbox"><label><input type="radio" id="marketing"> Marketing</label></div>
               <div class="checkbox"><label><input type="radio" id="sales"> Sales</label></div>
               <div class="checkbox"><label><input type="radio" id="b_other">Other<input type="text" class="form-control" id="b_other_text"style="display:none;"></label></div>
+              <div id='b_position_name' style="display:none;"><label>
+              {% if user.account_type != "Student" %}
+              Current Postion
+              {% else %}
+              Major
+              {% endif %}
+              <input type="text" class="form-control" id="b_position_text"></label></div>
               <button id="activate3b" class="btn btn-primary pull-right">Next</button>
             </div>
             <div class="col-md-2"></div>
           </div>
         </div>
 
-          <!-- Computer/SE - Question 3 -->
-          <div class="row setup-content" id = "step3se">
-            <div class="col-xs-12">
+        <!-- Professional, Student, and Recruiter Other Sections -->
+        <div class="row setup-content" id="step2o">
+          <div class="col-xs-12">
             <div class="col-md-2"></div>
-             <div class="col-md-8 well" >
-                <div class="page-header"><h3>Which <b>kind</b> of Developer<span id="d_role"></span>?</h3></div>
-                <div class="checkbox"><label><input type="radio" id="mobile"> Mobile Applications</label></div>
-                <div class="checkbox"><label><input type="radio" id="system"> Systems</label></div>
-                <div class="checkbox"><label><input type="radio" id="web"> Web</label></div>
-                <div class="checkbox"><label><input type="radio" id="embedSystem"> Embedded Systems</label></div>
-                <div class="checkbox"><label><input type="radio" id="bigdata"> Big Data</label></div>
-                <div class="checkbox"><label><input type="radio" id="quality"> Quality Assurance</label></div>
-                <div class="checkbox"><label><input type="radio" id="d_other">Other<input type="text" class="form-control" id="d_other_text" style="display:none;"></label></div>
-                <!-- Autocomplete programming languages -->
-                <div id="languages-form" style="display:none;">
-                <div class="page-header">Which programming languages<span id="dlanguages"></span>?</div>
-                <input class="input-lg" type="text" value="Java" id="languages" data-role="tagsinput"></input>
-                </div>
-                <button id="done_t" type="submit" class="btn btn-primary pull-right" data-dismiss="modal">Done</button>
-              </div>
-              <div class="col-md-2"></div>
+            <div class="col-md-8 well">
+              <div class="page-header"><h3>Which field in <span id="other_role_span"></span>?</h3></div>
+
+              <div class = "page-header"><label>Please be as specific as possible<input type="text" class="form-control" id="o_other_text"></label></div>
+              <div id='o_position_name'><label>
+              {% if user.account_type != "Student" %}
+              Current Postion
+              {% else %}
+              Major
+              {% endif %}
+              <input type="text" class="form-control" id="o_position_text"></label></div>
+              <button id="activate3o" class="btn btn-primary pull-right">Next</button>
             </div>
+            <div class="col-md-2"></div>
           </div>
+        </div>
+
+        <!-- Computer/SE - Question 3 -->
+        <div class="row setup-content" id = "step3se">
+          <div class="col-xs-12">
+          <div class="col-md-2"></div>
+           <div class="col-md-8 well" >
+              <div class="page-header"><h3>Which kind of Developer<span id="d_role"></span>?</h3></div>
+              <div class="checkbox"><label><input type="radio" id="mobile"> Mobile Applications</label></div>
+              <div class="checkbox"><label><input type="radio" id="system"> Systems</label></div>
+              <div class="checkbox"><label><input type="radio" id="web"> Web</label></div>
+              <div class="checkbox"><label><input type="radio" id="embedSystem"> Embedded Systems</label></div>
+              <div class="checkbox"><label><input type="radio" id="bigdata"> Big Data</label></div>
+              <div class="checkbox"><label><input type="radio" id="quality"> Quality Assurance</label></div>
+              <div class="checkbox"><label><input type="radio" id="d_other">Other<input type="text" class="form-control" id="d_other_text" style="display:none;"></label></div>
+              <!-- Autocomplete programming languages -->
+              <div id="languages-form" style="display:none;">
+              <div class="page-header">Which programming languages<span id="dlanguages"></span>?</div>
+              <input class="input-lg" type="text" value="Java" id="languages" data-role="tagsinput"></input>
+              </div>
+              <button id="done_t" type="submit" class="btn btn-primary pull-right" data-dismiss="modal">Done</button>
+            </div>
+            <div class="col-md-2"></div>
+          </div>
+        </div>
         <!-- Engineer Question 3 -->
           <div class="row setup-content" id ="step3e">
             <div class="col-xs-12">
             <div class="col-md-2"></div>
             <div class="col-md-8 well">
-              <div class="page-header"><h3>Please <b>input</b><span id="r_role"></span> skills</h3></div>
+              <div class="page-header"><h3>Please input
+              {% if user.account_type == "Recruiter" %}
+              skills all candidates must have
+              {% else %} skills
+              {% endif %} </h3></div>
               <input class = "input-lg" type="text" value="Technical Writing" id="engineering_skills" data-role="tagsinput"></input>
               <button id="done_te" type="submit" class="btn btn-primary pull-right" data-dismiss="modal">Done</button>
             </div>
@@ -302,7 +356,7 @@ class="img-rounded"/>
             <div class="col-xs-12"> 
             <div class="col-md-2"></div>
               <div class="col-md-8 well">
-                <div class="page-header"><h3>What <b>type</b> of Marketing?</h3></div>
+                <div class="page-header"><h3>What type of Marketing?</h3></div>
                 <div class="checkbox"><label><input type="radio" id="online_marketing"> Online Marketing</label></div>
                 <div class="checkbox"><label><input type="radio" id="business_marketing"> Business to Business</label></div>
                 <div class="checkbox"><label><input type="radio" id="consumer_marketing"> Business to Consumer</label></div>
@@ -319,7 +373,7 @@ class="img-rounded"/>
             <div class="col-xs-12">
               <div class="col-md-2"></div>
               <div class="col-md-8 well">
-                <div class="page-header"><h3>What <b>type</b> of Finance?</h3></div>
+                <div class="page-header"><h3>What type of Finance?</h3></div>
                 <div class="checkbox"><label><input type="radio" id="personal_finance"> Personal</label></div>
                 <div class="checkbox"><label><input type="radio" id="corporate_finance"> Corporate</label></div>
                 <div class="checkbox"><label><input type="radio" id="investment"> Investment</label></div>
@@ -335,7 +389,7 @@ class="img-rounded"/>
             <div class="col-xs-12">
               <div class="col-md-2"></div>
               <div class="col-md-8 well">
-                <div class="page-header"><h3>What <b>type</b> of Sales?</h3></div>
+                <div class="page-header"><h3>What type of Sales?</h3></div>
                 <div class="checkbox"><label><input type="radio" id="inside_sales"> Inside</label></div>
                 <div class="checkbox"><label><input type="radio" id="outside_sales"> Outside</label></div>
                 <div class="checkbox"><label><input type="radio" id="support_sales"> Support</label></div>

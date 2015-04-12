@@ -134,7 +134,8 @@ class UpdateProfile(SessionHandler):
 class SkillsHandler(SessionHandler):
   def post(self):
     user = self.user_model
-    role = cgi.escape(self.request.get('role'))
+    employer = cgi.escape(self.request.get('employer'))
+    profession = cgi.escape(self.request.get('job'))
     field = cgi.escape(self.request.get('field'))
     tools = cgi.escape(self.request.get('tools'))
     specialty = cgi.escape(self.request.get('specialty'))
@@ -157,11 +158,12 @@ class SkillsHandler(SessionHandler):
     specialty_skill = Skill(name=specialty.lower().strip())
     field_skill.put()
     specialty_skill.put()
+    # Add new User Info
     user.skills.append(field_skill.key)
     user.skills.append(specialty_skill.key)
     user.skills_count += new_skills_count
-    user.account_type = role
-    user.profession = specialty
+    user.employer = employer
+    user.profession = profession
     user.put()
 
 config = {}
