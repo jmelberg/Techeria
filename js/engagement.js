@@ -289,21 +289,25 @@ $(document).ready(function(){
 
 //////// What kind of Marketing on/off switch //////
   $('#online_marketing').click(function(){
+    $('#marketing-form').show();
     $('#business_marketing').prop("checked", false);
     $('#consumer_marketing').prop("checked", false);
     $('#partner_marketing').prop("checked", false);
   });
   $('#business_marketing').click(function(){
+    $('#marketing-form').show();
     $('#online_marketing').prop("checked", false);
     $('#consumer_marketing').prop("checked", false);
     $('#partner_marketing').prop("checked", false);
   });
   $('#consumer_marketing').click(function(){
+    $('#marketing-form').show();
     $('#business_marketing').prop("checked", false);
     $('#online_marketing').prop("checked", false);
     $('#partner_marketing').prop("checked", false);
   });
   $('#partner_marketing').click(function(){
+    $('#marketing-form').show();
     $('#business_marketing').prop("checked", false);
     $('#consumer_marketing').prop("checked", false);
     $('#online_marketing').prop("checked", false);
@@ -311,14 +315,17 @@ $(document).ready(function(){
 
   //////// What kind of Finance on/off switch /////
   $('#personal_finance').click(function(){
+    $('#finance-form').show();
     $('#corporate_finance').prop("checked", false);
     $('#investment').prop("checked", false);
   });
   $('#corporate_finance').click(function(){
+    $('#finance-form').show();
     $('#personal_finance').prop("checked", false);
     $('#investment').prop("checked", false);
   });
   $('#investment').click(function(){
+    $('#finance-form').show();
     $('#corporate_finance').prop("checked", false);
     $('#personal_finance').prop("checked", false);
   });
@@ -326,34 +333,32 @@ $(document).ready(function(){
 
   /////// What kind of sales on/off switch ///////
   $('#inside_sales').click(function(){
+    $('#sales-form').show();
     $('#outside_sales').prop("checked", false);
     $('#support_sales').prop("checked", false);
     $('#commission_sales').prop("checked", false);
     $('#s_sales').prop("checked", false);
   });
   $('#outside_sales').click(function(){
+    $('#sales-form').show();
     $('#inside_sales').prop("checked", false);
     $('#support_sales').prop("checked", false);
     $('#commission_sales').prop("checked", false);
     $('#s_sales').prop("checked", false);
   });
   $('#support_sales').click(function(){
+    $('#sales-form').show();
     $('#outside_sales').prop("checked", false);
     $('#inside_sales').prop("checked", false);
     $('#commission_sales').prop("checked", false);
     $('#s_sales').prop("checked", false);
   });
   $('#commission_sales').click(function(){
+    $('#sales-form').show();
     $('#outside_sales').prop("checked", false);
     $('#support_sales').prop("checked", false);
     $('#inside_sales').prop("checked", false);
     $('#s_sales').prop("checked", false);
-  });
-  $('#s_sales').click(function(){
-    $('#outside_sales').prop("checked", false);
-    $('#support_sales').prop("checked", false);
-    $('#commission_sales').prop("checked", false);
-    $('#inside_sales').prop("checked", false);
   });
 
   //////////                     //////////
