@@ -23,7 +23,7 @@
             </div>
           </div>
           <!-- CHECK USERNAME -->
-          <script type="text/javascript" src= "js/checkusername.js"></script> 
+          <script type="text/javascript" src= "js/register.js"></script> 
           <div class="control-group">
             <h4>First Name</h4>
             <div class="controls">
@@ -60,6 +60,20 @@
               <input type="file" id="avatar" name="img"  class="form-control input-lg" required>
             </div>
           </div>
+          <div class="control-group">
+            <h4>Accout Type</h4>
+            <div class="btn-group" data-toggle="buttons">
+              <label class="btn btn-default">
+              <input type="radio" name="options" id="student" autocomplete="off" checked><span class ="glyphicon glyphicon-education" aria-hidden="true"></span>   Student</label>
+              <label class="btn btn-default active">
+              <input type="radio" name="options" id="prof" autocomplete="off" checked> <span class ="glyphicon glyphicon-briefcase" aria-hidden="true"></span>     Professional
+              </label>
+              <label class="btn btn-default">
+              <input type="radio" name="options" id="recruiter" autocomplete="off"><span class ="glyphicon glyphicon-user" aria-hidden="true"></span><span class ="glyphicon glyphicon-transfer" aria-hidden="true"></span><span class ="glyphicon glyphicon-user" aria-hidden="true"></span>   Recruiter
+            </label>
+          </div>
+          <!-- User Account Type -->
+          <input id="account_type" name="account_type" type="hidden"></input>
           <br></br>
           <div class="control-group">
           <!-- Button -->

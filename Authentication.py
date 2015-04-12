@@ -51,6 +51,7 @@ class RegisterHandler(SessionHandler):
     last_name = cgi.escape(self.request.get('last_name')).strip()
     username = cgi.escape(self.request.get('username')).strip().lower()
     email = cgi.escape(self.request.get('email')).strip().lower()
+    account = cgi.escape(self.request.get('account_type'))
     password = cgi.escape(self.request.get('password'))
     avatar = self.request.get('img')
     avatar = images.resize(avatar,400,400) 
@@ -59,7 +60,7 @@ class RegisterHandler(SessionHandler):
     user_data = User.create_user(username,
       unique_properties, username=username,
       email_address=email, first_name=first_name, password_raw=password,
-      last_name=last_name, avatar = avatar, subscriptions=["news", "techeria"], verified=False)
+      last_name=last_name, avatar = avatar, subscriptions=["news", "techeria"], account_type=account, verified=False)
     # TODO: Look for new wait method
     time.sleep(1)
     try:
