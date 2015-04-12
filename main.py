@@ -44,6 +44,7 @@ class ProfileHandler(SessionHandler):
       connection = User.get_by_id(connection.id())
       counter+=1
     user.friend_count = counter
+    user.put()
     comments = Comment.query(Comment.recipient == user.username).order(-Comment.time)
     if user:
       self.response.out.write(template.render('views/profile.html',

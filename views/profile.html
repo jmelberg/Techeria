@@ -222,7 +222,13 @@ class="img-rounded"/>
                 <div class="checkbox"><label><input type="radio" id="tech"> Engineering</label></div>
                 <div class="checkbox"><label><input type="radio" id="other_role">Other<input type="text" class="form-control" id="other_role_text" style="display:none;"></label></div>
               </div>
-                <div style="display:none;" id='employer_name'><label>Where?<input type="text" class="form-control" id="employer_text"></label></div>
+                <div style="display:none;" id='employer_name'><label>
+                  {% if user.account_type == "Student" %}
+                  School:
+                  {% else %}
+                  Employer:
+                  {% endif %}
+                  <input type="text" class="form-control" id="employer_text"></label></div>
                 <button id="activate2" class="btn btn-primary pull-right">Next</button>
               </div>
               <div class="col-md-2"></div>
@@ -256,9 +262,9 @@ class="img-rounded"/>
               </div>
               <div id='position_name' style="display:none;"><label>
               {% if user.account_type != "Student" %}
-              Current Postion
+              Current Postion:
               {% else %}
-              Major
+              Major:
               {% endif %}
               <input type="text" class="form-control" id="position_text"></label></div>
               <button id="activate3e" class="btn btn-primary pull-right">Next</button>
@@ -279,9 +285,9 @@ class="img-rounded"/>
               <div class="checkbox"><label><input type="radio" id="b_other">Other<input type="text" class="form-control" id="b_other_text"style="display:none;"></label></div>
               <div id='b_position_name' style="display:none;"><label>
               {% if user.account_type != "Student" %}
-              Current Postion
+              Current Postion:
               {% else %}
-              Major
+              Major:
               {% endif %}
               <input type="text" class="form-control" id="b_position_text"></label></div>
               <button id="activate3b" class="btn btn-primary pull-right">Next</button>
@@ -300,9 +306,9 @@ class="img-rounded"/>
               <div class = "page-header"><label>Please be as specific as possible<input type="text" class="form-control" id="o_other_text"></label></div>
               <div id='o_position_name'><label>
               {% if user.account_type != "Student" %}
-              Current Postion
+              Current Postion:
               {% else %}
-              Major
+              Major:
               {% endif %}
               <input type="text" class="form-control" id="o_position_text"></label></div>
               <button id="activate3o" class="btn btn-primary pull-right">Next</button>
@@ -442,11 +448,20 @@ class="img-rounded"/>
                 <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                   <div class="panel-body">
                     {% for skill in skills %}
-                    <p><a href="/tech/{{skill.name.split|join:""}}">{{skill.name}} </a></p>
+                    <div class = "row">
+                      <div class='col-md-8'>
+                      <span class="badge">{{skill.vote_count}}</span>
+                      <a href="/tech/{{skill.name.split|join:""}}" style="padding-right: 10px;">{{skill.name}}</a>
+                      </div>
+                      <div class='col-md-2'>
+                      <button class="btn btn-primary btn-xs" type="button" style="border: none; background: none; color: #4682B4"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span></button>
+                      </div>
+                    </div>
                     {% endfor %}
-                  </div>
+                  </div>                    
                 </div>
               </div>
+              
               <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingThree">
                   <h4 class="panel-title">
