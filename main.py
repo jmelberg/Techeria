@@ -36,21 +36,20 @@ class ProfileHandler(SessionHandler):
     user = q.get()
     skill_list = []
     endorsements = Endorsement.query(Endorsement.endorsee == user.key).fetch()
+    print(endorsements)
     for skill in user.skills:
       skill = skill.get()
-      print(skill)
       endorsement_list = []
-      endorsement_list.append(skill.name)
+      endorsement_list.append(skill)
       #Add number #
       count = 0
       for x in endorsements:
         if x.skill == skill.key:
-          count+=x.endorsement_count
+          count=x.endorsement_count
       endorsement_list.append(count)
       #endorsement_list.append([x.endorsement_count for x in endorsements if x.skill == skill.key ])
       skill_list.append(endorsement_list)
     connection_list = []
-    print(skill_list)
     """Get friend count """
     counter = 0
     for connection in user.friends:

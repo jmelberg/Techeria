@@ -451,13 +451,15 @@ class="img-rounded"/>
                     <div class = "row">
                       <div class='col-md-10'>
                       {% if endorsement != 0 %}
-                      <span class="badge" id="upCount{{forloop.counter}}">{{endorsement}}</span>
+                      <span class="badge" id ="{{forloop.counter}}">{{endorsement}}</span>
+                      {% else %}
+                      <span class="badge" id ="{{forloop.counter}}" style="display:none;">{{endorsement}}</span>
                       {% endif %}
-                      <a href="/tech/{{skill.name.split|join:""}}" style="padding-right: 10px;">{{skill}}</a>
+                      <a href="/tech/{{skill.name.split|join:""}}" style="padding-right: 10px;">{{skill.name}}</a>
                       </div>
                       <div class='col-md-2'>
                       {% if user.email_address != viewer.email_address %}
-                      <button class="btn btn-primary btn-xs" type="button" value="{{skill}}" id="up-{{forloop.counter}}" style="border:none; background:none; color:#4682B4"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                      <button class="btn btn-primary btn-xs" type="button" value="{{skill.key.urlsafe}}" id="up-{{forloop.counter}}" style="border:none; background:none; color:#4682B4"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                       {% endif %}
                       </div>
                     </div>
@@ -533,6 +535,6 @@ class="img-rounded"/>
 <!-- Comment JS -->
 <script type="text/javascript" src="../js/comment.js"> </script>
 <script type="text/javascript" src="../js/endorse.js"></script>
-<div id= "endorser" style="display: none;">{{viewer.key.urlsafe}}</div>
+<div id= "endorser" style="display: none;">{{user.key.urlsafe}}</div>
 
 {% endblock %}

@@ -5,11 +5,9 @@ $(document).ready(function(){
   // Upvote Selected
   $("[id^='up-']").click(function(){
     key = $(this).val();
-    alert(key)
     var counter = $(this).attr('id').split('-')[1];
-    var number = document.getElementById('upCount'+counter);
-    alert(number)
-    var voteCount = number.value;
+    var number = document.getElementById(counter);
+    var voteCount = number.innerHTML;
     if($('#up-'+ counter).is(":enabled")){
       voteCount++;
     }
