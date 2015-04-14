@@ -521,7 +521,10 @@ $(document).ready(function(){
       url: "/newskill",
       data:{'field':field, 'specialty':specialty, 'job':job, 'employer':employer, 'tools':tools}
     });
-    window.location.href = '/';
+    setTimeout(function(){ // Refresh after 1 second
+      window.location.href = '/';
+    }, 1000);
+    
   });
   //////// Engineer Submit //////
   $("#done_te").click(function(){
@@ -531,7 +534,9 @@ $(document).ready(function(){
       url: "/newskill",
       data:{'field':field, 'specialty':specialty, 'job':job, 'employer':employer, 'tools':tools}
     });
-    window.location.href = '/';
+    setTimeout(function(){ // Refresh after 1 second
+      window.location.href = '/';
+    }, 1000);
   });
 
   //////// Marketing Submit //////
@@ -554,7 +559,9 @@ $(document).ready(function(){
       url: "/newskill",
       data:{'field':field, 'tools':tools, 'job':job, 'employer':employer, 'specialty':specialty}
     });
-    window.location.href = '/';
+    setTimeout(function(){ // Refresh after 1 second
+      window.location.href = '/';
+    }, 1000);
   });
 
   //////// Finance Submit //////
@@ -575,7 +582,9 @@ $(document).ready(function(){
       url: "/newskill",
       data:{'field':field, 'tools':tools, 'job':job, 'employer':employer,  'specialty': specialty}
     });
-    window.location.href = '/';
+    setTimeout(function(){ // Refresh after 1 second
+      window.location.href = '/';
+    }, 1000);
   });
 
   //////// Sales Submit //////
@@ -598,7 +607,9 @@ $(document).ready(function(){
       url: "/newskill",
       data:{'field':field, 'tools':tools, 'job':job, 'employer':employer, 'specialty':specialty}
     });
-    window.location.href = '/';
+    setTimeout(function(){ // Refresh after 1 second
+      window.location.href = '/';
+    }, 1000);
   });
 });
 

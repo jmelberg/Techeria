@@ -447,14 +447,18 @@ class="img-rounded"/>
                 </div>
                 <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                   <div class="panel-body">
-                    {% for skill in skills %}
+                    {% for skill, endorsement in skills %}
                     <div class = "row">
-                      <div class='col-md-8'>
-                      <span class="badge">{{skill.vote_count}}</span>
-                      <a href="/tech/{{skill.name.split|join:""}}" style="padding-right: 10px;">{{skill.name}}</a>
+                      <div class='col-md-10'>
+                      {% if endorsement != 0 %}
+                      <span class="badge" id="upCount{{forloop.counter}}">{{endorsement}}</span>
+                      {% endif %}
+                      <a href="/tech/{{skill.name.split|join:""}}" style="padding-right: 10px;">{{skill}}</a>
                       </div>
                       <div class='col-md-2'>
-                      <button class="btn btn-primary btn-xs" type="button" style="border: none; background: none; color: #4682B4"><span class="glyphicon glyphicon-plus" aria-hidden="true" ></span></button>
+                      {% if user.email_address != viewer.email_address %}
+                      <button class="btn btn-primary btn-xs" type="button" value="{{skill}}" id="up-{{forloop.counter}}" style="border:none; background:none; color:#4682B4"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                      {% endif %}
                       </div>
                     </div>
                     {% endfor %}
@@ -528,5 +532,7 @@ class="img-rounded"/>
 
 <!-- Comment JS -->
 <script type="text/javascript" src="../js/comment.js"> </script>
+<script type="text/javascript" src="../js/endorse.js"></script>
+<div id= "endorser" style="display: none;">{{viewer.key.urlsafe}}</div>
 
 {% endblock %}

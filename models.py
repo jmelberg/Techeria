@@ -67,8 +67,14 @@ class Forum(ndb.Model):
 
 class Skill(ndb.Model):
   name = ndb.StringProperty()
-  vote_count = ndb.IntegerProperty(default = 0)
-  endorsements = ndb.KeyProperty(kind="User", repeated=True)
+
+class Endorsement(ndb.Model):
+  endorsers = ndb.KeyProperty(kind="User", repeated=True)
+  endorsee = ndb.KeyProperty() 
+  skill = ndb.KeyProperty(kind="Skill")
+  endorsement_count = ndb.IntegerProperty(default = 0)
+
+
 
 
 
