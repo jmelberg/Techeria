@@ -71,10 +71,9 @@ class ProfileHandlerAPI(SessionHandler):
       user_json['lastname'] = user.last_name
       user_json['email'] = user.email_address
       user_json['profession'] = user.profession
+      user_json['employer'] = user.employer
       #User Profile Information
-      user_json['friends'] = user.friends
       user_json['subscriptions'] = user.subscriptions
-      user_json['skill'] = getObjectsFromKey(user.skills)
       user_json['friend_count'] = user.friend_count
       user_json['picture'] = "/img?user_id={}".format(user.key.urlsafe())
     self.response.headers['Content-Type'] = 'application/json' 

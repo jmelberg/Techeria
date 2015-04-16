@@ -102,10 +102,10 @@ class FeedListHandler(SessionHandler):
     # Need to see if user has friends, if not - Query using viewer.friends will break #
     if viewer.friends:
       comments = Comment.query(Comment.root==True, ndb.OR(Comment.sender_key.IN(viewer.friends),
-        Comment.recipient_key.IN(viewer.friends))).order(-Comment.time).fetch(10, offset=offset_count)
+        Comment.recipient_key.IN(viewer.friends), Comment.sender_key == viewer.key)).order(-Comment.time).fetch(10, offset=offset_count)
         #ndb.OR(Comment.recipient_key == viewer.key, Comment.sender_key == viewer.key)).order(-Comment.time).fetch(10, offset=offset_count)
     else:
-      comments = Comment.query(Comment.root==True, Comment.recipient_key == None).order(-Comment.time).fetch(10, offset=offset_count)
+      comments = Comment.query(Comment.root==True, Comment.sender_key == viewer.key).order(-Comment.time).fetch(10, offset=offset_count)
     more = len(comments)
     print(comments)
     while index < len(comments):
