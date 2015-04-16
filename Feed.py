@@ -49,20 +49,18 @@ class CommentHandler(SessionHandler):
     else:
       comment.sender_key = User.query(User.username == sender).get().key
       comment.recipient_key = None
-
     comment.text = text
     comment.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
     comment.put()
+    
     if comment.root == False:
       parent_comment.children.append(comment.key)
       parent_comment.put()
-
+    
     if origin == "feed":
       self.redirect('/feed')
     else:
       self.redirect('/profile/{}'.format(recipient))
-
-
 
 class FeedHandler(SessionHandler):
   """ Handler for handling user feed """
@@ -103,14 +101,13 @@ class FeedListHandler(SessionHandler):
     viewer = self.user_model
     # Need to see if user has friends, if not - Query using viewer.friends will break #
     if viewer.friends:
-      comments = Comment.query(Comment.root==True,
-        ndb.OR(Comment.sender_key.IN(viewer.friends), Comment.recipient_key.IN(viewer.friends)),
-        ndb.OR(Comment.recipient_key == viewer.key, Comment.sender_key==viewer.key)).order(-Comment.time).fetch(10, offset=offset_count)
+      comments = Comment.query(Comment.root==True, ndb.OR(Comment.sender_key.IN(viewer.friends),
+        Comment.recipient_key.IN(viewer.friends))).order(-Comment.time).fetch(10, offset=offset_count)
+        #ndb.OR(Comment.recipient_key == viewer.key, Comment.sender_key == viewer.key)).order(-Comment.time).fetch(10, offset=offset_count)
     else:
-      comments = Comment.query(Comment.root==True,
-        ndb.OR(Comment.recipient_key == viewer.key,
-          Comment.sender_key == viewer.key)).order(-Comment.time).fetch(10, offset=offset_count)
+      comments = Comment.query(Comment.root==True, Comment.recipient_key == None).order(-Comment.time).fetch(10, offset=offset_count)
     more = len(comments)
+    print(comments)
     while index < len(comments):
       children = Comment.query(Comment.parent == comments[index].key).fetch()
       index += 1
@@ -121,7 +118,6 @@ class FeedListHandler(SessionHandler):
     index = 0
     viewer = self.user_model
     posts = ForumPost.query(ForumPost.forum_name.IN(viewer.subscriptions)).order(-ForumPost.time).fetch(10, offset=offset_count)
-
     more = len(posts)
     return posts, more
 
