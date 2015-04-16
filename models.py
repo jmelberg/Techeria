@@ -3,12 +3,16 @@ import webapp2_extras.appengine.auth.models as auth_models
 
 class User(auth_models.User):
   first_name = ndb.StringProperty()
+  lower_first_name = ndb.StringProperty()
   last_name = ndb.StringProperty()
+  lower_last_name = ndb.StringProperty()
   username = ndb.StringProperty()
   email_address = ndb.StringProperty()
   account_type = ndb.StringProperty()
   profession = ndb.StringProperty()
+  lower_profession = ndb.StringProperty()
   employer = ndb.StringProperty()
+  lower_employer = ndb.StringProperty()
   activated = ndb.BooleanProperty()
   friends = ndb.KeyProperty(kind= "User", repeated=True)
   friend_count = ndb.IntegerProperty(default=0)

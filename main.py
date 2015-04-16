@@ -73,7 +73,7 @@ class SearchHandler(SessionHandler):
     results = []
     names = []
     for search_string in search_list:
-      search_string = search_string.strip(' ')
+      search_string = search_string.strip(' ').lower()
       if "@" in search_string:
         q = User.query(User.email_address == search_string)
         if q:
@@ -82,23 +82,14 @@ class SearchHandler(SessionHandler):
         person = search_string.split(' ')
         first_name = person[0]
         last_name = person[1]
-        query_first = User.first_name
-        query_last = User.last_name
-        full_name = User.query(User.first_name == first_name, User.last_name == last_name)
+        full_name = User.query(ndb.OR(User.lower_profession == search_string, 
+          User.lower_employer == search_string, ndb.AND(User.lower_first_name == first_name, User.lower_last_name == last_name)))
         if full_name:
-          results.append(full_name.get())
+          results.extend(full_name.fetch())
       else:
-        first_name = User.query(User.first_name == search_string)
-        last_name = User.query(User.last_name == search_string)
-        username = User.query(User.username == search_string)
-        if username.get() is not None:
-          results.append(username.get())
-        if first_name.get() is not None:
-          for result in first_name.fetch(10):
-            results.append(result)
-        if last_name.get() is not None:
-          for result in last_name.fetch(10):
-            results.append(result)
+        name_list = User.query(ndb.OR(User.username == search_string, User.lower_first_name == search_string, User.lower_last_name == search_string, 
+          User.lower_employer == search_string, User.lower_profession == search_string)).fetch()
+        results.extend(name_list)
     self.response.out.write(template.render('views/search.html', {'results':results, 'search_string':search_string, 'viewer':user}))
 
 class Image(SessionHandler):
@@ -141,6 +132,10 @@ class UpdateProfile(SessionHandler):
     user.last_name = last_name
     user.profession = profession
     user.employer = employer
+    user.lower_profession = profession.lower()
+    user.lower_employer = employer.lower()
+    user.lower_first_name = first_name.lower()
+    user.lower_last_name = last_name.lower()
     user.put()
     self.redirect('/profile/{}'.format(user.username))
 
@@ -177,6 +172,8 @@ class SkillsHandler(SessionHandler):
     user.skills_count += new_skills_count
     user.employer = employer
     user.profession = profession
+    user.lower_employer = employer.lower()
+    user.lower_profession = profession.lower()
     user.put()
 
 class EndorsementHandler(SessionHandler):
