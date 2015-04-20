@@ -23,10 +23,14 @@ class MessageHandler(SessionHandler):
   """ Handler to process user messages"""
   @login_required
   def get(self):
+    arg = cgi.escape(self.request.get('q'))
     user = self.user_model
     user.message_count = 0
     user.put()
-    messages = Message.query(Message.recipient == user.username).order(-Message.time)
+    if arg == "sent":
+      messages = Message.query(Message.sender == user.username).order(-Message.time)
+    else:
+      messages = Message.query(Message.recipient == user.username).order(-Message.time)
     self.response.out.write(template.render('views/messages.html', {'viewer': user, 'messages': messages}))
 
 class ComposeMessage(SessionHandler):

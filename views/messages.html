@@ -8,8 +8,8 @@
   </h2>
 </div>
 <ul class = "nav nav-tabs nav-justified">
-  <li role="presentation" class = "active"><a href="/messages">Inbox</a></li>
-  <li role="presentation"><a href ="/trash">Trash</a></li>
+  <li role="presentation" id="inboxMessages"><a href="/messages">Inbox</a></li>
+  <li role="presentation" id="sentMessages"><a href ="/messages?q=sent">Sent</a></li>
 </ul>
 <div id="my-tabs" class="tab-content">
   <div id="messages">
@@ -46,4 +46,22 @@
 </div>
 <!-- Check for checked items to delete
  --><script type ="text/javascript" src="js/selectMessage.js"></script>
+    <script>
+    if (document.URL.indexOf("q") > -1) {
+      $('#sentMessages').attr("class", "active");
+      $('#inboxMessages').removeAttr("class");
+    } 
+    else {
+      $('#inboxMessages').attr("class", "active");
+      $('#sentMessages').removeAttr("class");
+    }
+        $('#inboxMessages').click(function() {
+    $('#sentMessages').removeAttr("class");
+    $('#inboxMessages').attr("class", "active");
+  }); 
+  $('#sentMessages').click(function() {
+    $('#inboxMessages').removeAttr("class");
+    $('#sentMessages').attr("class", "active");
+  }); 
+    </script>
 {% endblock %}

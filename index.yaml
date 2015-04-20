@@ -83,3 +83,9 @@ indexes:
   - name: recipient
   - name: time
     direction: desc
+
+- kind: Message
+  properties:
+  - name: sender
+  - name: time
+    direction: desc
