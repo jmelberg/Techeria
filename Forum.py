@@ -111,6 +111,8 @@ class ForumCommentHandler(SessionHandler):
     comment.recipient = recipient
     comment.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
     comment.put()
+    post.comment_count += 1
+    post.put()
     self.redirect('/tech/{}/{}'.format(forum_id, post_reference))
 
 class ForumViewer(SessionHandler):

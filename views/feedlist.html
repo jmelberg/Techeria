@@ -72,7 +72,13 @@
           {% endif %}
         </small></h3>
         <p> submitted to <a href="/tech/{{post.forum_name}}">{{post.forum_name}}</a> {{post.time}} by <a href="/profile/{{post.author}}">{{post.author}}</a></p>
-        <a href="/tech/{{post.forum_name}}/{{post.reference}}" class="badge badge-default pull-right">Comments</a>
+        <a href="/tech/{{post.forum_name}}/{{post.reference}}" class="badge badge-default pull-right">
+          {% if post.comment_count != 0 %}
+           {{post.comment_count}} Comments
+          {% else %}
+            Comments
+          {% endif %}
+        </a>
       </div>
     </div>
   </div>

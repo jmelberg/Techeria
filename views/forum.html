@@ -6,7 +6,7 @@
   <h1>{{forum_name}}
     <a href="/submit?forum_name={{forum_name}}" type="button" class="btn btn-primary pull-right" align="right">
       <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Submit Post</a>
-      {% if forum != None and viewer.key not in forum.subscribers and viewer != None %}
+      {% if forum != None and forum_name not in viewer.subscriptions and viewer != None %}
       <input type="hidden" id="forumName" name-"forum_name" value={{forum_name}}>
       <button id="subscribeButton" class="btn btn-warning pull-right" align="right">
       <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>  Subscribe</button>
@@ -33,7 +33,13 @@
           {% endif %}
         </small></h3>
         <p> submitted {{post.time}} by {{post.author}}</p>
-        <a href="/tech/{{forum_name}}/{{post.reference}}" class="badge badge-default pull-right">Comments</a>
+        <a href="/tech/{{forum_name}}/{{post.reference}}" class="badge badge-default pull-right">
+          {% if post.comment_count != 0 %}
+           {{post.comment_count}} Comments
+          {% else %}
+            Comments
+          {% endif %}
+        </a>
       </div>
     </div>
   </div>
