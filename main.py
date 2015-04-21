@@ -64,7 +64,14 @@ class ProfileHandler(SessionHandler):
       counter+=1
     user.friend_count = counter
     user.put()
-    comments = Comment.query(Comment.recipient == user.username).order(-Comment.time)
+    # Get Nested Comments
+    comments = Comment.query(Comment.root==True, Comment.sender_key == viewer.key).order(-Comment.time).fetch()
+    index = 0
+    while index < len(comments):
+      children = Comment.query(Comment.parent == comments[index].key).fetch()
+      index += 1
+      comments[index:index] = children
+    #comments = Comment.query(Comment.recipient == user.username).order(-Comment.time)
     if user:
       self.response.out.write(template.render('views/profile.html',
                                         {'user':user, 'comments': comments,
@@ -166,6 +173,7 @@ class UpdateProfile(SessionHandler):
     user.lower_first_name = first_name.lower()
     user.lower_last_name = last_name.lower()
     user.put()
+
     #Update profile
     profile = Profile.query(Profile.owner == user.key).get()
     if profile:
