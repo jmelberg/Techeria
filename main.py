@@ -71,6 +71,9 @@ class SearchHandler(SessionHandler):
     #TODO normalize names in User model to ignore case
     search_list = search.split(',')
     results = []
+    jobs = []
+    employers = []
+    skills = []
     names = []
     for search_string in search_list:
       search_string = search_string.strip(' ').lower()
@@ -84,13 +87,27 @@ class SearchHandler(SessionHandler):
         last_name = person[1]
         full_name = User.query(ndb.OR(User.lower_profession == search_string, 
           User.lower_employer == search_string, ndb.AND(User.lower_first_name == first_name, User.lower_last_name == last_name)))
+        profession_name = User.query(User.lower_profession == search_string).fetch()
+        employer_name = User.query(User.lower_employer == search_string).fetch()
+
         if full_name:
           results.extend(full_name.fetch())
+        if profession_name:
+          jobs.extend(profession_name)
+        if employer_name:
+          employers.extend(employer_name)
+
       else:
+        jobs_list = User.query(ndb.OR(User.lower_profession == search_string, User.profession == search_string)).fetch()
+        employers_list = User.query(ndb.OR(User.lower_employer == search_string, User.employer == search_string)).fetch()
+        #skill_list = User.query(User.skills))
         name_list = User.query(ndb.OR(User.username == search_string, User.lower_first_name == search_string, User.lower_last_name == search_string, 
           User.lower_employer == search_string, User.lower_profession == search_string)).fetch()
         results.extend(name_list)
-    self.response.out.write(template.render('views/search.html', {'results':results, 'search_string':search_string, 'viewer':user}))
+        jobs.extend(jobs_list)
+        employers.extend(employers_list)
+      self.response.out.write(template.render('views/search.html', {'results':results, 'employers': employers, 'jobs': jobs, 'search_string':search_string, 'viewer':user}))
+
 
 class Image(SessionHandler):
   """Serves the image associated with an avatar"""
@@ -214,6 +231,7 @@ app = webapp2.WSGIApplication([
                                ('/connect', ConnectHandler),
                                ('/confirmconnect', ConfirmConnection),
                                ('/search', SearchHandler),
+                               ('/advancedSearch', SearchHandler),
                                ('/comment', CommentHandler),
                                ('/messages', MessageHandler),
                                ('/compose', ComposeMessage),
