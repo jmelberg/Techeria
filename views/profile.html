@@ -64,24 +64,24 @@ class="img-rounded"/>
   <!-- Edit information -->
   <div class = "row">
     <div class = "col-md-12">
-      <form class = "form-inline" action = "/updateprofile" method = "post" style = "display: none;" id = "editField">
+      <div class = "form-inline" style ="display: none;" id ="editField">
         <div class = "col-md-2">
-          <input name = "first" type = "text" class="form-control input-default" style="width: 100%;" value ="{{user.first_name}}">
+          <input id="first_edit" type = "text" class="form-control input-default" style="width: 100%;" value ="{{user.first_name}}">
         </div>
         <div class = "col-md-2">
-          <input name = "last" type = "text" class="form-control input-default" style="width: 100%;" value ="{{user.last_name}}">
+          <input id="last_edit" type = "text" class="form-control input-default" style="width: 100%;" value ="{{user.last_name}}">
         </div>
         <div class = "col-md-2">
-          <input name = "profession" type = "text" class="form-control input-default" style="width: 100%;" value ="{{user.profession}}">
+          <input id="profession_edit" type = "text" class="form-control input-default" style="width: 100%;" value ="{{user.profession}}">
         </div>
         <div class = "col-xs-1 text-center"><h4>at</h4></div>
         <div class = "col-md-3">
-          <input name = "employer" type = "text" class="form-control input-default" style="width: 100%;" value ="{{user.employer}}">
-          <input name="user_key" type="hidden" value="{{user.key.urlsafe}}">
+          <input id="employer_edit" type = "text" class="form-control input-default" style="width: 100%;" value ="{{user.employer}}">
+          <input id="user_key" type="hidden" value="{{user.key.urlsafe}}">
         </div>
         <div class = "col-md-1"><button class = "btn btn-warning" id="cancel" type="reset">Cancel</button></div>
         <div class = "col-md-1"><button class = "btn btn-primary" id = "save" type="submit">Save</button></div>
-      </form>
+      </div>
     </div>
   </div>
   <!-- End edit information -->
@@ -430,7 +430,9 @@ class="img-rounded"/>
                   </a>
                 </div>
                 <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                  <div class="panel-body">Website:</div>
+                  <div class="panel-body" id="about">{{profile.about}}</div>
+                  <div class="panel-body" style="display:none;" id='about_edit'>
+                  <input id="about_me" type = "text" class="form-control input-default" style="width: 100%;" value ="{{profile.about}}"></div>
                 </div>
               </div>
               <div class="panel panel-default">

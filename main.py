@@ -14,6 +14,7 @@ from models import Skill
 from models import Forum
 from models import Endorsement
 from models import AccessToken
+from models import Profile
 import logging
 import random
 import string
@@ -35,9 +36,15 @@ class ProfileHandler(SessionHandler):
     viewer = self.user_model
     q = User.query(User.username == profile_id)
     user = q.get()
+    profile = Profile.query(Profile.owner == user.key).get()
+    #if profile isn't created, create one
+    if not profile:
+      profile = Profile()
+      profile.owner = user.key
+      profile.about = ""
+      profile.put()
     skill_list = []
     endorsements = Endorsement.query(Endorsement.endorsee == user.key).fetch()
-    print(endorsements)
     for skill in user.skills:
       skill = skill.get()
       endorsement_list = []
@@ -48,7 +55,6 @@ class ProfileHandler(SessionHandler):
         if x.skill == skill.key:
           count=x.endorsement_count
       endorsement_list.append(count)
-      #endorsement_list.append([x.endorsement_count for x in endorsements if x.skill == skill.key ])
       skill_list.append(endorsement_list)
     connection_list = []
     """Get friend count """
@@ -62,7 +68,7 @@ class ProfileHandler(SessionHandler):
     if user:
       self.response.out.write(template.render('views/profile.html',
                                         {'user':user, 'comments': comments,
-                                        'viewer':viewer, 'skills':skill_list,}))
+                                        'viewer':viewer, 'skills':skill_list, 'profile':profile,}))
 
 class SearchHandler(SessionHandler):
   """Handler to search for users/jobs"""
@@ -72,10 +78,13 @@ class SearchHandler(SessionHandler):
     #TODO normalize names in User model to ignore case
     search_list = search.split(',')
     results = []
+    # For recuiters' advance search #
     jobs = []
     employers = []
     skills = []
     names = []
+
+    #Search Algorithm
     for search_string in search_list:
       search_string = search_string.strip(' ').lower()
       if "@" in search_string:
@@ -87,26 +96,26 @@ class SearchHandler(SessionHandler):
         first_name = person[0]
         last_name = person[1]
         full_name = User.query(ndb.OR(User.lower_profession == search_string, 
-          User.lower_employer == search_string, ndb.AND(User.lower_first_name == first_name, User.lower_last_name == last_name)))
-        profession_name = User.query(User.lower_profession == search_string).fetch()
-        employer_name = User.query(User.lower_employer == search_string).fetch()
-
-        if full_name:
-          results.extend(full_name.fetch())
-        if profession_name:
+          User.lower_employer == search_string, ndb.AND(User.lower_first_name == first_name, User.lower_last_name == last_name))).fetch()
+        if user.accout_type is "Recruiter":
+          profession_name = User.query(User.lower_profession == search_string).fetch()
+          employer_name = User.query(User.lower_employer == search_string).fetch()
           jobs.extend(profession_name)
-        if employer_name:
-          employers.extend(employer_name)
+          employers.extend(employer_name) 
+        if full_name:
+          results.extend(full_name)
 
       else:
-        jobs_list = User.query(ndb.OR(User.lower_profession == search_string, User.profession == search_string)).fetch()
-        employers_list = User.query(ndb.OR(User.lower_employer == search_string, User.employer == search_string)).fetch()
-        #skill_list = User.query(User.skills))
+        if user.accout_type is "Recruiter":
+          jobs_list = User.query(ndb.OR(User.lower_profession == search_string, User.profession == search_string)).fetch()
+          employers_list = User.query(ndb.OR(User.lower_employer == search_string, User.employer == search_string)).fetch()
+          #skill_list = User.query(User.skills))
+          jobs.extend(jobs_list)
+          employers.extend(employers_list)
+          
         name_list = User.query(ndb.OR(User.username == search_string, User.lower_first_name == search_string, User.lower_last_name == search_string, 
           User.lower_employer == search_string, User.lower_profession == search_string)).fetch()
         results.extend(name_list)
-        jobs.extend(jobs_list)
-        employers.extend(employers_list)
       self.response.out.write(template.render('views/search.html', {'results':results, 'employers': employers, 'jobs': jobs, 'search_string':search_string, 'viewer':user}))
 
 
@@ -145,6 +154,8 @@ class UpdateProfile(SessionHandler):
     profession = cgi.escape(self.request.get('profession'))
     employer = cgi.escape(self.request.get('employer'))
     user_key = ndb.Key(urlsafe=self.request.get('user_key'))
+    about = cgi.escape(self.request.get('about'))
+    # Decode user key
     user = user_key.get()
     user.first_name = first_name
     user.last_name = last_name
@@ -155,6 +166,11 @@ class UpdateProfile(SessionHandler):
     user.lower_first_name = first_name.lower()
     user.lower_last_name = last_name.lower()
     user.put()
+    #Update profile
+    profile = Profile.query(Profile.owner == user.key).get()
+    if profile:
+      profile.about = about
+      profile.put()
     self.redirect('/profile/{}'.format(user.username))
 
 class SkillsHandler(SessionHandler):
@@ -232,7 +248,6 @@ app = webapp2.WSGIApplication([
                                ('/connect', ConnectHandler),
                                ('/confirmconnect', ConfirmConnection),
                                ('/search', SearchHandler),
-                               ('/advancedSearch', SearchHandler),
                                ('/comment', CommentHandler),
                                ('/messages', MessageHandler),
                                ('/compose', ComposeMessage),

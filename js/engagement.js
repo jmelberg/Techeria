@@ -617,10 +617,30 @@ $(document).ready(function(){
 $(function () {
   $('#edit').click(function () {
     $('#test').hide();
+    $('#about').hide();
     $('#editField').show();
+    $('#about_edit').show();
   });
   $('#cancel').click(function(){
     $('#test').show();
+    $('#about').show();
     $('#editField').hide();
+    $('#about_edit').hide();
+  });
+  $('#save').click(function(){
+    first = document.getElementById('first_edit').value;
+    last = document.getElementById('last_edit').value;
+    employer = document.getElementById('employer_edit').value;
+    profession = document.getElementById('profession_edit').value;
+    user_key = document.getElementById('user_key').value;
+    about = document.getElementById('about_me').value;
+    $.ajax({
+      type: "POST",
+      url: "/updateprofile",
+      data:{ 'first': first, 'last':last, 'employer':employer, 'profession':profession, 'user_key':user_key, 'about':about}
+    });
+    setTimeout(function(){ // Refresh after 1 second
+      window.location.href = '/';
+    }, 100);
   });
 });

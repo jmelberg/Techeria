@@ -23,6 +23,10 @@ class User(auth_models.User):
   avatar =  ndb.BlobProperty()
   subscriptions = ndb.StringProperty(repeated=True)
 
+class Profile(ndb.Model):
+  owner = ndb.KeyProperty(kind = "User")
+  about = ndb.StringProperty(default = "I am new to Techeria!")
+
 class Comment(ndb.Model):
   sender_key = ndb.KeyProperty()
   recipient_key = ndb.KeyProperty()
