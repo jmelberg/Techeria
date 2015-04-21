@@ -78,6 +78,11 @@ class Endorsement(ndb.Model):
   skill = ndb.KeyProperty(kind="Skill")
   endorsement_count = ndb.IntegerProperty(default = 0)
 
+class AccessToken(ndb.Model):
+  token = ndb.StringProperty()
+  granted = ndb.DateTimeProperty()
+  user = ndb.KeyProperty(kind= "User")
+
 
 
 

@@ -13,6 +13,7 @@ from models import ForumPost
 from models import Skill
 from models import Forum
 from models import Endorsement
+from models import AccessToken
 import logging
 import random
 import string
@@ -240,5 +241,6 @@ app = webapp2.WSGIApplication([
                                ('/api/tech/', ForumViewerAPI),
                                ('/api/profile/(\w+)', ProfileHandlerAPI),
                                ('/api/search', SearchHandlerAPI),
-                               ('/api/connections', DisplayConnectionsAPI)
+                               ('/api/connections', DisplayConnectionsAPI),
+                               ('/api/login', LoginHandlerAPI)
                                ], debug=True, config=config)

@@ -13,6 +13,7 @@ from models import ConnectionRequest
 from models import ForumPost
 from models import Skill
 from models import Forum
+from models import AccessToken
 import logging
 import random
 import string
@@ -41,6 +42,25 @@ class LoginHandler(SessionHandler):
     except( auth.InvalidAuthIdError, auth.InvalidPasswordError):
       error = "Invalid Email/Password"
       self.response.out.write(template.render('views/login.html', {'error':error}))
+
+class LoginHandlerAPI(SessionHandler):
+  """provides a user access token from login"""
+  def post(self):
+    username = self.request.get('username').strip().lower()
+    password = self.request.get('password')
+    try:
+      if '@' in username:
+        user_login = User.query(User.email_address == username).get()
+        if user_login != None:
+          username = user_login.username
+      u = self.auth.get_user_by_password(username, password)
+      token = AccessToken()
+      token.user = self.user_model.key
+      token.token = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(20))
+      token.put()
+      self.response.out.write({"token": token.token})
+    except( auth.InvalidAuthIdError, auth.InvalidPasswordError):
+      self.response.out.write({"token": ''})
 
 class RegisterHandler(SessionHandler):
   def get(self):
