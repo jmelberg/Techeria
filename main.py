@@ -104,7 +104,7 @@ class SearchHandler(SessionHandler):
         last_name = person[1]
         full_name = User.query(ndb.OR(User.lower_profession == search_string, 
           User.lower_employer == search_string, ndb.AND(User.lower_first_name == first_name, User.lower_last_name == last_name))).fetch()
-        if user.accout_type is "Recruiter":
+        if user.account_type is "Recruiter":
           profession_name = User.query(User.lower_profession == search_string).fetch()
           employer_name = User.query(User.lower_employer == search_string).fetch()
           jobs.extend(profession_name)
@@ -113,7 +113,7 @@ class SearchHandler(SessionHandler):
           results.extend(full_name)
 
       else:
-        if user.accout_type is "Recruiter":
+        if user.account_type is "Recruiter":
           jobs_list = User.query(ndb.OR(User.lower_profession == search_string, User.profession == search_string)).fetch()
           employers_list = User.query(ndb.OR(User.lower_employer == search_string, User.employer == search_string)).fetch()
           #skill_list = User.query(User.skills))
@@ -152,6 +152,17 @@ class CheckUsername(SessionHandler):
       self.response.out.write('Username is available')
     else:
       self.response.out.write('Username is taken')
+
+class UpdatePicture(SessionHandler):
+  def post(self):
+    user = self.user_model
+    avatar = self.request.get('img')
+    avatar = images.resize(avatar, 400, 400)
+    user.avatar = avatar
+    user.put()
+    self.redirect('/profile/{}'.format(user.username))
+
+
 
 class UpdateProfile(SessionHandler):
   """ In place update profile capabilities on the user profile page """
@@ -272,6 +283,7 @@ app = webapp2.WSGIApplication([
                                ('/endorse', EndorsementHandler),
                                ('/checkusername', CheckUsername),
                                ('/updateprofile', UpdateProfile),
+                               ('/updatepicture', UpdatePicture),
                                ('/logout', LogoutHandler),
                                ('/tech', ForumViewer),
                                ('/tech/', ForumViewer),

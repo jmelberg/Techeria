@@ -618,12 +618,14 @@ $(function () {
   $('#edit').click(function () {
     $('#test').hide();
     $('#about').hide();
+    $('#img_edit').show();
     $('#editField').show();
     $('#about_edit').show();
   });
   $('#cancel').click(function(){
     $('#test').show();
     $('#about').show();
+    $('#img_edit').hide();
     $('#editField').hide();
     $('#about_edit').hide();
   });
@@ -637,7 +639,7 @@ $(function () {
     $.ajax({
       type: "POST",
       url: "/updateprofile",
-      data:{ 'first': first, 'last':last, 'employer':employer, 'profession':profession, 'user_key':user_key, 'about':about}
+      data:{ 'first': first, 'last':last, 'employer':employer, 'profession':profession, 'user_key':user_key, 'about':about,}
     });
     setTimeout(function(){ // Refresh after 1 second
       window.location.href = '/';
