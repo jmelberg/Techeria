@@ -84,6 +84,39 @@
   </div>
   <div class="col-md-1"></div>
 </div>
+  
+  <div class="modal fade" id="endorseModal" tabindex="-1" role="dialog" aria-labelledby="connectionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="connectionLabel">Endorsement</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class = "media">
+              <div class = "media-left">
+                <img src="/img?user_id={{user.key.urlsafe}}&height=150&width=150" class="img-rounded"/> 
+              </div>
+              <div class ="media-body">
+              <h4 class ="media-heading"><h4>{{user.first_name}} {{user.last_name}}<br>{{user.profession}} at {{user.employer}}</h4></br>
+              <button id="comment_selected" type="button" class="btn btn-default btn-xs">     Leave Endorsement Description</button>
+              <div id="endorse_comment" style="display:none;">
+              <textarea class="form-control" id="endorse-text" rows="2">Leave your endorsement for {{user.first_name}} here.</textarea>
+              </div>     
+              </div>
+            </div>
+           </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" id="endorsementMade">Endorse</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 
     <!-- NEW CONNECTION MODAL SELECTED -->
       <div class="modal fade" id="connectModal" tabindex="-1" role="dialog" aria-labelledby="connectionLabel" aria-hidden="true">
@@ -452,7 +485,7 @@
     
 
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-5">
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
               <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingOne">
@@ -497,6 +530,36 @@
                       <button class="btn btn-primary btn-xs" type="button" value="{{skill.key.urlsafe}}" id="up-{{forloop.counter}}" style="border:none; background:none; color:#4682B4"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
                       {% endif %}
                       </div>
+                    </div>
+                    {% endfor %}
+                  </div>                    
+                </div>
+              </div>
+
+
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingThree">
+                  <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
+                    Endorsements
+                    {% if user.endorsement_count > 0 %}
+                    <span class="badge pull-right">{{user.endorsement_count}}</span>
+                    {% endif %}
+                    <input type="hidden" id="endorsement_count" name="variable" value="{{user.skills_count}}">
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                  <div class="panel-body">
+                    {% for endorsement in endorsements %}
+                    <div class = "row">
+                      <div class='col-md-2'><img src="/img?user_id={{endorsement.endorser.urlsafe}}&height=50&width=50" class="img-rounded"/></div>
+                      {{endorsement.time}}
+                      <div class='col-md-8'>
+                        {{endorsement.description}}
+                        <br><br>
+                      </div>
+                      <div class='col-md-2'></div>
                     </div>
                     {% endfor %}
                   </div>                    

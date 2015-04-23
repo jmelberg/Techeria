@@ -15,6 +15,7 @@ from models import Forum
 from models import Endorsement
 from models import AccessToken
 from models import Profile
+from models import EndorsementDetails
 import logging
 import random
 import string
@@ -45,10 +46,13 @@ class ProfileHandler(SessionHandler):
       profile.put()
     skill_list = []
     endorsements = Endorsement.query(Endorsement.endorsee == user.key).fetch()
+    endorsement_details = EndorsementDetails.query(EndorsementDetails.endorsee == user.key).fetch()
+    user.endorsement_count = len(endorsement_details)
     for skill in user.skills:
       skill = skill.get()
       endorsement_list = []
       endorsement_list.append(skill)
+      #Get endorsement messages
       #Add number #
       count = 0
       for x in endorsements:
@@ -56,6 +60,7 @@ class ProfileHandler(SessionHandler):
           count=x.endorsement_count
       endorsement_list.append(count)
       skill_list.append(endorsement_list)
+
     connection_list = []
     """Get friend count """
     counter = 0
@@ -71,11 +76,10 @@ class ProfileHandler(SessionHandler):
       children = Comment.query(Comment.parent == comments[index].key).fetch()
       index += 1
       comments[index:index] = children
-    #comments = Comment.query(Comment.recipient == user.username).order(-Comment.time)
     if user:
       self.response.out.write(template.render('views/profile.html',
                                         {'user':user, 'comments': comments,
-                                        'viewer':viewer, 'skills':skill_list, 'profile':profile,}))
+                                        'viewer':viewer, 'skills':skill_list, 'profile':profile, 'endorsements':endorsement_details}))
 
 class SearchHandler(SessionHandler):
   """Handler to search for users/jobs"""
@@ -236,10 +240,20 @@ class EndorsementHandler(SessionHandler):
     post = cgi.escape(self.request.get('key'))
     #Person getting the endorsement
     endorsee = cgi.escape(self.request.get('endorsee'))
+    text = cgi.escape(self.request.get('text'))
     skill_key = ndb.Key(urlsafe=post)
     endorsee_key = ndb.Key(urlsafe=endorsee)
     endorsement = Endorsement.query(Endorsement.endorsee == endorsee_key,
       Endorsement.skill == skill_key).get()
+    if text != "empty":
+      details = EndorsementDetails()
+      details.endorser = viewer.key
+      details.endorsee = endorsee_key
+      details.skill = skill_key
+      details.description = text
+      details.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
+      details.put()
+
     if endorsement is not None:
       endorsement.endorsers.append(viewer.key)
       endorsement.endorsement_count +=1

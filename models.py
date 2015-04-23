@@ -18,6 +18,7 @@ class User(auth_models.User):
   friend_count = ndb.IntegerProperty(default=0)
   message_count = ndb.IntegerProperty(default = 0)
   request_count = ndb.IntegerProperty(default = 0)
+  endorsement_count = ndb.IntegerProperty(default =0)
   skills = ndb.KeyProperty(kind = "Skill", repeated=True)
   skills_count = ndb.IntegerProperty(default = 0)
   avatar =  ndb.BlobProperty()
@@ -81,6 +82,13 @@ class Endorsement(ndb.Model):
   endorsee = ndb.KeyProperty() 
   skill = ndb.KeyProperty(kind="Skill")
   endorsement_count = ndb.IntegerProperty(default = 0)
+
+class EndorsementDetails(ndb.Model):
+  endorsee = ndb.KeyProperty()
+  endorser = ndb.KeyProperty()
+  skill = ndb.KeyProperty(kind="Skill")
+  description = ndb.StringProperty()
+  time = ndb.DateTimeProperty()
 
 class AccessToken(ndb.Model):
   token = ndb.StringProperty()
