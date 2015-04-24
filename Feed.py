@@ -106,7 +106,6 @@ class FeedListHandler(SessionHandler):
     else:
       comments = Comment.query(Comment.root==True, Comment.sender_key == viewer.key).order(-Comment.time).fetch(10, offset=offset_count)
     more = len(comments)
-    print(comments)
     while index < len(comments):
       children = Comment.query(Comment.parent == comments[index].key).fetch()
       index += 1

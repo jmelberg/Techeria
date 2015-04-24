@@ -515,6 +515,9 @@
                 </div>
                 <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                   <div class="panel-body">
+                  {% if user.skills_count == 0 %}
+                    {{user.first_name}} has not added any skills
+                  {% else %}
                     {% for skill, endorsement in skills %}
                     <div class = "row">
                       <div class='col-md-10'>
@@ -532,10 +535,10 @@
                       </div>
                     </div>
                     {% endfor %}
+                    {% endif %}
                   </div>                    
                 </div>
               </div>
-
 
               <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="headingThree">
@@ -551,6 +554,9 @@
                 </div>
                 <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                   <div class="panel-body">
+                  {% if user.endorsement_count == 0 %}
+                    {{user.first_name}} has no endorsements yet
+                  {% else %}
                     {% for endorsement in endorsements %}
                     <div class = "row">
                       <div class='col-md-2'><img src="/img?user_id={{endorsement.endorser.urlsafe}}&height=50&width=50" class="img-rounded"/></div>
@@ -562,6 +568,7 @@
                       <div class='col-md-2'></div>
                     </div>
                     {% endfor %}
+                    {% endif %}
                   </div>                    
                 </div>
               </div>
