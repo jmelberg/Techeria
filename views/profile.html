@@ -535,8 +535,17 @@
                       </div>
                     </div>
                     {% endfor %}
+                    <hr>
+                    <button id="add_button" type="button" class ="btn btn-primary btn-xs">Add Skills</button>
+                    <div id="more_skills" style="display:none;">
+                      <form role="form">
+                        <input class="input-lg" type="text" value="" id="add_skills" data-role="tagsinput"></input><br>
+                        <button id="add_skill_submit" type="submit" class = "btn btn-success btn-xs">Update</button>
+                      </form>
+                    </div>
+                    <script type="text/javascript" src="../js/addskill.js"></script>
                     {% endif %}
-                  </div>                    
+                  </div>                 
                 </div>
               </div>
 

@@ -196,16 +196,49 @@ class UpdateProfile(SessionHandler):
       profile.put()
     self.redirect('/profile/{}'.format(user.username))
 
+class AddSkillsHandler(SessionHandler):
+  def post(self):
+    user = self.user_model
+    skills = cgi.escape(self.request.get('skills'))
+    new_skills = skills.split(',')
+    for i in new_skills:
+      i = i.lower().strip()
+      skill_query = Skill.query(Skill.name == i).get()
+      if skill_query == None: # Not in skills database
+        new_skill = Skill(name=i)
+        new_skill.put()
+        user.skills.append(new_skill.key)
+        user.subscriptions.append(new_skill.name.replace(" ", ""))
+        user.skills_count +=1
+        user.put()
+      else: # In skills database
+        # Search user skills to see if exists
+        flag = ""
+        for skill in user.skills:
+          skill = skill.get()
+          if skill.name == i:
+            flag = "exists"
+            break
+        if flag != "exists":
+          new_skill = Skill.query(Skill.name == i).get()
+          print("Added to user skills:")
+          print(new_skill.name)
+          user.skills.append(new_skill.key)
+          user.subscriptions.append(new_skill.name.replace(" ", ""))
+          user.skills_count +=1
+          user.put()
+    user.put()
+
 class SkillsHandler(SessionHandler):
   def post(self):
     user = self.user_model
-    employer = cgi.escape(self.request.get('employer'))
-    profession = cgi.escape(self.request.get('job'))
-    field = cgi.escape(self.request.get('field'))
+    employer = cgi.escape(self.request.get('employer')).strip()
+    profession = cgi.escape(self.request.get('job')).strip()
+    field = cgi.escape(self.request.get('field')).strip()
     tools = cgi.escape(self.request.get('tools'))
-    specialty = cgi.escape(self.request.get('specialty'))
+    specialty = cgi.escape(self.request.get('specialty')).strip()
     tool_list = tools.split(',')
-    new_skills_count = 2 #for field and specialty
+    new_skills_count = 0 #for field and specialty
     for i in tool_list:
       if i != " ":
         i = i.lower().strip()
@@ -219,18 +252,26 @@ class SkillsHandler(SessionHandler):
         else:
           user.skills.append(skill_query.key)
         new_skills_count += 1
-    field_skill = Skill(name=field.lower().strip())
-    specialty_skill = Skill(name=specialty.lower().strip())
-    field_skill.put()
-    specialty_skill.put()
+    
     # Add new User Info
-    user.skills.append(field_skill.key)
-    user.skills.append(specialty_skill.key)
+    if field != "":
+      field_skill = Skill(name=field.lower())
+      field_skill.put()
+      user.skills.append(field_skill.key)
+      new_skills_count += 1
+    if specialty != "":
+      specialty_skill = Skill(name=specialty.lower())
+      specialty_skill.put()
+      user.skills.append(specialty_skill.key)
+      new_skills_count += 1
+    if employer != " ":
+      user.employer = employer
+      user.lower_employer = employer.lower()
+    if profession != " ":
+      user.profession = profession
+      user.lower_profession = profession.lower()
+
     user.skills_count += new_skills_count
-    user.employer = employer
-    user.profession = profession
-    user.lower_employer = employer.lower()
-    user.lower_profession = profession.lower()
     user.put()
 
 class EndorsementHandler(SessionHandler):
@@ -302,6 +343,7 @@ app = webapp2.WSGIApplication([
                                ('/tech', ForumViewer),
                                ('/tech/', ForumViewer),
                                ('/newskill', SkillsHandler),
+                               ('/addskill', AddSkillsHandler),
                                ('/subscribe', SubscriptionHandler),
                                ('/api/tech/(\w+)', ForumAPI),
                                ('/api/tech', ForumViewerAPI),
