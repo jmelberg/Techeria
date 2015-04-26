@@ -94,6 +94,8 @@ class SearchHandler(SessionHandler):
     employers = []
     skills = []
     names = []
+    if user.account_type == "Recruiter":
+      search_type = "advanced"
 
     #Search Algorithm
     for search_string in search_list:
@@ -108,26 +110,34 @@ class SearchHandler(SessionHandler):
         last_name = person[1]
         full_name = User.query(ndb.OR(User.lower_profession == search_string, 
           User.lower_employer == search_string, ndb.AND(User.lower_first_name == first_name, User.lower_last_name == last_name))).fetch()
-        if user.account_type is "Recruiter":
+        if search_type is "advanced":
           profession_name = User.query(User.lower_profession == search_string).fetch()
           employer_name = User.query(User.lower_employer == search_string).fetch()
           jobs.extend(profession_name)
           employers.extend(employer_name) 
         if full_name:
           results.extend(full_name)
-
       else:
-        if user.account_type is "Recruiter":
+        if search_type is "advanced":
           jobs_list = User.query(ndb.OR(User.lower_profession == search_string, User.profession == search_string)).fetch()
           employers_list = User.query(ndb.OR(User.lower_employer == search_string, User.employer == search_string)).fetch()
-          #skill_list = User.query(User.skills))
           jobs.extend(jobs_list)
           employers.extend(employers_list)
+          # Get Users with skills
+          skill_query = Skill.query(Skill.name == search_string).get()
+          if skill_query != None:
+            users_with_skills = []
+            # TODO limit fetch returns entities
+            skilled_users = User.query(User.skills == skill_query.key).fetch()
+            skills.extend(skilled_users)
+            results.extend(skilled_users)
+          forum_query = Forum.query(Forum.name == search_string).get()
           
         name_list = User.query(ndb.OR(User.username == search_string, User.lower_first_name == search_string, User.lower_last_name == search_string, 
           User.lower_employer == search_string, User.lower_profession == search_string)).fetch()
         results.extend(name_list)
-      self.response.out.write(template.render('views/search.html', {'results':results, 'employers': employers, 'jobs': jobs, 'search_string':search_string, 'viewer':user}))
+      self.response.out.write(template.render('views/search.html', {'results':results, 'employers': employers,
+        'jobs': jobs, 'search_string':search_string, 'viewer':user, 'skills':skills, 'forums':forum_query}))
 
 
 class Image(SessionHandler):
@@ -201,15 +211,16 @@ class AddSkillsHandler(SessionHandler):
     user = self.user_model
     skills = cgi.escape(self.request.get('skills'))
     new_skills = skills.split(',')
+    new_skills = [skill for skill in new_skills if len(skill) >0]
     for i in new_skills:
       i = i.lower().strip()
       skill_query = Skill.query(Skill.name == i).get()
       if skill_query == None: # Not in skills database
         new_skill = Skill(name=i)
-        new_skill.put()
-        user.skills.append(new_skill.key)
+        new_skill_key = new_skill.put()
         user.subscriptions.append(new_skill.name.replace(" ", ""))
         user.skills_count +=1
+        user.skills.append(new_skill_key)
         user.put()
       else: # In skills database
         # Search user skills to see if exists
@@ -223,9 +234,9 @@ class AddSkillsHandler(SessionHandler):
           new_skill = Skill.query(Skill.name == i).get()
           print("Added to user skills:")
           print(new_skill.name)
-          user.skills.append(new_skill.key)
           user.subscriptions.append(new_skill.name.replace(" ", ""))
           user.skills_count +=1
+          user.skills.append(new_skill.key)
           user.put()
     user.put()
 

@@ -21,8 +21,8 @@ from BaseHandler import login_required
 from urlparse import urlparse
 
 class VoteHandler(SessionHandler):
-  @login_required
   """ Handles upvoting and downvoting on forum postings """
+  @login_required
   def post(self):
     post = cgi.escape(self.request.get('key'))
     change = int(cgi.escape(self.request.get('change')))

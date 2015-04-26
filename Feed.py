@@ -20,8 +20,8 @@ from BaseHandler import SessionHandler
 from BaseHandler import login_required
 
 class CommentHandler(SessionHandler):
-  @login_required
   """Handler to process user comments"""
+  @login_required
   def post(self):
     origin = cgi.escape(self.request.get('origin'))
     text = cgi.escape(self.request.get('text'))

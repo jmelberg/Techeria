@@ -9,19 +9,19 @@
     <script type="text/javascript" src="../js/advancedSearch.js"> </script>
     <div class="col-md-2">
       <div class="list-group">
-        <li {% if results %} class="list-group-item active" {% else %} class ="list-group-item disabled" {% endif %} id="users">Users<span class="badge">{{results|length}}</span></li>
+        <li {% if results %} class="list-group-item active" {% else %} class ="list-group-item disabled" {% endif %} id="users">Users<span class="badge">{% if results|length != 0 %}{{results|length}}{% endif %}</span></li>
 
-        <li{% if skills %} class="list-group-item" {% else %} class = "list-group-item disabled" {% endif %} id="skills">Skills<span class="badge">{{skills|length}}</span></li>
+        <li{% if skills %} class="list-group-item" {% else %} class = "list-group-item disabled" {% endif %} id="skills">Skills<span class="badge">{% if skills|length != 0 %}{{skills|length}}{% endif %}</span></li>
 
-        <li {% if forums %} class="list-group-item" {% else %} class = "list-group-item disabled" {% endif %} id="forums">Forums<span class="badge">{{forums|length}}</span></li>
+        <li {% if forums %} class="list-group-item" {% else %} class = "list-group-item disabled" {% endif %} id="forums">Forums<span class="badge">{% if forums|length != 0 %}{{forums|length}}{% endif %}</span></li>
 
-        <li {% if employers %} class="list-group-item" {% else %} class = "list-group-item disabled" {% endif %} id="employers">Employers<span class="badge">{{employers|length}}</span></li>
+        <li {% if employers %} class="list-group-item" {% else %} class = "list-group-item disabled" {% endif %} id="employers">Employers<span class="badge">{% if employers|length != 0 %}{{employers|length}}{% endif %}</span></li>
 
-        <li {% if jobs %} class="list-group-item" {% else %} class = "list-group-item disabled" {% endif %} id="jobs">Profession<span class="badge">{{jobs|length}}</span></li>
+        <li {% if jobs %} class="list-group-item" {% else %} class = "list-group-item disabled" {% endif %} id="jobs">Profession<span class="badge">{% if jobs|length != 0 %}{{jobs|length}}{% endif %}</span></li>
       </div>
     </div>
     {% for user in results %}
-      {% if user != None %}
+      {% if user != None and user.username != None %}
       <div class="col-md-10" id="users_list">
       <!-- User Tab -->
         <div class="list-group">
@@ -56,7 +56,24 @@
       </div>
       {% endif %}
     {% endfor %}
-
+    <!-- Skills Search -->
+    {% for user in skills %}
+      {% if user != None %}
+      <div class="col-md-10" id ="skills_list" style="display: none;">
+        <div class="list-group">
+         <a href="profile/{{user.username}}" class="row list-group-item">
+          <div class="col-md-2">
+            <img src="/img?user_id={{user.key.urlsafe}}&height=100&width=100" class="img-rounded"></img>
+           </div>
+          <div class="col-md-10">
+              <h3>{{user.first_name}}  {{user.last_name}}</h3>
+              <p>{{user.profession}} @ <b>{{user.employer}}</b></p>
+          </div>
+         </a>
+        </div>
+      </div>
+      {% endif %}
+    {% endfor %}
     <!-- Jobs Search -->
     {% for user in jobs %}
       {% if user != None %}
@@ -75,8 +92,20 @@
       </div>
       {% endif %}
     {% endfor %}
+    <!-- Forum Search -->
+      {% if forums != None %}
+      <div class="col-md-10" id="forums_list" style="display:none;">
+        <div class="list-group">
+         <a href="tech/{{forums.name}}" class="row list-group-item">
+          <div class="col-md-10">
+          <h3 >{{forums.name}}</h3>
+          <p>Posts: {{forums.posts}}</p>
+        </div></a>
+        </div>
+      </div>
+      {% endif %}
 
-    {% if not results %}
+    {% if not results and forums == None %}
     <div class= "col-md-10">
       <div class="list-group">
         <a href="/profile/{{user.username}}" class="list-group-item ">
