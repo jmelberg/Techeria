@@ -35,7 +35,7 @@ class User(auth_models.User):
 '''
 class Profile(ndb.Model):
   owner = ndb.KeyProperty(kind = "User")
-  about = ndb.StringProperty(default = "I am new to Techeria!")
+  about = ndb.StringProperty()
 
 ''' Comment Model 
 - Object to holds recipient, sender, time, and comment details.

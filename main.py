@@ -94,6 +94,7 @@ class SearchHandler(SessionHandler):
     employers = []
     skills = []
     names = []
+    search_type = " "
     if user.account_type == "Recruiter":
       search_type = "advanced"
 
