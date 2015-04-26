@@ -476,180 +476,172 @@
   <!-- End edit information -->
 </div>
 
-      
-
-
-
-
-      
-    
-
-        <div class="row">
-          <div class="col-md-5">
-            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-              <div class="panel panel-default">
-                <div class="panel-heading" role="tab" id="headingOne">
-                  <h4 class="panel-title">
-                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    About Me
-                  </h4>
-                  </a>
-                </div>
-                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                  <div class="panel-body" id="about">{{profile.about}}</div>
-                  <div class="panel-body" style="display:none;" id='about_edit'>
-                  <input id="about_me" type = "text" class="form-control input-default" style="width: 100%;" value ="{{profile.about}}"></div>
-                </div>
-              </div>
-              <div class="panel panel-default">
-                <div class="panel-heading" role="tab" id="headingTwo">
-                  <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    Skills
-                    {% if user.skills_count > 0 %}
-                    <span class="badge pull-right">{{user.skills_count}}</span>
-                    {% endif %}
-                    <input type="hidden" id="skill_count" name="variable" value="{{user.skills_count}}">
-                    </a>
-                  </h4>
-                </div>
-                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                  <div class="panel-body">
-                  {% if user.skills_count == 0 %}
-                    {{user.first_name}} has not added any skills
-                  {% else %}
-                    {% for skill, endorsement in skills %}
-                    <div class = "row">
-                      <div class='col-md-10'>
-                      {% if endorsement != 0 %}
-                      <span class="badge" id ="{{forloop.counter}}">{{endorsement}}</span>
-                      {% else %}
-                      <span class="badge" id ="{{forloop.counter}}" style="display:none;">{{endorsement}}</span>
-                      {% endif %}
-                      <a href="/tech/{{skill.name.split|join:""}}" style="padding-right: 10px;">{{skill.name}}</a>
-                      </div>
-                      <div class='col-md-2'>
-                      {% if user.email_address != viewer.email_address %}
-                      <button class="btn btn-primary btn-xs" type="button" value="{{skill.key.urlsafe}}" id="up-{{forloop.counter}}" style="border:none; background:none; color:#4682B4"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-                      {% endif %}
-                      </div>
-                    </div>
-                    {% endfor %}
-                    <hr>
-                    <button id="add_button" type="button" class ="btn btn-primary btn-xs">Add Skills</button>
-                    <div id="more_skills" style="display:none;">
-                      <form role="form">
-                        <input class="input-lg" type="text" value="" id="add_skills" data-role="tagsinput"></input><br>
-                        <button id="add_skill_submit" type="submit" class = "btn btn-success btn-xs">Update</button>
-                      </form>
-                    </div>
-                    <script type="text/javascript" src="../js/addskill.js"></script>
-                    {% endif %}
-                  </div>                 
-                </div>
-              </div>
-
-              <div class="panel panel-default">
-                <div class="panel-heading" role="tab" id="headingThree">
-                  <h4 class="panel-title">
-                    <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
-                    Endorsements
-                    {% if user.endorsement_count > 0 %}
-                    <span class="badge pull-right">{{user.endorsement_count}}</span>
-                    {% endif %}
-                    <input type="hidden" id="endorsement_count" name="variable" value="{{user.skills_count}}">
-                    </a>
-                  </h4>
-                </div>
-                <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                  <div class="panel-body">
-                  {% if user.endorsement_count == 0 %}
-                    {{user.first_name}} has no endorsements yet
-                  {% else %}
-                    {% for endorsement in endorsements %}
-                    <div class = "row">
-                      <div class='col-md-2'><img src="/img?user_id={{endorsement.endorser.urlsafe}}&height=50&width=50" class="img-rounded"/></div>
-                      {{endorsement.time}}
-                      <div class='col-md-8'>
-                        {{endorsement.description}}
-                        <br><br>
-                      </div>
-                      <div class='col-md-2'></div>
-                    </div>
-                    {% endfor %}
-                    {% endif %}
-                  </div>                    
-                </div>
-              </div>
-                
-            <div class="panel panel-default">
-              <div class="panel-heading" role="tab" id="headingFive">
-                <h4 class="panel-title">
-                  <a href="/connections?username={{user.username}}">
-                    Connections
-                    {% if user.friend_count > 0 %}
-                    <span class="badge pull-right">{{user.friend_count}}</span>
-                    {% endif %}
-                  </a>
-                </h4>
-              </div>
-            </div>
+  <div class="row">
+    <div class="col-md-5">
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingOne">
+            <h4 class="panel-title">
+            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              About Me
+            </h4>
+            </a>
+          </div>
+          <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body" id="about">{{profile.about}}</div>
+            <div class="panel-body" style="display:none;" id='about_edit'>
+            <input id="about_me" type = "text" class="form-control input-default" style="width: 100%;" value ="{{profile.about}}"></div>
           </div>
         </div>
-          <div class="col-md-2"></div>
-
-          <div class="col-md-6">
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Comment</h3>
-              </div>
-              <div class="panel-body">
-                <form role="form" action="/comment" method="post">
-                  <div class="form-group">
-                    <textarea style="resize:none; font-size: 16px;" name="text" class="form-control" rows="1" id="commentBox"></textarea>
-                    <ol style="visibility:hidden;"></ol>
-                    <input  type="hidden" name="recipient" class="form-control" value={{user.username}}>
-                    <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
-                    <button type="submit" style="display:none;" class="btn btn-primary pull-right" id="postButton"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div class="panel panel-default" style="display:none; padding:0;" id="replybox">
-              <div class="panel-heading">
-                <h3 class="panel-title">Reply</h3>
-              </div>
-              <div class="panel-body">
-                <form role="form" action="/comment" method="post">
-                  <div class="form-group">
-                    <textarea style="font-size: 18px;" name="text" class="form-control" rows="3" id="replycommentBox"></textarea>
-                    <ol style="visibility:hidden;"></ol>
-                    <input  type="hidden" name="recipient" class="form-control" value={{viewer.username}}>
-                    <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
-                    <input  type="hidden" name="origin" class="form-control" value='profile'>
-                    <input type="hidden" id="parent" name="parent" class="form-control">
-                    <button type="submit" class="btn btn-primary pull-right" id="postreplyButton"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Reply</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-            {% if comments %}
-            <div class="list-group">
-              {% for comment in comments %}
-              <div id="comment{{page}}a{{forloop.counter}}"  {% if comment.root%} class="panel panel-info" style="margin-bottom:0; margin-top:10px;" {%else%} class="list-group-item" style="margin-left: {{comment.offset}}; margin-top:0;margin-bottom:0;"{% endif %}>
-              <div class="panel-heading">
-                 <h2 class="panel-title">{{comment.sender}}<span><p class="panel-title pull-right">{{comment.time}}</p></span></h2>
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingTwo">
+            <h4 class="panel-title">
+              <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Skills
+              {% if user.skills_count > 0 %}
+              <span class="badge pull-right">{{user.skills_count}}</span>
+              {% endif %}
+              <input type="hidden" id="skill_count" name="variable" value="{{user.skills_count}}">
+              </a>
+            </h4>
+          </div>
+          <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+            {% if user.skills_count == 0 %}
+              {{user.first_name}} has not added any skills
+            {% else %}
+              {% for skill, endorsement in skills %}
+              <div class = "row">
+                <div class='col-md-10'>
+                {% if endorsement != 0 %}
+                <span class="badge" id ="{{forloop.counter}}">{{endorsement}}</span>
+                {% else %}
+                <span class="badge" id ="{{forloop.counter}}" style="display:none;">{{endorsement}}</span>
+                {% endif %}
+                <a href="/tech/{{skill.name.split|join:""}}" style="padding-right: 10px;">{{skill.name}}</a>
                 </div>
-                <div class="panel-body">
-                  <h4>{{comment.text|linebreaks}} </h4>
-                  <div class="btn-group pull-right">
-                    <button style="padding-left:15px;" class="btn btn-xs pull-right" id="reply-{{page}}a{{forloop.counter}}" value={{comment.key.urlsafe}}>Reply</button>
-                  </div>
+                <div class='col-md-2'>
+                {% if user.email_address != viewer.email_address %}
+                <button class="btn btn-primary btn-xs" type="button" value="{{skill.key.urlsafe}}" id="up-{{forloop.counter}}" style="border:none; background:none; color:#4682B4"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                {% endif %}
                 </div>
               </div>
               {% endfor %}
+              <hr>
+              <button id="add_button" type="button" class ="btn btn-primary btn-xs">Add Skills</button>
+              <div id="more_skills" style="display:none;">
+                <form role="form">
+                  <input class="input-lg" type="text" value="" id="add_skills" data-role="tagsinput"></input><br>
+                  <button id="add_skill_submit" type="submit" class = "btn btn-success btn-xs">Update</button>
+                </form>
+              </div>
+              <script type="text/javascript" src="../js/addskill.js"></script>
+              {% endif %}
+            </div>                 
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading" role="tab" id="headingThree">
+            <h4 class="panel-title">
+              <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
+              Endorsements
+              {% if user.endorsement_count > 0 %}
+              <span class="badge pull-right">{{user.endorsement_count}}</span>
+              {% endif %}
+              <input type="hidden" id="endorsement_count" name="variable" value="{{user.skills_count}}">
+              </a>
+            </h4>
+          </div>
+          <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+            {% if user.endorsement_count == 0 %}
+              {{user.first_name}} has no endorsements yet
+            {% else %}
+              {% for endorsement in endorsements %}
+              <div class = "row">
+                <div class='col-md-2'><img src="/img?user_id={{endorsement.endorser.urlsafe}}&height=50&width=50" class="img-rounded"/></div>
+                {{endorsement.time}}
+                <div class='col-md-8'>
+                  {{endorsement.description}}
+                  <br><br>
+                </div>
+                <div class='col-md-2'></div>
+              </div>
+              {% endfor %}
+              {% endif %}
+            </div>                    
+          </div>
+        </div>
+          
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingFive">
+          <h4 class="panel-title">
+            <a href="/connections?username={{user.username}}">
+              Connections
+              {% if user.friend_count > 0 %}
+              <span class="badge pull-right">{{user.friend_count}}</span>
+              {% endif %}
+            </a>
+          </h4>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class="col-md-2"></div>
+
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Comment</h3>
+        </div>
+        <div class="panel-body">
+          <form role="form" action="/comment" method="post">
+            <div class="form-group">
+              <textarea style="resize:none; font-size: 16px;" name="text" class="form-control" rows="1" id="commentBox"></textarea>
+              <ol style="visibility:hidden;"></ol>
+              <input  type="hidden" name="recipient" class="form-control" value={{user.username}}>
+              <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
+              <button type="submit" style="display:none;" class="btn btn-primary pull-right" id="postButton"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post</button>
             </div>
-            {% endif %}
+          </form>
+        </div>
+      </div>
+      <div class="panel panel-default" style="display:none; padding:0;" id="replybox">
+        <div class="panel-heading">
+          <h3 class="panel-title">Reply</h3>
+        </div>
+        <div class="panel-body">
+          <form role="form" action="/comment" method="post">
+            <div class="form-group">
+              <textarea style="font-size: 18px;" name="text" class="form-control" rows="3" id="replycommentBox"></textarea>
+              <ol style="visibility:hidden;"></ol>
+              <input  type="hidden" name="recipient" class="form-control" value={{viewer.username}}>
+              <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
+              <input  type="hidden" name="origin" class="form-control" value='profile'>
+              <input type="hidden" id="parent" name="parent" class="form-control">
+              <button type="submit" class="btn btn-primary pull-right" id="postreplyButton"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Reply</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      {% if comments %}
+      <div class="list-group">
+        {% for comment in comments %}
+        <div id="comment{{page}}a{{forloop.counter}}"  {% if comment.root%} class="panel panel-info" style="margin-bottom:0; margin-top:10px;" {%else%} class="list-group-item" style="margin-left: {{comment.offset}}; margin-top:0;margin-bottom:0;"{% endif %}>
+        <div class="panel-heading">
+           <h2 class="panel-title">{{comment.sender}}<span><p class="panel-title pull-right">{{comment.time}}</p></span></h2>
+          </div>
+          <div class="panel-body">
+            <h4>{{comment.text|linebreaks}} </h4>
+            <div class="btn-group pull-right">
+              <button style="padding-left:15px;" class="btn btn-xs pull-right" id="reply-{{page}}a{{forloop.counter}}" value={{comment.key.urlsafe}}>Reply</button>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
    </div>
  </div>
 

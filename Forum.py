@@ -21,6 +21,7 @@ from BaseHandler import login_required
 from urlparse import urlparse
 
 class VoteHandler(SessionHandler):
+  @login_required
   """ Handles upvoting and downvoting on forum postings """
   def post(self):
     post = cgi.escape(self.request.get('key'))
@@ -129,6 +130,7 @@ class ForumViewer(SessionHandler):
     self.response.out.write(template.render('views/forumViewer.html', {'viewer': self.user_model, 'forums':forums, 'override_base':override_base}))
 
 class SubscriptionHandler(SessionHandler):
+  @login_required
   def post(self):
     forum_name = cgi.escape(self.request.get('forum_name'))
     user_key = self.user_model.key

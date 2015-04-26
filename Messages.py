@@ -73,6 +73,7 @@ class ComposeMessage(SessionHandler):
 
 class DeleteMessage(SessionHandler):
   """ Handler to delete messages from the datastore """
+  @login_required
   def post(self):
     key_array = cgi.escape(self.request.get('array'))
     for key in key_array.split(","):
