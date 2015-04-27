@@ -60,7 +60,7 @@ class ComposeMessage(SessionHandler):
       message.text = text
       message.sender = sender
       message.recipient = recipient
-      message.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
+      message.time = datetime.datetime.now() - datetime.timedelta(hours=7) #For PST
       message.put()
       #Increment message count for navbar
       q = User.query(User.username == recipient)

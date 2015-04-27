@@ -214,33 +214,45 @@ class AddSkillsHandler(SessionHandler):
     skills = cgi.escape(self.request.get('skills'))
     new_skills = skills.split(',')
     new_skills = [skill for skill in new_skills if len(skill) >0]
+    to_add_skills = []
+    to_add_subscriptions = []
     for i in new_skills:
       i = i.lower().strip()
       skill_query = Skill.query(Skill.name == i).get()
       if skill_query == None: # Not in skills database
         new_skill = Skill(name=i)
         new_skill_key = new_skill.put()
-        user.subscriptions.append(new_skill.name.replace(" ", ""))
-        user.skills_count +=1
-        user.skills.append(new_skill_key)
-        user.put()
+        print "New Skill Added to Database"
+        print new_skill.name
+        to_add_subscriptions.append(new_skill.name.replace(" ", ""))
+        to_add_skills.append(new_skill_key)
       else: # In skills database
         # Search user skills to see if exists
-        flag = ""
+        flag = " "
         for skill in user.skills:
           skill = skill.get()
           if skill.name == i:
             flag = "exists"
+            print skill.name
+            print "already exists in user skills"
             break
         if flag != "exists":
           new_skill = Skill.query(Skill.name == i).get()
           print("Added to user skills:")
           print(new_skill.name)
-          user.subscriptions.append(new_skill.name.replace(" ", ""))
-          user.skills_count +=1
-          user.skills.append(new_skill.key)
-          user.put()
+          to_add_subscriptions.append(new_skill.name.replace(" ", ""))
+          to_add_skills.append(new_skill.key)
+      
+      # Add to user skills
+    user.skills.extend(to_add_skills)
+    user.skills_count += len(to_add_skills)
+      # Add to user subscriptions
+    user.subscriptions.extend(to_add_subscriptions)
+    time.sleep(1)
     user.put()
+    #self.redirect('/profile/{}'.format(user.username))
+
+
 
 class SkillsHandler(SessionHandler):
   def post(self):
@@ -305,7 +317,7 @@ class EndorsementHandler(SessionHandler):
       details.endorsee = endorsee_key
       details.skill = skill_key
       details.description = text
-      details.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
+      details.time = datetime.datetime.now() - datetime.timedelta(hours=7) #For PST
       details.put()
 
     if endorsement is not None:

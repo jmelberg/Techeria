@@ -9,9 +9,9 @@ $(document).ready(function(){
         type: "POST",
         url: "/addskill",
         data:{ 'skills': skills,},
-        success: function() {
-          window.location.reload(true);
-        }
       });
+      setTimeout(function(){ // Refresh after 1 second
+      window.location.href = '/';
+    }, 200);
   });
 });

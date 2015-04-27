@@ -616,6 +616,7 @@ $(document).ready(function(){
 // Edit and Cancel Buttons
 $(function () {
   $('#edit').click(function () {
+    $('#edit').hide();
     $('#test').hide();
     $('#about').hide();
     $('#img_edit').show();
@@ -623,6 +624,7 @@ $(function () {
     $('#about_edit').show();
   });
   $('#cancel').click(function(){
+    $('#edit').show();
     $('#test').show();
     $('#about').show();
     $('#img_edit').hide();

@@ -74,7 +74,7 @@ class ForumHandler(SessionHandler):
     post.author = author
     post.forum_name = forum_name
     post.title = title
-    post.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
+    post.time = datetime.datetime.now() - datetime.timedelta(hours=7) #For PST
     post.url = url
     post.url_host = urlparse(url).hostname
     post.reference = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
@@ -110,7 +110,7 @@ class ForumCommentHandler(SessionHandler):
     comment.text = text
     comment.sender = sender
     comment.recipient = recipient
-    comment.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
+    comment.time = datetime.datetime.now() - datetime.timedelta(hours=7) #For PST
     comment.put()
     post.comment_count += 1
     post.put()

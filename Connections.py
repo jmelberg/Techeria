@@ -41,7 +41,7 @@ class ConnectHandler(SessionHandler):
       connection_request = ConnectionRequest()
       connection_request.requestor = requestor.username
       connection_request.requestee = requestee.username
-      connection_request.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
+      connection_request.time = datetime.datetime.now() - datetime.timedelta(hours=7) #For PST
       connection_request.text = text
       connection_request.put()
       requestee.request_count += 1

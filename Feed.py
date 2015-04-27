@@ -51,7 +51,7 @@ class CommentHandler(SessionHandler):
       comment.sender_key = User.query(User.username == sender).get().key
       comment.recipient_key = None
     comment.text = text
-    comment.time = datetime.datetime.now() - datetime.timedelta(hours=8) #For PST
+    comment.time = datetime.datetime.now() - datetime.timedelta(hours=7) #For PST
     comment.put()
     
     if comment.root == False:
