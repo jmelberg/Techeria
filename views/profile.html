@@ -63,7 +63,7 @@
   </div>
   <div class="col-md-2"></div>
   <div class= "col-md-6">
-    <div class="page-header"><h2 id= "test" >{{user.first_name}} {{user.last_name}}
+    <div class="page-header" id = "test"><h2>{{user.first_name}} {{user.last_name}}
     <br>
     <small id = "profession">      {{user.profession}}    </small>
     <small> @ </small>
@@ -112,8 +112,6 @@
       </div>
     </div>
   </div>
-
-
 
     <!-- NEW CONNECTION MODAL SELECTED -->
       <div class="modal fade" id="connectModal" tabindex="-1" role="dialog" aria-labelledby="connectionLabel" aria-hidden="true">
@@ -427,7 +425,6 @@
 <!-- END MODAL -->
 
 <div class= "row">
-  <div class="col-md-1"></div>
   <div class="col-md-3">
     <div class="control-group" id="img_edit" style="display:none;">
       <h5>New Profile Picture</h5>
@@ -440,7 +437,7 @@
         </div>
       </form>
     </div>
-    <div class="col-md-1"></div>
+    
   </div>
 </div>
 
@@ -563,13 +560,13 @@
             {% else %}
               {% for endorsement in endorsements %}
               <div class = "row">
-                <div class='col-md-2'><img src="/img?user_id={{endorsement.endorser.urlsafe}}&height=50&width=50" class="img-rounded"/></div>
+                <div class='col-md-3'><img src="/img?user_id={{endorsement.endorser.urlsafe}}&height=50&width=50" class="img-rounded"/></div>
                 {{endorsement.time}}
                 <div class='col-md-8'>
                   {{endorsement.description}}
                   <br><br>
                 </div>
-                <div class='col-md-2'></div>
+                <div class='col-md-1'></div>
               </div>
               {% endfor %}
               {% endif %}
