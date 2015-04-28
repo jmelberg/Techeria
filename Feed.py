@@ -37,7 +37,7 @@ class CommentHandler(SessionHandler):
       comment.offset = parent_comment.offset + 20
       recipient_comment = ndb.Key(urlsafe=replied_to_urlsafe).get()
       comment.recipient = recipient_comment.sender
-      comment.sender = self.user_model.username
+      comment.sender = viewer.username
       comment.root = False
     else:
       comment.sender = sender
@@ -116,7 +116,7 @@ class FeedListHandler(SessionHandler):
   def post_list(self, offset_count):
     index = 0
     viewer = self.user_model
-    posts = ForumPost.query(ForumPost.forum_name.IN(viewer.subscriptions)).order(-ForumPost.time).fetch(10, offset=offset_count)
+    posts = ForumPost.query(ForumPost.forum_name.IN(viewer.subscriptions)).order(-ForumPost.vote_count, -ForumPost.time).fetch(10, offset=offset_count)
     more = len(posts)
     return posts, more
 

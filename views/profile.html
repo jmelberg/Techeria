@@ -231,7 +231,7 @@
                 <div class="page-header">
                 <div class="checkbox"><label><input type="radio" id="business"> Business</label></div>
                 <div class="checkbox"><label><input type="radio" id="tech"> Engineering</label></div>
-                <div class="checkbox"><label><input type="radio" id="other_role">Other<input type="text" class="form-control" id="other_role_text" style="display:none;"></label></div>
+                <div class="checkbox"><label><input type="radio" id="other_role"> Other<input type="text" class="form-control" id="other_role_text" style="display:none;"></label></div>
               </div>
                 <div style="display:none;" id='employer_name'><label>
                   {% if user.account_type == "Student" %}
@@ -240,7 +240,7 @@
                   Employer:
                   {% endif %}
                   <input type="text" class="form-control" id="employer_text"></label></div>
-                <button id="activate2" class="btn btn-primary pull-right">Next</button>
+                <button id="activate2" class="btn btn-primary pull-right"> Next</button>
               </div>
               <div class="col-md-2"></div>
             </div>
@@ -259,8 +259,8 @@
                 {% endif %}
                 </h3></div>
               <div class="page-header">
-              <div class="checkbox"><label><input type="radio" id="air">Aerospace</label></div>
-              <div class="checkbox"><label><input type="radio" id="medical">Biomedical, Chemical, or Materials</label></div>
+              <div class="checkbox"><label><input type="radio" id="air"> Aerospace</label></div>
+              <div class="checkbox"><label><input type="radio" id="medical"> Biomedical, Chemical, or Materials</label></div>
               <div class="checkbox"><label><input type="radio" id="civil"> Civil/ Environmental</label></div>
               <div class="checkbox"><label><input type="radio" id="computer"> Computer</label></div>
               <div class="checkbox"><label><input type="radio" id="electrical"> Electrical</label></div>
@@ -268,7 +268,7 @@
               <div class="checkbox"><label><input type="radio" id="industrial"> Industrial and Systems</label></div>
               <div class="checkbox"><label><input type="radio" id="mechanical"> Mechanical</label></div>
               <div class="checkbox"><label><input type="radio" id="software"> Software</label></div>
-              <div class="checkbox"><label><input type="radio" id="other">Other<input type="text" class="form-control" id="other_text" style="display:none;"></label>
+              <div class="checkbox"><label><input type="radio" id="other"> Other<input type="text" class="form-control" id="other_text" style="display:none;"></label>
               </div>
               </div>
               <div id='position_name' style="display:none;"><label>
@@ -278,7 +278,7 @@
               Major:
               {% endif %}
               <input type="text" class="form-control" id="position_text"></label></div>
-              <button id="activate3e" class="btn btn-primary pull-right">Next</button>
+              <button id="activate3e" class="btn btn-primary pull-right"> Next</button>
             </div>
             <div class="col-md-2"></div>
           </div>
@@ -293,7 +293,7 @@
               <div class="checkbox"><label><input type="radio" id="finance"> Finance</label></div>
               <div class="checkbox"><label><input type="radio" id="marketing"> Marketing</label></div>
               <div class="checkbox"><label><input type="radio" id="sales"> Sales</label></div>
-              <div class="checkbox"><label><input type="radio" id="b_other">Other<input type="text" class="form-control" id="b_other_text"style="display:none;"></label></div>
+              <div class="checkbox"><label><input type="radio" id="b_other"> Other<input type="text" class="form-control" id="b_other_text"style="display:none;"></label></div>
               <div id='b_position_name' style="display:none;"><label>
               {% if user.account_type != "Student" %}
               Current Postion:
@@ -301,7 +301,7 @@
               Major:
               {% endif %}
               <input type="text" class="form-control" id="b_position_text"></label></div>
-              <button id="activate3b" class="btn btn-primary pull-right">Next</button>
+              <button id="activate3b" class="btn btn-primary pull-right"> Next</button>
             </div>
             <div class="col-md-2"></div>
           </div>
@@ -312,9 +312,9 @@
           <div class="col-xs-12">
             <div class="col-md-2"></div>
             <div class="col-md-8 well">
-              <div class="page-header"><h3>Which field in <span id="other_role_span"></span>?</h3></div>
+              <div class="page-header"><h3> Which field in <span id="other_role_span"></span>?</h3></div>
 
-              <div class = "page-header"><label>Please be as specific as possible<input type="text" class="form-control" id="o_other_text"></label></div>
+              <div class = "page-header"><label> Please be as specific as possible<input type="text" class="form-control" id="o_other_text"></label></div>
               <div id='o_position_name'><label>
               {% if user.account_type != "Student" %}
               Current Postion:
@@ -322,7 +322,7 @@
               Major:
               {% endif %}
               <input type="text" class="form-control" id="o_position_text"></label></div>
-              <button id="activate3o" class="btn btn-primary pull-right">Next</button>
+              <button id="activate3o" class="btn btn-primary pull-right"> Next</button>
             </div>
             <div class="col-md-2"></div>
           </div>
@@ -333,20 +333,20 @@
           <div class="col-xs-12">
           <div class="col-md-2"></div>
            <div class="col-md-8 well" >
-              <div class="page-header"><h3>Which kind of Developer<span id="d_role"></span>?</h3></div>
+              <div class="page-header"><h3> Which kind of Developer<span id="d_role"></span>?</h3></div>
               <div class="checkbox"><label><input type="radio" id="mobile"> Mobile Applications</label></div>
               <div class="checkbox"><label><input type="radio" id="system"> Systems</label></div>
               <div class="checkbox"><label><input type="radio" id="web"> Web</label></div>
               <div class="checkbox"><label><input type="radio" id="embedSystem"> Embedded Systems</label></div>
               <div class="checkbox"><label><input type="radio" id="bigdata"> Big Data</label></div>
               <div class="checkbox"><label><input type="radio" id="quality"> Quality Assurance</label></div>
-              <div class="checkbox"><label><input type="radio" id="d_other">Other<input type="text" class="form-control" id="d_other_text" style="display:none;"></label></div>
+              <div class="checkbox"><label><input type="radio" id="d_other"> Other<input type="text" class="form-control" id="d_other_text" style="display:none;"></label></div>
               <!-- Autocomplete programming languages -->
               <div id="languages-form" style="display:none;">
-              <div class="page-header">Which programming languages<span id="dlanguages"></span>?</div>
+              <div class="page-header"> Which programming languages<span id="dlanguages"></span>?</div>
               <input class="input-lg" type="text" value="Java" id="languages" data-role="tagsinput"></input>
               </div>
-              <button id="done_t" type="submit" class="btn btn-primary pull-right" data-dismiss="modal">Done</button>
+              <button id="done_t" type="submit" class="btn btn-primary pull-right" data-dismiss="modal"> Done</button>
             </div>
             <div class="col-md-2"></div>
           </div>
@@ -362,7 +362,7 @@
               {% else %} skills
               {% endif %} </h3></div>
               <input class = "input-lg" type="text" value="Technical Writing" id="engineering_skills" data-role="tagsinput"></input>
-              <button id="done_te" type="submit" class="btn btn-primary pull-right" data-dismiss="modal">Done</button>
+              <button id="done_te" type="submit" class="btn btn-primary pull-right" data-dismiss="modal"> Done</button>
             </div>
             <div class="col-md-2"></div>
             </div>
@@ -379,9 +379,9 @@
                 <div class="checkbox"><label><input type="radio" id="consumer_marketing"> Business to Consumer</label></div>
                 <div class="checkbox"><label><input type="radio" id="partner_marketing"> Partner Marketing</label></div>
                 <div id="marketing-form" style="display:none;">
-                  <div class="page-header">What Tools<span id="rm_role"></span>?</div><input class="input-lg" type="text" value="Microsoft Excel" id="marketingtools" data-role="tagsinput"></input>
+                  <div class="page-header"> What Tools<span id="rm_role"></span>?</div><input class="input-lg" type="text" value="Microsoft Excel" id="marketingtools" data-role="tagsinput"></input>
                 </div>
-                <button id="done_m" type="submit" class="btn btn-primary pull-right" data-dismiss="modal">Done</button>
+                <button id="done_m" type="submit" class="btn btn-primary pull-right" data-dismiss="modal"> Done</button>
               </div>
               <div class="col-md-2"></div>
             </div>
@@ -395,9 +395,9 @@
                 <div class="checkbox"><label><input type="radio" id="corporate_finance"> Corporate</label></div>
                 <div class="checkbox"><label><input type="radio" id="investment"> Investment</label></div>
                 <div id="finance-form" style="display:none;">
-                  <div class="page-header">What Tools<span id="rf_role"></span>?</div><input class="input-lg" type="text" value="Microsoft Excel" id="financetools" data-role="tagsinput"></input>
+                  <div class="page-header"> What Tools<span id="rf_role"></span>?</div><input class="input-lg" type="text" value="Microsoft Excel" id="financetools" data-role="tagsinput"></input>
                 </div>
-                <button id="done_f" type="submit" class="btn btn-primary  pull-right" data-dismiss="modal">Done</button>
+                <button id="done_f" type="submit" class="btn btn-primary  pull-right" data-dismiss="modal"> Done</button>
               </div>
               <div class="col-md-2"></div>
             </div>
@@ -412,9 +412,9 @@
                 <div class="checkbox"><label><input type="radio" id="support_sales"> Support</label></div>
                 <div class="checkbox"><label><input type="radio" id="commission_sales"> Commission</label></div>
                 <div id="sales-form" style="display:none;">
-                <div class="page-header">What Tools<span id="rs_role"></span>?</div><input class="input-lg" type="text" value="Salesforce" id="salestools" data-role="tagsinput"></input>
+                <div class="page-header"> What Tools<span id="rs_role"></span>?</div><input class="input-lg" type="text" value="Salesforce" id="salestools" data-role="tagsinput"></input>
                 </div>
-                <button id="done_s" type="submit" class="btn btn-primary pull-right" data-dismiss="modal">Done</button>
+                <button id="done_s" type="submit" class="btn btn-primary pull-right" data-dismiss="modal"> Done</button>
               </div>
               <div class="col-md-2"></div>
             </div>
@@ -449,8 +449,10 @@
 
 <div class="page-header">
   <!-- Edit information -->
+  {% if user.email_address == viewer.email_address %}
   <button type="button" class="btn btn-primary pull-right" align="right" id="edit">
   <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>   Edit</button>
+  {% endif %}
   <div class = "row">
     <div class = "col-md-12">
       <div class = "form-inline" style ="display: none;" id ="editField">

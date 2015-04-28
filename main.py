@@ -33,6 +33,7 @@ import json
 
 class ProfileHandler(SessionHandler):
   """handler to display a profile page"""
+  @login_required
   def get(self, profile_id):
     viewer = self.user_model
     q = User.query(User.username == profile_id)
@@ -50,16 +51,17 @@ class ProfileHandler(SessionHandler):
     user.endorsement_count = len(endorsement_details)
     for skill in user.skills:
       skill = skill.get()
-      endorsement_list = []
-      endorsement_list.append(skill)
-      #Get endorsement messages
-      #Add number #
-      count = 0
-      for x in endorsements:
-        if x.skill == skill.key:
-          count=x.endorsement_count
-      endorsement_list.append(count)
-      skill_list.append(endorsement_list)
+      if skill is not None:
+        endorsement_list = []
+        endorsement_list.append(skill)
+        #Get endorsement messages
+        #Add number #
+        count = 0
+        for x in endorsements:
+          if x.skill == skill.key:
+            count=x.endorsement_count
+        endorsement_list.append(count)
+        skill_list.append(endorsement_list)
 
     connection_list = []
     """Get friend count """

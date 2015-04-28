@@ -78,6 +78,14 @@ indexes:
   - name: time
     direction: desc
 
+- kind: ForumPost
+  properties:
+  - name: forum_name
+  - name: vote_count
+    direction: desc
+  - name: time
+    direction: desc
+
 - kind: Message
   properties:
   - name: recipient

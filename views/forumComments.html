@@ -2,50 +2,85 @@
 
 {% block content %}
 
-<div class="page-header">
-  <h1>{{post.title}}
-  </h1>
-</div>
-{% if post.text != None %}
-<div class="panel panel-info">
-  <div class="panel-heading">
-    submitted {{post.time}} by {{post.author}}
-  </div>
-  <div class="panel-body">
-    <h4>{{post.text}}</h4>
-  </div>
-</div>
-{% endif %}
 
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Comment</h3>
+<div>
+  <div class="page-header">
+    <h1>{{forum_name}}: {{post.title}}
+    </h1>
   </div>
-  <div class="panel-body">
-    <form role="form" action="/tech/{{post.forum_name}}/{{post.reference}}" method="post">
-      <div class="form-group">
-        <textarea style="resize:none; font-size: 20px;" name="text" class="form-control" rows="2"></textarea>
-        <ol style="visibility:hidden;"></ol>
+  {% if post.text != None %}
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      submitted {{post.time}} by {{post.author}}
+    </div>
+    <div class="panel-body">
+      <h4>{{post.text}}</h4>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="panel panel-default" style="display:none; padding:0;" id="replybox">
+    <div class="panel-heading">
+      <h3 class="panel-title">Reply</h3>
+    </div>
+    <div class="panel-body">
+      <form role="form" action="/tech/{{post.forum_name}}/{{post.reference}}" method="post">
+        <div class="form-group">
+          <textarea style="font-size: 18px;" name="text" class="form-control" rows="3" id="replycommentBox"></textarea>
+          <ol style="visibility:hidden;"></ol>
+          <input  type="hidden" name="recipient" class="form-control" value={{viewer.username}}>
           <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
-          <input  type="hidden" name="recipient" class="form-control" value="/tech/{{post.forum_name}}">
-              <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post</button>
-              </div>
-    </form>
+          <input  type="hidden" name="origin" class="form-control" value='forum'>
+          <input type= "hidden" name = "forum_name" class = "form-control" value= '{{forum_name}}/{{post_reference}}'>
+          <input type="hidden" id="parent" name="parent" class="form-control">
+          <button type="submit" class="btn btn-primary pull-right" id="postreplyButton"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Reply</button>
+        </div>
+      </form>
+    </div>
   </div>
+  <!-- Comments -->
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Comment</h3>
+    </div>
+    <div class="panel-body">
+      <form role="form" action="/tech/{{post.forum_name}}/{{post.reference}}" method="post">
+        <div class="form-group">
+          <textarea style="resize:none; font-size: 18px;" name="text" class="form-control" rows="2"></textarea>
+          <ol style="visibility:hidden;"></ol>
+            <input  type="hidden" name="sender" class="form-control" value={{viewer.username}}>
+            <input  type="hidden" name="recipient" class="form-control" value="/tech/{{post.forum_name}}">
+            <button type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Post</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% if comments %}
+   {% for comment in comments %}
+   <div id="comment{{page}}a{{forloop.counter}}"  {% if comment.root %} class="panel panel-info" style="margin-bottom:0; margin-top:10px; " {% else %} class="list-group-item" style="margin-left: {{comment.offset}}; margin-top:0;margin-bottom:0;" {% endif %}>
+    <div class="panel-heading">
+      <h2 class="panel-title">
+        <a href="/profile/{{comment.sender}}" >{{comment.sender}}</a>
+        {% if comment.sender != comment.recipient %}
+        <a href="/profile/{{comment.recipient}}">
+        <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>  {{comment.recipient}}
+        </a>
+        {% endif %}
+        <span><p class="panel-title pull-right">{{comment.time}}</p></span>
+      </h2>
+      </div>
+      <div class="panel-body">
+        <h4>{{comment.text|linebreaks}} </h4>
+        <div class="btn-group pull-right">
+        <button style="padding-left:15px;" class="btn btn-xs pull-right" id="reply-{{page}}a{{forloop.counter}}" value={{comment.key.urlsafe}}>Reply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    {% endfor %}
+  {% endif %}
+
+  <script type="text/javascript" src = "../../js/reply.js"></script>
 </div>
-
-{% for comment in comments %}
-<div class="panel panel-info">
-  <div class="panel-heading">
-    <h2 class="panel-title">
-      {{comment.sender}}
-      <span><p class="panel-title pull-right">{{comment.time}}</p></span></h2>
-  </div>
-  <div class="panel-body">
-    <h4>{{comment.text}}</h4>
-  </div>
-</div>
-{% endfor %}
-
-
 {% endblock %}

@@ -95,23 +95,56 @@ class ForumCommentHandler(SessionHandler):
     user = self.user_model
     post = ForumPost.query(ForumPost.forum_name == forum_id, ForumPost.reference == post_reference).get()
     comments = Comment.query(Comment.parent==post.key).fetch()
+    # Get nested Comments
+    index = 0
+    while index < len(comments):
+      children = Comment.query(Comment.parent == comments[index].key).fetch()
+      index +=1
+      comments[index:index] = children
+
     if user == None:
       override_base = "visitorBase.html"
     else:
       override_base = "base.html"
-    self.response.out.write(template.render('views/forumComments.html', {'override_base':override_base, 'viewer': user, 'post':post, 'forum_name':forum_id, 'comments':comments}))
+    self.response.out.write(template.render('views/forumComments.html',
+      {'override_base':override_base, 'viewer': user, 'post':post,
+      'forum_name':forum_id, 'comments':comments, 'post_reference':post_reference}))
   def post(self, forum_id, post_reference):
     user = self.user_model
     post = ForumPost.query(ForumPost.forum_name == forum_id, ForumPost.reference == post_reference).get()
     text = cgi.escape(self.request.get('text'))
     sender = cgi.escape(self.request.get('sender'))
     recipient = cgi.escape(self.request.get('recipient'))
-    comment = Comment(parent=post.key)
+    replied_to_urlsafe = cgi.escape(self.request.get('parent'))
+    comment = Comment(parent = post.key)
+    if len(replied_to_urlsafe) != 0:
+      replied_to_key = ndb.Key(urlsafe=replied_to_urlsafe)
+      parent_comment = replied_to_key.get()
+      comment.parent = replied_to_key
+      comment.offset = parent_comment.offset + 20
+      recipient_comment = ndb.Key(urlsafe=replied_to_urlsafe).get()
+      comment.recipient = recipient_comment.sender
+      comment.sender = user.username
+      comment.root = False
+    else:
+      comment.sender = sender
+      comment.recipient = recipient
+
+    # Not double adding User Keys
+    if sender != recipient:
+      comment.sender_key = User.query(User.username == sender).get().key
+      comment.recipient_key = User.query(User.username== recipient).get().key
+    else:
+      comment.sender_key = User.query(User.username == sender).get().key
+      comment.recipient_key = None
     comment.text = text
-    comment.sender = sender
-    comment.recipient = recipient
     comment.time = datetime.datetime.now() - datetime.timedelta(hours=7) #For PST
     comment.put()
+
+    if comment.root == False:
+      parent_comment.children.append(comment.key)
+      parent_comment.put()
+      
     post.comment_count += 1
     post.put()
     self.redirect('/tech/{}/{}'.format(forum_id, post_reference))
