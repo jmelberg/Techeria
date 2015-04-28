@@ -43,6 +43,8 @@ class ConnectHandler(SessionHandler):
       connection_request.requestee = requestee.username
       connection_request.time = datetime.datetime.now() - datetime.timedelta(hours=7) #For PST
       connection_request.text = text
+      connection_request.requestor_key = requestor.key
+      connection_request.requestor_name = requestor.first_name + " " + requestor.last_name
       connection_request.put()
       requestee.request_count += 1
       requestee.put()
@@ -54,12 +56,15 @@ class ConfirmConnection(SessionHandler):
     requestor = User.query(User.username == cgi.escape(self.request.get('requestor'))).get()
     requestee = User.query(User.username == cgi.escape(self.request.get('requestee'))).get()
     connection_request = ConnectionRequest.query(ConnectionRequest.requestee == requestee.username).get()
-    requestor.friends.append(requestee.key)
-    requestee.friends.append(requestor.key)
-    requestee.request_count -= 1
-    requestor.put()
-    requestee.put()
-    connection_request.key.delete()
+    if requestee.key not in requestor.friends:
+      requestor.friends.append(requestee.key)
+      requestor.put()
+    if requestor.key not in requestee.friends:
+      requestee.friends.append(requestor.key)
+      requestee.request_count -= 1
+      requestee.put()
+    if connection_request != None:
+      connection_request.key.delete()
     self.redirect('/connect')
     
 class DisplayConnections(SessionHandler):

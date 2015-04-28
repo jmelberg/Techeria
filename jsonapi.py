@@ -4,17 +4,40 @@ from google.appengine.ext import ndb
 from google.appengine.api import users
 from google.appengine.api import images
 from webapp2_extras import sessions, auth
-from models import User
-from models import Comment
-from models import Message
-from models import ConnectionRequest
-from models import ForumPost
-from models import Skill
-from models import Forum
+from models import *
 from BaseHandler import SessionHandler
 from BaseHandler import login_required
 from urlparse import urlparse
 import json
+
+class MessageHandlerAPI(webapp2.RequestHandler):
+  """ Handler to process user messages"""
+  def post(self):
+    data = []
+    token = cgi.escape(self.request.get('token'))
+    arg = cgi.escape(self.request.get('q'))
+    if type(token) == unicode:
+      converter = bytearray(token, "utf-8")
+      token = bytes(converter)
+    token_key = ndb.Key("AccessToken", token)
+    access_token = AccessToken.query(AccessToken.token == token).get()
+    user = access_token.user.get()
+    if access_token == None:
+      data.append("Invalid Token")
+      self.response.out.write(json.dumps(data))
+    if arg == "sent":
+      messages = Message.query(Message.sender == user.username).order(-Message.time)
+    else:
+      messages = Message.query(Message.recipient == user.username).order(-Message.time)
+    for message in messages:
+      item = {}
+      item["type"] = "message"
+      item["sender"] = message.sender
+      item["recipient"] = message.recipient
+      item["text"] = message.text
+      data.append(item)
+    self.response.headers['Content-Type'] = 'application/json' 
+    self.response.out.write(json.dumps(data))
 
 class ForumAPI(SessionHandler):
   """ Handles the forum """

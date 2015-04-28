@@ -1,33 +1,51 @@
-{% extends "base.html" %}
+  {% extends "base.html" %}
 
-{% block content %}
-<div class="page-header">
-  <h2>Connection Requests<small></small>
-  </h2>
-</div>
-<ul class = "list-group">
-  {% for request in  requests %}
-  <div class="list-group-item">
-    <a href="/profile/{{request.requestor}}">
-      <h3 class="list-group-item-text">{{request.requestor}}</h3>
-    </a>
-    {% if request.text != None %}
-    <p class="list-group-item-text">{{request.text}}</p>
-    {% endif %}
-    <form role="form" action="/confirmconnect" method="post">
-      <input  type="hidden" name="requestor" class="form-control" value={{request.requestor}}>
-        <input type="hidden" name="requestee" class="form-control" value={{request.requestee}}>
-          <span class="input-group-btn">
-            <button id="connect{{forloop.counter}}" type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Connect</button>
-          </span>
-          </form>
+  {% block content %}
+  <div class="page-header">
+    <h2>Connection Requests<small></small>
+    </h2>
   </div>
-  {% empty %}
-          <div class = "row">
-          <div style="margin-left: 15px; margin-right: 15px;" class="list-group-item">
-            <h3 stlye="margin-left: 20px;"> No New Connection Requests </h3>
+  <ul class = "list-group">
+    {% for request in  requests %}
+    <div class="list-group-item">
+    <div class="row">
+    <div class="col-md-2">
+          <img src="/img?user_id={{request.requestor_key.urlsafe}}&height=100&width=100" class="img-rounded" ></img>
+    </div>
+    <div class="col-md-8">
+      <a href="/profile/{{request.requestor}}">
+
+        <h3>{{request.requestor_name}} </h3>
+      </a>
+      {% if request.text != None %}
+      <p>{{request.text}}</p>
+      {% endif %}
+    </div>
+    <div class="col-md-2">
+    <br></br>
+      <form role="form" action="/confirmconnect" method="post">
+        <input  type="hidden" name="requestor" class="form-control" value={{request.requestor}}>
+          <input type="hidden" name="requestee" class="form-control" value={{request.requestee}}>
+            <span class="input-group-btn">
+              <button id="connect{{forloop.counter}}" type="submit" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>  Connect</button>
+            </span>
+            </form>
+    </div>
+    </div>
+    </div>
+    {% empty %}
+            <div class = "row">
+            <div style="margin-left: 15px; margin-right: 15px;" class="list-group-item">
+              <h3 stlye="margin-left: 20px;"> No New Connection Requests </h3>
+            </div>
           </div>
-        </div>
-  {% endfor %}
-</ul>
-{% endblock %}
+    {% endfor %}
+  </ul>
+
+  <script>
+  $( "[id^='connect']" ).click(function() {
+    $(this).hide();
+  });  
+
+  </script>
+  {% endblock %}
