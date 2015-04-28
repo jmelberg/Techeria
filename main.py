@@ -27,7 +27,7 @@ from Forum import *
 from Feed import *
 from Authentication import *
 from Connections import *
-from jsonapi import ForumAPI, ForumViewerAPI, ProfileHandlerAPI, SearchHandlerAPI, DisplayConnectionsAPI
+from jsonapi import *
 import json
 """Techeria is a professional social network for techies"""
 
@@ -376,5 +376,6 @@ app = webapp2.WSGIApplication([
                                ('/api/profile/(\w+)', ProfileHandlerAPI),
                                ('/api/search', SearchHandlerAPI),
                                ('/api/connections', DisplayConnectionsAPI),
-                               ('/api/login', LoginHandlerAPI)
+                               ('/api/login', LoginHandlerAPI),
+                               ('/api/messages', MessageHandlerAPI)
                                ], debug=True, config=config)

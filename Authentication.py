@@ -20,6 +20,7 @@ import string
 import datetime
 from BaseHandler import SessionHandler
 from BaseHandler import login_required
+import json
 
 class LoginHandler(SessionHandler):
   def get(self):
@@ -48,6 +49,7 @@ class LoginHandlerAPI(SessionHandler):
   def post(self):
     username = self.request.get('username').strip().lower()
     password = self.request.get('password')
+    data = []
     try:
       if '@' in username:
         user_login = User.query(User.email_address == username).get()
@@ -58,9 +60,10 @@ class LoginHandlerAPI(SessionHandler):
       token.user = self.user_model.key
       token.token = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(20))
       token.put()
-      self.response.out.write({"token": token.token})
+      data.append({"token": token.token})
+      self.response.out.write(json.dumps(data))
     except( auth.InvalidAuthIdError, auth.InvalidPasswordError):
-      self.response.out.write({"token": ''})
+      self.response.out.write(json.dumps(data))
 
 class RegisterHandler(SessionHandler):
   def get(self):
