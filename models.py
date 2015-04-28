@@ -75,6 +75,9 @@ class ConnectionRequest(ndb.Model):
   requestee = ndb.StringProperty()
   time = ndb.DateTimeProperty(auto_now_add=True)
   text = ndb.StringProperty()
+  #use key to retrieve requestors picture
+  requestor_key = ndb.KeyProperty()
+  requestor_name = ndb.StringProperty()
 
 ''' ForumPost Model 
 - Object to hold forum name and other descriptors.

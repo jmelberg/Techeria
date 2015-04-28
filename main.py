@@ -70,7 +70,7 @@ class ProfileHandler(SessionHandler):
     user.friend_count = counter
     user.put()
     # Get Nested Comments
-    comments = Comment.query(Comment.root==True, Comment.sender_key == viewer.key).order(-Comment.time).fetch()
+    comments = Comment.query(Comment.root==True, ndb.OR(Comment.recipient_key == user.key, Comment.sender_key == user.key)).order(-Comment.time).fetch(10)
     index = 0
     while index < len(comments):
       children = Comment.query(Comment.parent == comments[index].key).fetch()

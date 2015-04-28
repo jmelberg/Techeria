@@ -7,7 +7,7 @@ $(function () {
  });
   $('#commentBox').focusout(function () {
     if($(this).val().length == 0){
-      $(this).attr('placeholder', "Leave {{user.first_name}} a comment.");
+      $(this).attr('placeholder', "Leave a comment.");
       $(this).attr('rows', 1);
       $("#postButton").hide("fast");
     }

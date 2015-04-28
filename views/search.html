@@ -22,7 +22,7 @@
     </div>
     {% for user in results %}
       {% if user != None and user.username != None %}
-      <div class="col-md-10" id="users_list">
+      <div class="col-md-12" id="users_list">
       <!-- User Tab -->
         <div class="list-group">
          <a href="profile/{{user.username}}" class="row list-group-item">
@@ -120,7 +120,7 @@
     <!-- User is NOT a Recruiter -->
     {% for user in results %}
       {% if user != None %}
-    <div class="col-md-10">
+    <div class="col-md-12">
       <div class="list-group">
        <a href="profile/{{user.username}}" class="row list-group-item">
         <div class="col-md-2">
