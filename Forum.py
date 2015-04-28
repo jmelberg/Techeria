@@ -130,13 +130,6 @@ class ForumCommentHandler(SessionHandler):
       comment.sender = sender
       comment.recipient = recipient
 
-    # Not double adding User Keys
-    if sender != recipient:
-      comment.sender_key = User.query(User.username == sender).get().key
-      comment.recipient_key = User.query(User.username== recipient).get().key
-    else:
-      comment.sender_key = User.query(User.username == sender).get().key
-      comment.recipient_key = None
     comment.text = text
     comment.time = datetime.datetime.now() - datetime.timedelta(hours=7) #For PST
     comment.put()
