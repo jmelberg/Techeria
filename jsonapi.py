@@ -18,8 +18,8 @@ class BaseHandlerAPI(webapp2.RequestHandler):
       converter = bytearray(token, "utf-8")
       token = bytes(converter)
     token_key = ndb.Key("AccessToken", token)
-    if token_key != None:
-      access_token = AccessToken.query(AccessToken.token == token).get()
+    access_token = AccessToken.query(AccessToken.token == token).get()
+    if access_token != None:
       user = access_token.user.get()
       return user
     else:
@@ -31,25 +31,42 @@ class FeedListHandlerAPI(BaseHandlerAPI):
       CURRENT: Loads 10 comments per page, with ability to load more when user reaches
       end of page.
   """
-  def get(self):
+  def post(self):
     data = []
     token = cgi.escape(self.request.get('token'))
     threaded_comments = []
     page = int(cgi.escape(self.request.get('page')))
     items = self.request.get('items')
     offset_count = 10*page
-    viewer = user_from_token(token)
+    viewer = self.user_from_token(token)
     more = 0
     if viewer != None:
       if items == '':
-        threaded_comments, more = self.comment_list(offset_count)
-        self.response.out.write(threaded_comments)
+        threaded_comments, more = self.comment_list(offset_count, viewer)
+        for comment in threaded_comments:
+          item = {}
+          item["type"] = "comment"
+          item["sender"] = comment.sender
+          item["recipient"] = comment.recipient
+          item["text"] = comment.text
+          data.append(item)
+        self.response.out.write(json.dumps(data))
       else:
-        posts, more = self.post_list(offset_count)
-        self.response.out.write(posts)
-  def comment_list(self, offset_count):
+        posts, more = self.post_list(offset_count, viewer)
+        for post in posts:
+          item = {}
+          item["type"] = "post"
+          item["url"] = post.url
+          item["votes"] = post.vote_count
+          item["text"] = post.text
+          item["author"] = post.author
+          item["forum"] = post.forum_name
+          item["reference"] = post.reference
+          data.append(item)
+        self.response.out.write(json.dumps(data))
+  def comment_list(self, offset_count, user):
     index = 0
-    viewer = self.user_model
+    viewer = user
     # Need to see if user has friends, if not - Query using viewer.friends will break #
     if viewer.friends:
       comments = Comment.query(Comment.root==True, ndb.OR(Comment.sender_key.IN(viewer.friends),
@@ -63,9 +80,9 @@ class FeedListHandlerAPI(BaseHandlerAPI):
       comments[index:index] = children
     return comments, more
 
-  def post_list(self, offset_count):
+  def post_list(self, offset_count, user):
     index = 0
-    viewer = self.user_model
+    viewer = user
     posts = ForumPost.query(ForumPost.forum_name.IN(viewer.subscriptions)).order(-ForumPost.vote_count, -ForumPost.time).fetch(10, offset=offset_count)
     more = len(posts)
     return posts, more
