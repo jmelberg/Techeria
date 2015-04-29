@@ -10,19 +10,74 @@ from BaseHandler import login_required
 from urlparse import urlparse
 import json
 
-class MessageHandlerAPI(webapp2.RequestHandler):
+
+class BaseHandlerAPI(webapp2.RequestHandler):
+  """based in handler for logged in functions"""
+  def user_from_token(self, token):
+    if type(token) == unicode:
+      converter = bytearray(token, "utf-8")
+      token = bytes(converter)
+    token_key = ndb.Key("AccessToken", token)
+    if token_key != None:
+      access_token = AccessToken.query(AccessToken.token == token).get()
+      user = access_token.user.get()
+      return user
+    else:
+      return None
+
+class FeedListHandlerAPI(BaseHandlerAPI):
+  """ Handler to handle output of all comments pulled from all users.
+      
+      CURRENT: Loads 10 comments per page, with ability to load more when user reaches
+      end of page.
+  """
+  def get(self):
+    data = []
+    token = cgi.escape(self.request.get('token'))
+    threaded_comments = []
+    page = int(cgi.escape(self.request.get('page')))
+    items = self.request.get('items')
+    offset_count = 10*page
+    viewer = user_from_token(token)
+    more = 0
+    if viewer != None:
+      if items == '':
+        threaded_comments, more = self.comment_list(offset_count)
+        self.response.out.write(threaded_comments)
+      else:
+        posts, more = self.post_list(offset_count)
+        self.response.out.write(posts)
+  def comment_list(self, offset_count):
+    index = 0
+    viewer = self.user_model
+    # Need to see if user has friends, if not - Query using viewer.friends will break #
+    if viewer.friends:
+      comments = Comment.query(Comment.root==True, ndb.OR(Comment.sender_key.IN(viewer.friends),
+        Comment.recipient_key.IN(viewer.friends), Comment.sender_key == viewer.key)).order(-Comment.time).fetch(10, offset=offset_count)
+    else:
+      comments = Comment.query(Comment.root==True, Comment.sender_key == viewer.key).order(-Comment.time).fetch(10, offset=offset_count)
+    more = len(comments)
+    while index < len(comments):
+      children = Comment.query(Comment.parent == comments[index].key).fetch()
+      index += 1
+      comments[index:index] = children
+    return comments, more
+
+  def post_list(self, offset_count):
+    index = 0
+    viewer = self.user_model
+    posts = ForumPost.query(ForumPost.forum_name.IN(viewer.subscriptions)).order(-ForumPost.vote_count, -ForumPost.time).fetch(10, offset=offset_count)
+    more = len(posts)
+    return posts, more
+
+class MessageHandlerAPI(BaseHandlerAPI):
   """ Handler to process user messages"""
   def post(self):
     data = []
     token = cgi.escape(self.request.get('token'))
     arg = cgi.escape(self.request.get('q'))
-    if type(token) == unicode:
-      converter = bytearray(token, "utf-8")
-      token = bytes(converter)
-    token_key = ndb.Key("AccessToken", token)
-    access_token = AccessToken.query(AccessToken.token == token).get()
-    user = access_token.user.get()
-    if access_token == None:
+    user = self.user_from_token(token)
+    if user == None:
       data.append("Invalid Token")
       self.response.out.write(json.dumps(data))
     if arg == "sent":
@@ -39,10 +94,10 @@ class MessageHandlerAPI(webapp2.RequestHandler):
     self.response.headers['Content-Type'] = 'application/json' 
     self.response.out.write(json.dumps(data))
 
+
 class ForumAPI(SessionHandler):
   """ Handles the forum """
   def get(self, forum_id):
-
     forum_id = forum_id.lower()
     user = self.user_model
     forum_posts = ForumPost.query(ForumPost.forum_name == forum_id)
