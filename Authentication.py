@@ -76,25 +76,29 @@ class RegisterHandler(SessionHandler):
     email = cgi.escape(self.request.get('email')).strip().lower()
     account = cgi.escape(self.request.get('account_type'))
     password = cgi.escape(self.request.get('password'))
+    verification = cgi.escape(self.request.get('verification'))
     avatar = self.request.get('img')
     avatar = images.resize(avatar,400,400) 
-    unique_properties = ['email_address']
-    lower_first = first_name.lower()
-    lower_last = last_name.lower()
-    # Initial Creation of User 
-    user_data = User.create_user(username,
-      unique_properties, username=username,
-      email_address=email, first_name=first_name, lower_first_name=lower_first, password_raw=password,
-      last_name=last_name, lower_last_name = lower_last, avatar = avatar, subscriptions=["news", "techeria"], account_type=account, verified=False)
-    # TODO: Look for new wait method
-    time.sleep(1)
-    try:
-      u = self.auth.get_user_by_password(username, password, remember=True,
-      save_session=True)
-      self.redirect('/profile/{}'.format(self.user_model.username))
-    except( auth.InvalidAuthIdError, auth.InvalidPasswordError):
-      error = "Invalid Email/Password"
-      self.response.out.write(template.render('views/login.html', {'error':error}))
+    if (verification == "tech"):
+      unique_properties = ['email_address']
+      lower_first = first_name.lower()
+      lower_last = last_name.lower()
+      # Initial Creation of User 
+      user_data = User.create_user(username,
+        unique_properties, username=username,
+        email_address=email, first_name=first_name, lower_first_name=lower_first, password_raw=password,
+        last_name=last_name, lower_last_name = lower_last, avatar = avatar, subscriptions=["news", "techeria"], account_type=account, verified=False)
+      # TODO: Look for new wait method
+      time.sleep(1)
+      try:
+        u = self.auth.get_user_by_password(username, password, remember=True,
+        save_session=True)
+        self.redirect('/profile/{}'.format(self.user_model.username))
+      except( auth.InvalidAuthIdError, auth.InvalidPasswordError):
+        error = "Invalid Email/Password"
+        self.response.out.write(template.render('views/login.html', {'error':error}))
+    else:
+      self.redirect('/register')
 
 class LogoutHandler(SessionHandler):
     """Destroy the user session and return them to the login screen."""
