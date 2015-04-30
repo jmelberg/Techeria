@@ -63,23 +63,25 @@ class ForumHandler(SessionHandler):
     title = cgi.escape(self.request.get('title'))
     url = cgi.escape(self.request.get('url'))
     text = cgi.escape(self.request.get('text'))
-    post = ForumPost()
-    forum = Forum.query(Forum.name == forum_name).get()
-    if forum != None:
-      forum.posts += 1
-    else:
-      forum = Forum(name=forum_name, posts=1)
-    forum.put()
-    post.text = text
-    post.author = author
-    post.forum_name = forum_name
-    post.title = title
-    post.time = datetime.datetime.now() - datetime.timedelta(hours=7) #For PST
-    post.url = url
-    post.url_host = urlparse(url).hostname
-    post.reference = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
-    post.put()
-    self.redirect('/tech/{}'.format(forum_name))
+    forums = forum_name.strip().replace(" ", "").split(",")
+    for submissions in forums[0:3]:
+      post = ForumPost()
+      forum = Forum.query(Forum.name == submissions).get()
+      if forum != None:
+        forum.posts += 1
+      else:
+        forum = Forum(name=submissions, posts=1)
+      forum.put()
+      post.text = text
+      post.author = author
+      post.forum_name = submissions
+      post.title = title
+      post.time = datetime.datetime.now() - datetime.timedelta(hours=7) #For PST
+      post.url = url
+      post.url_host = urlparse(url).hostname
+      post.reference = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(8))
+      post.put()
+    self.redirect('/tech/{}'.format(forums[0]))
 
 class SubmissionHandler(SessionHandler):
   """Handles user submissions to forums"""
