@@ -279,6 +279,7 @@ class SkillsHandler(SessionHandler):
           user.subscriptions.append(new_skill.name.replace(" ",""))
         else:
           user.skills.append(skill_query.key)
+          user.subscriptions.append(skill_query.name.replace(" ", ""))
         new_skills_count += 1
     
     # Add new User Info
