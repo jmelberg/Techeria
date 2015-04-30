@@ -58,6 +58,15 @@ $(document).ready(function(){
     $('#sales').prop("checked", false);
     $('#finance').prop("checked", false);
     $('#b_other').prop("checked", false);
+    $('#management').prop("checked", false);
+    $('#b_other_text').hide();
+    $('#b_position_name').show();
+  });
+  $('#management').click(function(){
+    $('#marketing').prop("checked", false);
+    $('#sales').prop("checked", false);
+    $('#finance').prop("checked", false);
+    $('#b_other').prop("checked", false);
     $('#b_other_text').hide();
     $('#b_position_name').show();
   });
@@ -65,6 +74,7 @@ $(document).ready(function(){
     $('#marketing').prop("checked", false);
     $('#finance').prop("checked", false);
     $('#b_other').prop("checked", false);
+    $('#management').prop("checked", false);
     $('#b_other_text').hide();
     $('#b_position_name').show();
   });
@@ -72,6 +82,7 @@ $(document).ready(function(){
     $('#sales').prop("checked", false);
     $('#marketing').prop("checked", false);
     $('#b_other').prop("checked", false);
+    $('#management').prop("checked", false);
     $('#b_other_text').hide();
     $('#b_position_name').show();
   });
@@ -79,6 +90,7 @@ $(document).ready(function(){
     $('#sales').prop("checked", false);
     $('#marketing').prop("checked", false);
     $('#finance').prop("checked", false);
+    $('#management').prop("checked", false);
     $('#b_other_text').show();
     $('#b_position_name').show();
   });
@@ -290,28 +302,100 @@ $(document).ready(function(){
 //////// What kind of Marketing on/off switch //////
   $('#online_marketing').click(function(){
     $('#marketing-form').show();
+    $('#m_other_text').hide();
+    $('#m_other').prop("checked", false);
     $('#business_marketing').prop("checked", false);
     $('#consumer_marketing').prop("checked", false);
     $('#partner_marketing').prop("checked", false);
   });
   $('#business_marketing').click(function(){
     $('#marketing-form').show();
+    $('#m_other_text').hide();
+    $('#m_other').prop("checked", false);
     $('#online_marketing').prop("checked", false);
     $('#consumer_marketing').prop("checked", false);
     $('#partner_marketing').prop("checked", false);
   });
   $('#consumer_marketing').click(function(){
     $('#marketing-form').show();
+    $('#m_other_text').hide();
+    $('#m_other').prop("checked", false);
     $('#business_marketing').prop("checked", false);
     $('#online_marketing').prop("checked", false);
     $('#partner_marketing').prop("checked", false);
   });
   $('#partner_marketing').click(function(){
     $('#marketing-form').show();
+    $('#m_other_text').hide();
+    $('#m_other').prop("checked", false);
     $('#business_marketing').prop("checked", false);
     $('#consumer_marketing').prop("checked", false);
     $('#online_marketing').prop("checked", false);
   });
+  $('#m_other').click(function(){
+    $('#m_other_text').show();
+    $('#marketing-form').show();
+    $('#business_marketing').prop("checked", false);
+    $('#consumer_marketing').prop("checked", false);
+    $('#online_marketing').prop("checked", false);
+    $('#partner_marketing').prop("checked", false);
+  });
+
+  //////// What kind of Management on/off switch /////
+  $('#account_management').click(function(){
+    $('#management-form').show();
+    $('#human_management').prop("checked", false);
+    $('#project_management').prop("checked", false);
+    $('#retail_management').prop("checked", false);
+    $('#sales_management').prop("checked", false);
+    $('#man_other').prop("checked", false);
+  });
+  $('#human_management').click(function(){
+    $('#management-form').show();
+    $('#account_management').prop("checked", false);
+    $('#project_management').prop("checked", false);
+    $('#retail_management').prop("checked", false);
+    $('#sales_management').prop("checked", false);
+    $('#man_other').prop("checked", false);
+    $('#man_other_text').hide();
+  });
+  $('#project_management').click(function(){
+    $('#management-form').show();
+    $('#account_management').prop("checked", false);
+    $('#human_management').prop("checked", false);
+    $('#retail_management').prop("checked", false);
+    $('#sales_management').prop("checked", false);
+    $('#man_other').prop("checked", false);
+    $('#man_other_text').hide();
+  });
+  $('#retail_management').click(function(){
+    $('#management-form').show();
+    $('#account_management').prop("checked", false);
+    $('#human_management').prop("checked", false);
+    $('#project_management').prop("checked", false);
+    $('#sales_management').prop("checked", false);
+    $('#man_other').prop("checked", false);
+    $('#man_other_text').hide();
+  });
+  $('#sales_management').click(function(){
+    $('#management-form').show();
+    $('#account_management').show();
+    $('#human_management').prop("checked", false);
+    $('#project_management').prop("checked", false);
+    $('#retail_management').prop("checked", false);
+    $('#man_other').prop("checked", false);
+    $('#man_other_text').hide();
+  });
+  $('#man_other').click(function(){
+    $('#account_management').show();
+    $('#human_management').prop("checked", false);
+    $('#project_management').prop("checked", false);
+    $('#retail_management').prop("checked", false);
+    $('#sales_management').prop("checked", false);
+    $('#management-form').show();
+    $('#man_other_text').show();
+  });
+
 
   //////// What kind of Finance on/off switch /////
   $('#personal_finance').click(function(){
@@ -479,6 +563,12 @@ $(document).ready(function(){
       $('ul.setup-panel li a[href="#step3"]').trigger('click');
       $('#step3s').show();
     }
+    else if(document.getElementById("management").checked== true){
+      specialty = "Management";
+      $('ul.setup-panel li:eq(3)').removeClass('disabled');
+      $('ul.setup-panel li a[href="#step3"]').trigger('click');
+      $('#step3man').show();
+    }
     else{
       specialty = $('#b_other_text').val();
       $('ul.setup-panel li:eq(3)').removeClass('disabled');
@@ -575,6 +665,7 @@ $(document).ready(function(){
     if(document.getElementById("investment").checked == true){
       specialty = "Investment Finance";
     }
+ 
     tools = document.getElementById("financetools").value; 
 
     $.ajax({
@@ -611,6 +702,39 @@ $(document).ready(function(){
       window.location.href = '/';
     }, 1000);
   });
+
+  //////// Sales Submit //////
+  $("#done_man").click(function(){
+  if(document.getElementById("account_management").checked == true){
+      specialty = "Account Management";
+    }
+    if(document.getElementById("human_management").checked == true){
+      specialty = "Human Resource Management";
+    }
+    if(document.getElementById("project_management").checked == true){
+      specialty = "Project Management";
+    }
+    if(document.getElementById("retail_management").checked == true){
+      specialty = "Retail Management";
+    }
+    if(document.getElementById("sales_management").checked == true){
+      specialty = "Sales Management";
+    }
+    else{
+      specialty = $('#man_other_text').val();
+    }  
+
+    tools = document.getElementById("managementtools").value;
+    $.ajax({
+      type:"POST",
+      url: "/newskill",
+      data:{'field':field, 'tools':tools, 'job':job, 'employer':employer, 'specialty':specialty}
+    });
+    setTimeout(function(){ // Refresh after 1 second
+      window.location.href = '/';
+    }, 1000);
+  });
+
 });
 
 // Edit and Cancel Buttons
