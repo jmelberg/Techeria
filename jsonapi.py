@@ -9,6 +9,7 @@ from BaseHandler import SessionHandler
 from BaseHandler import login_required
 from urlparse import urlparse
 import json
+import datetime
 
 
 class BaseHandlerAPI(webapp2.RequestHandler):
@@ -24,6 +25,53 @@ class BaseHandlerAPI(webapp2.RequestHandler):
       return user
     else:
       return None
+  def token_error():
+    error = {}
+    error["type"] = "error"
+    error["text"] = "Invalid token"
+    self.response.out.write(json.dumps(error))
+
+class ComposeMessageAPI(BaseHandlerAPI):
+  """ Handler to compose messages from one user to another """
+
+  def post(self):
+    token = cgi.escape(self.request.get('token'))
+    text = cgi.escape(self.request.get('text'))
+    recipient = cgi.escape(self.request.get('recipient'))
+    subject = cgi.escape(self.request.get('subject'))
+    parent_message = cgi.escape(self.request.get('parent'))
+    user = self.user_from_token(token)
+    recipient_user = User.query(User.username == recipient).get()
+    if(user and recipient_user != None):
+      if len(parent_message) > 0:
+        message_key = ndb.Key(urlsafe=parent_message)
+        message = Message(parent = message_key)
+      else:
+        message = Message()
+      message.subject = subject
+      message.text = text
+      message.sender = user.username
+      message.recipient = recipient
+      message.time = datetime.datetime.now() - datetime.timedelta(hours=7) #For PST
+      message.put()
+      #Increment message count for navbar
+      q = User.query(User.username == recipient)
+      user = q.get()
+      user.message_count += 1
+      user.put()
+      success = {}
+      success["type"] = "status"
+      success["text"] = "Message Sent"
+      self.response.out.write(json.dumps(success))
+    elif(recipient_user == None):
+      success = {}
+      success["type"] = "status"
+      success["text"] = "Recipient does not exist"
+      self.response.out.write(json.dumps(success))
+    else:
+      self.token_error()
+
+
 
 class FeedListHandlerAPI(BaseHandlerAPI):
   """ Handler to handle output of all comments pulled from all users.

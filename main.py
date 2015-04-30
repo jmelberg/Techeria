@@ -199,6 +199,8 @@ class UpdateProfile(SessionHandler):
     user.employer = employer
     user.lower_profession = profession.lower()
     user.lower_employer = employer.lower()
+    if employer.lower().replace(" ", "") not in user.subscriptions:
+      user.subscriptions.append(employer.lower().replace(" ", ""))
     user.lower_first_name = first_name.lower()
     user.lower_last_name = last_name.lower()
     user.put()
@@ -380,5 +382,6 @@ app = webapp2.WSGIApplication([
                                ('/api/connections', DisplayConnectionsAPI),
                                ('/api/login', LoginHandlerAPI),
                                ('/api/messages', MessageHandlerAPI),
-                               ('/api/feedlist', FeedListHandlerAPI)
+                               ('/api/feedlist', FeedListHandlerAPI),
+                               ('/api/compose', ComposeMessageAPI)
                                ], debug=True, config=config)

@@ -20,7 +20,13 @@ def test_feed(token):
   #add items for posts
   params={"token":token, "page":0, "items":"posts"}
   r = requests.post(url, params)
-  output= r.text
+  output = r.text
+  return output
+def test_compose(token, subject, text, recipient):
+  url="http://localhost:8080/api/compose"
+  params={"token":token, "subject":subject, "text":text, "recipient":recipient}
+  r = requests.post(url, params)
+  output = r.text
   return output
 
 def main():
@@ -35,5 +41,7 @@ def main():
     print messages
     feed = test_feed(token)
     print feed
+    compose = test_compose(token, "Tester", "This is a text body of the message", "newuser")
+    print compose
 if __name__ == '__main__':
   main()
