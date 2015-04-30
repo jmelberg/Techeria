@@ -257,7 +257,6 @@ class AddSkillsHandler(SessionHandler):
     #self.redirect('/profile/{}'.format(user.username))
 
 
-
 class SkillsHandler(SessionHandler):
   def post(self):
     user = self.user_model
@@ -301,6 +300,7 @@ class SkillsHandler(SessionHandler):
       user.lower_profession = profession.lower()
 
     user.skills_count += new_skills_count
+    user.subscriptions.append(employer.lower().replace(" ", ""))
     user.put()
 
 class EndorsementHandler(SessionHandler):

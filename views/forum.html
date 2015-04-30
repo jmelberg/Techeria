@@ -43,6 +43,10 @@
       </div>
     </div>
   </div>
+  {% empty %}
+  <h3>There are no posts yet in {{forum_name}} </h3>
+</div>
+
 
 {% endfor %}
 <div id = "voter" style = "display: none;">{{viewer.key.urlsafe}}</div>
