@@ -104,18 +104,18 @@
             <li><a href='/logout'>Sign Out</a></li>
           </ul>
           <ul class="nav nav-pills navbar-left" role="tablist">
-            <li role="presentation"><a href="/profile/{{viewer.username}}"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><span class="badge"></span>
-              <span class="badge"></span>
+            <li role="presentation"><a href="/profile/{{viewer.username}}"><span class="glyphicon glyphicon-home" aria-hidden="true" style="padding-top:6px; color:white;"></span><span class="badge"></span>
+              <span class="badge" style="background-color:white; color:black;"></span>
             </a></li>
-            <li role="presentation"><a href="/connect"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            <li role="presentation"><a href="/connect"><span class="glyphicon glyphicon-user" aria-hidden="true" style="padding-top:6px; color:white;"></span>
+              <span class="glyphicon glyphicon-plus" aria-hidden="true" style="padding-top:6px; color:white;"></span>
               {% if viewer.request_count > 0 %}
-              <span class="badge">{{viewer.request_count}}</span>
+              <span class="badge" style="background-color:white; color:black;">{{viewer.request_count}}</span>
               {% endif %}
             </a></li>
-            <li role="presentation"><a href="../../messages"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+            <li role="presentation"><a href="../../messages"> <span class="glyphicon glyphicon-envelope" aria-hidden="true" style="padding-top:6px; color:white;"></span>
               {% if viewer.message_count > 0 %}
-              <span class="badge">{{viewer.message_count}}</span>
+              <span class="badge" style="background-color:white; color:black;">{{viewer.message_count}}</span>
               {% endif %}
             </a></li>
           </ul>
@@ -124,7 +124,7 @@
             <div class="form-group">
               <input id="searchBox" name="search" type="text" class="form-control" placeholder="Search" required>
                 </div>
-            <button id="searchBoxButton" type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+            <button id="searchBoxButton" type="submit" class="btn btn-warning"><span class="glyphicon glyphicon-search" aria-hidden="true" style = "color:white;"></span></button>
           </form>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.conaiiner-fluid -->
@@ -132,7 +132,7 @@
     <div class="container">
       {% block content %}{% endblock %}
     </div>
-    <div class="scroll-top-wrapper ">
+    <div class="scroll-top-wrapper">
     <span class="scroll-top-inner">
       <div class="glyphicon glyphicon-chevron-up" style="width:100%;"></div>
     </span>
