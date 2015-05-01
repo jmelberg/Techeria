@@ -31,7 +31,7 @@ class BaseHandlerAPI(webapp2.RequestHandler):
     error["text"] = "Invalid token"
     self.response.out.write(json.dumps(error))
 
-class ConnectHandlerAPI(SessionHandler):
+class ConnectHandlerAPI(BaseHandlerAPI):
   """handler to connect users"""
   def post(self):
     token = cgi.escape(self.request.get('token'))
@@ -62,7 +62,7 @@ class ConnectHandlerAPI(SessionHandler):
       success = {}
       success["type"] = "status"
       success["text"] = "Connection Request Sent"
-      self.response.out.write(json.dumps())
+      self.response.out.write(json.dumps(success))
 class ComposeMessageAPI(BaseHandlerAPI):
   """ Handler to compose messages from one user to another """
 

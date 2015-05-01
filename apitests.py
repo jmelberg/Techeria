@@ -28,6 +28,12 @@ def test_compose(token, subject, text, recipient):
   r = requests.post(url, params)
   output = r.text
   return output
+def test_connect(token, requestor, requestee):
+  url="http://localhost:8080/api/connect"
+  params={"token":token, "requestor":requestor, "requestee": requestee}
+  r = requests.post(url, params)
+  output = r.text
+  return output
 
 def main():
   response_data = test_login("newuser", "password")
@@ -43,5 +49,7 @@ def main():
     print feed
     compose = test_compose(token, "Tester", "This is a text body of the message", "newuser")
     print compose
+    connect = test_connect(token, "newuser", "a")
+    print connect
 if __name__ == '__main__':
   main()
