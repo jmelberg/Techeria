@@ -31,6 +31,38 @@ class BaseHandlerAPI(webapp2.RequestHandler):
     error["text"] = "Invalid token"
     self.response.out.write(json.dumps(error))
 
+class ConnectHandlerAPI(SessionHandler):
+  """handler to connect users"""
+  def post(self):
+    token = cgi.escape(self.request.get('token'))
+    requestor = self.user_from_token(token)
+    if requestor == None:
+      self.token_error()
+    else:
+      q = User.query(User.username == self.request.get('requestee'))
+      text = cgi.escape(self.request.get('text'))
+      requestee = q.get()
+      #Querying datastore to check for open connection request
+      incoming_query = ConnectionRequest.query(ConnectionRequest.requestor == requestee.username, ConnectionRequest.requestee == requestor.username)
+      outgoing_query = ConnectionRequest.query(ConnectionRequest.requestor == requestor.username, ConnectionRequest.requestee == requestee.username)
+      incoming_request = incoming_query.get()
+      outgoing_request = outgoing_query.get()
+      #don't create 2 connection requests between users
+      if incoming_request == None and outgoing_request == None and requestor.key not in requestee.friends:
+        connection_request = ConnectionRequest()
+        connection_request.requestor = requestor.username
+        connection_request.requestee = requestee.username
+        connection_request.time = datetime.datetime.now() - datetime.timedelta(hours=7) #For PST
+        connection_request.text = text
+        connection_request.requestor_key = requestor.key
+        connection_request.requestor_name = requestor.first_name + " " + requestor.last_name
+        connection_request.put()
+        requestee.request_count += 1
+        requestee.put()
+      success = {}
+      success["type"] = "status"
+      success["text"] = "Connection Request Sent"
+      self.response.out.write(json.dumps())
 class ComposeMessageAPI(BaseHandlerAPI):
   """ Handler to compose messages from one user to another """
 
