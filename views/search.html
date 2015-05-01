@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+html, body, .full-height {
+    height: 100%;
+}
+</style>
 <div class="page-header">
-      <h2>Search results for "{{search_string}}"
-      </h2>
-    </div>
+  <h2>Search results for "{{search_string}}"</h2>
+</div>
     {% if viewer.account_type == "Recruiter" %}
     <script type="text/javascript" src="../js/advancedSearch.js"> </script>
-    <div class="col-md-2">
+    <div class="col-md-2 full-height">
       <div class="list-group">
         <li {% if results %} class="list-group-item active" {% else %} class ="list-group-item disabled" {% endif %} id="users">Users<span class="badge">{% if results|length != 0 %}{{results|length}}{% endif %}</span></li>
 
@@ -22,14 +26,14 @@
     </div>
     {% for user in results %}
       {% if user != None and user.username != None %}
-      <div class="col-md-12" id="users_list">
+      <div class="col-md-10" id="users_list">
       <!-- User Tab -->
         <div class="list-group">
          <a href="profile/{{user.username}}" class="row list-group-item">
           <div class="col-md-2">
             <img src="/img?user_id={{user.key.urlsafe}}&height=100&width=100" class="img-rounded"></img>
           </div>
-          <div class="col-md-10">
+          <div class="col-md-8">
             <h3>{{user.first_name}}  {{user.last_name}}</h3>
             <p>{{user.profession}} @ {{user.employer}}</p>
           </div>
@@ -47,7 +51,7 @@
           <div class="col-md-2">
             <img src="/img?user_id={{user.key.urlsafe}}&height=100&width=100" class="img-rounded"></img>
            </div>
-          <div class="col-md-10">
+          <div class="col-md-8">
               <h3>{{user.first_name}}  {{user.last_name}}</h3>
               <p>{{user.profession}} @ <b>{{user.employer}}</b></p>
           </div>
@@ -65,7 +69,7 @@
           <div class="col-md-2">
             <img src="/img?user_id={{user.key.urlsafe}}&height=100&width=100" class="img-rounded"></img>
            </div>
-          <div class="col-md-10">
+          <div class="col-md-8">
               <h3>{{user.first_name}}  {{user.last_name}}</h3>
               <p>{{user.profession}} @ <b>{{user.employer}}</b></p>
           </div>
@@ -83,7 +87,7 @@
           <div class="col-md-2">
             <img src="/img?user_id={{user.key.urlsafe}}&height=100&width=100" class="img-rounded"></img>
            </div>
-          <div class="col-md-10">
+          <div class="col-md-8">
             <h3>{{user.first_name}}  {{user.last_name}}</h3>
             <p><b>{{user.profession}}</b> @ {{user.employer}}</p>
           </div>

@@ -43,7 +43,7 @@ class ProfileHandler(SessionHandler):
     if not profile:
       profile = Profile()
       profile.owner = user.key
-      profile.about = ""
+      profile.about = "I'm new to Techeria. Add me!"
       profile.put()
     skill_list = []
     endorsements = Endorsement.query(Endorsement.endorsee == user.key).fetch()
