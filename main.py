@@ -384,5 +384,6 @@ app = webapp2.WSGIApplication([
                                ('/api/login', LoginHandlerAPI),
                                ('/api/messages', MessageHandlerAPI),
                                ('/api/feedlist', FeedListHandlerAPI),
-                               ('/api/compose', ComposeMessageAPI)
+                               ('/api/compose', ComposeMessageAPI),
+                               ('/api/connect'), ConnectHandlerAPI)
                                ], debug=True, config=config)
