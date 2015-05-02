@@ -136,6 +136,7 @@ class FeedListHandlerAPI(BaseHandlerAPI):
         for post in posts:
           item = {}
           item["type"] = "post"
+          item["title"] = post.title
           item["url"] = post.url
           item["votes"] = post.vote_count
           item["text"] = post.text
