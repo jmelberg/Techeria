@@ -49,7 +49,6 @@ class LoginHandlerAPI(SessionHandler):
   def post(self):
     username = self.request.get('username').strip().lower()
     password = self.request.get('password')
-    data = []
     try:
       if '@' in username:
         user_login = User.query(User.email_address == username).get()
@@ -60,7 +59,8 @@ class LoginHandlerAPI(SessionHandler):
       token.user = self.user_model.key
       token.token = ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(20))
       token.put()
-      data.append({"token": token.token})
+      data = {}
+      data["token"] = token.token
       self.response.out.write(json.dumps(data))
     except( auth.InvalidAuthIdError, auth.InvalidPasswordError):
       self.response.out.write(json.dumps(data))
