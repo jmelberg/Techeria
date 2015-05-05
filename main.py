@@ -136,11 +136,11 @@ class SearchHandler(SessionHandler):
             skills.extend(skilled_users)
             results.extend(skilled_users)
           forum_query = Forum.query(Forum.name == search_string).get()
-          
+
         name_list = User.query(ndb.OR(User.username == search_string, User.lower_first_name == search_string, User.lower_last_name == search_string, 
           User.lower_employer == search_string, User.lower_profession == search_string)).fetch()
         results.extend(name_list)
-      self.response.out.write(template.render('views/search.html', {'results':results, 'employers': employers,
+      self.response.out.write(template.render('views/search.html', {'results':results, 'users':name_list, 'employers': employers,
         'jobs': jobs, 'search_string':search_string, 'viewer':user, 'skills':skills, 'forums':forum_query}))
 
 

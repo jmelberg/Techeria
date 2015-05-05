@@ -6,8 +6,18 @@ $(document).ready(function(){
         $('.list-group').find('li').removeClass('active');
         $that.addClass('active');
     });
+  // Results Selected
+  $('#results').click(function(){
+    $('#results_list').show();
+    $('#jobs_list').hide();
+    $('#skills_list').hide();
+    $('#forums_list').hide();
+    $('#employers_list').hide();
+    $('#users_list').hide();
+  });
   // Users Selected
   $('#users').click(function(){
+    $('#results_list').hide();
     $('#jobs_list').hide();
     $('#skills_list').hide();
     $('#forums_list').hide();
@@ -16,6 +26,7 @@ $(document).ready(function(){
   });
   // Skills Selected
   $('#skills').click(function(){
+    $('#results_list').hide();
     $('#jobs_list').hide();
     $('#users_list').hide();
     $('#forums_list').hide();
@@ -24,6 +35,7 @@ $(document).ready(function(){
   });
   // Forums Selected
   $('#forums').click(function(){
+    $('#results_list').hide();
     $('#jobs_list').hide();
     $('#skills_list').hide();
     $('#users_list').hide();
@@ -32,6 +44,7 @@ $(document).ready(function(){
   });
   // Employers Selected
   $('#employers').click(function(){
+    $('#results_list').hide();
     $('#jobs_list').hide();
     $('#skills_list').hide();
     $('#forums_list').hide();
@@ -40,6 +53,7 @@ $(document).ready(function(){
   });
   // Jobs Selected
   $('#jobs').click(function(){
+    $('#results_list').hide();
     $('#users_list').hide();
     $('#skills_list').hide();
     $('#forums_list').hide();

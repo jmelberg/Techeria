@@ -13,9 +13,12 @@ html, body, .full-height {
     <script type="text/javascript" src="../js/advancedSearch.js"> </script>
     <div class="col-md-2 full-height">
       <div class="list-group">
-        <li {% if results %} class="list-group-item active" {% else %} class ="list-group-item disabled" {% endif %} id="users">Users<span class="badge">{% if results|length != 0 %}{{results|length}}{% endif %}</span></li>
 
-        <li{% if skills %} class="list-group-item" {% else %} class = "list-group-item disabled" {% endif %} id="skills">Skills<span class="badge">{% if skills|length != 0 %}{{skills|length}}{% endif %}</span></li>
+        <li {% if results %} class="list-group-item active" {% else %} class ="list-group-item disabled" {% endif %} id="results">All Results<span class="badge">{% if results|length != 0 %}{{results|length}}{% endif %}</span></li>
+
+        <li {% if users %} class="list-group-item active" {% else %} class ="list-group-item disabled" {% endif %} id="users">Users<span class="badge">{% if users|length != 0 %}{{users|length}}{% endif %}</span></li>
+
+        <li {% if skills %} class="list-group-item" {% else %} class = "list-group-item disabled" {% endif %} id="skills">Skills<span class="badge">{% if skills|length != 0 %}{{skills|length}}{% endif %}</span></li>
 
         <li {% if forums %} class="list-group-item" {% else %} class = "list-group-item disabled" {% endif %} id="forums">Forums<span class="badge">{% if forums|length != 0 %}{{forums|length}}{% endif %}</span></li>
 
@@ -24,9 +27,10 @@ html, body, .full-height {
         <li {% if jobs %} class="list-group-item" {% else %} class = "list-group-item disabled" {% endif %} id="jobs">Profession<span class="badge">{% if jobs|length != 0 %}{{jobs|length}}{% endif %}</span></li>
       </div>
     </div>
+    <div id="results_list">
     {% for user in results %}
       {% if user != None and user.username != None %}
-      <div class="col-md-10" id="users_list">
+      <div class="col-md-10">
       <!-- User Tab -->
         <div class="list-group">
          <a href="profile/{{user.username}}" class="row list-group-item">
@@ -42,10 +46,35 @@ html, body, .full-height {
       </div>
       {% endif %}
     {% endfor %}
+  </div>
+
+    <!-- User Search -->
+    <div id="users_list" style="display:none;">
+    {% for user in users %}
+    {% if user != None and user.username != None %}
+      <div class="col-md-10">
+      <!-- User Tab -->
+        <div class="list-group">
+         <a href="profile/{{user.username}}" class="row list-group-item">
+          <div class="col-md-2">
+            <img src="/img?user_id={{user.key.urlsafe}}&height=100&width=100" class="img-rounded"></img>
+          </div>
+          <div class="col-md-8">
+            <h3>{{user.first_name}}  {{user.last_name}}</h3>
+            <p>{{user.profession}} @ {{user.employer}}</p>
+          </div>
+         </a>
+        </div>      
+      </div>
+    {% endif %}
+    {% endfor %}
+    </div>
+
     <!-- Employer Search -->
+    <div id="employers_list" style="display: none;">
     {% for user in employers %}
       {% if user != None %}
-      <div class="col-md-10" id ="employers_list" style="display: none;">
+      <div class="col-md-10">
         <div class="list-group">
          <a href="profile/{{user.username}}" class="row list-group-item">
           <div class="col-md-2">
@@ -60,10 +89,13 @@ html, body, .full-height {
       </div>
       {% endif %}
     {% endfor %}
+    </div>
+
     <!-- Skills Search -->
+    <div id="skills_list" style="display: none;">
     {% for user in skills %}
       {% if user != None %}
-      <div class="col-md-10" id ="skills_list" style="display: none;">
+      <div class="col-md-10" >
         <div class="list-group">
          <a href="profile/{{user.username}}" class="row list-group-item">
           <div class="col-md-2">
@@ -78,10 +110,13 @@ html, body, .full-height {
       </div>
       {% endif %}
     {% endfor %}
+    </div>
+
+    <div id="jobs_list" style="display: none;">
     <!-- Jobs Search -->
     {% for user in jobs %}
       {% if user != None %}
-      <div class="col-md-10" id="jobs_list" style="display: none;">
+      <div class="col-md-10">
         <div class="list-group">
          <a href="profile/{{user.username}}" class="row list-group-item">
           <div class="col-md-2">
@@ -96,6 +131,8 @@ html, body, .full-height {
       </div>
       {% endif %}
     {% endfor %}
+    </div>
+
     <!-- Forum Search -->
       {% if forums != None %}
       <div class="col-md-10" id="forums_list" style="display:none;">
