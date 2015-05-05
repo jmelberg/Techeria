@@ -76,7 +76,7 @@ class RegisterHandler(SessionHandler):
     email = cgi.escape(self.request.get('email')).strip().lower()
     account = cgi.escape(self.request.get('account_type'))
     password = cgi.escape(self.request.get('password'))
-    verification = cgi.escape(self.request.get('verification'))
+    verification = cgi.escape(self.request.get('verification')).strip().lower()
     avatar = self.request.get('img')
     avatar = images.resize(avatar,400,400) 
     if (verification == "tech"):
